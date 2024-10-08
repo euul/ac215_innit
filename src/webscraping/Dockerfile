@@ -13,7 +13,6 @@ RUN set -ex; \
     pip install --no-cache-dir --upgrade pip && \
     pip install pipenv && \
     mkdir -p /app 
-
 WORKDIR /app
 
 # Add Pipfile, Pipfile.lock + python code
