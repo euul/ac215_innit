@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import json
+from google.cloud import storage
 
 # Function to scrape titles and links from a given URL
 def scrape_page(url, teens):
@@ -46,6 +48,25 @@ def scrape_page(url, teens):
         return [], []  # Return empty lists if the request fails
 
 
+# Function to upload JSON data to a GCP bucket
+def upload_to_gcp_bucket(bucket_name, blob_name, data):
+    # Initialize the GCP client
+    storage_client = storage.Client()
+
+    # Get the bucket
+    bucket = storage_client.get_bucket(bucket_name)
+
+    # Create a new blob (object) in the bucket
+    blob = bucket.blob(blob_name)
+
+    # Convert data to JSON format
+    json_data = json.dumps(data)
+
+    # Upload the JSON data to GCP
+    blob.upload_from_string(json_data, content_type='application/json')
+
+    print(f"Data uploaded to GCP bucket {bucket_name} with blob name {blob_name}")
+
 def scrape_links(target_links,teens):
     # Read URLs from a text file (each URL on a new line)
     with open(target_links, 'r') as f:  # Replace with the actual name of your text file
@@ -64,18 +85,18 @@ def scrape_links(target_links,teens):
         all_titles.extend(titles)
         all_links.extend(links)
 
-    # Save the titles and links into a pandas DataFrame
-    df = pd.DataFrame({'Title': all_titles, 'Link': all_links})
+    # Create a dictionary of the scraped data
+    scraped_data = {'Title': all_titles, 'Link': all_links}
 
-    # Save the DataFrame to a CSV file
+    # Save the DataFrame to GCP
+    bucket_name = 'innit_articles_bucket'
     if teens == False:
-        df.to_csv('scraped_all_links.csv', index=False)
-        print("Scraping complete. All data saved to 'scraped_all_links.csv'.")
+        blob_name = 'scraped_all_links.json'
     else:
-        df.to_csv('scraped_all_links_teens.csv', index=False)
-        print("Scraping complete. All data saved to 'scraped_all_links_teens.csv'.")
+        blob_name = 'scraped_all_links_teens.json'
+    upload_to_gcp_bucket(bucket_name, blob_name, scraped_data)
+    print(f"Scraping complete. All data saved to {blob_name}")
 
-    
 
 scrape_links("target_links.txt",False)
 scrape_links("target_links_teens.txt",True)

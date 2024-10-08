@@ -1,10 +1,47 @@
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from google.cloud import storage
+import json
 
-def scrape_transcripts(csv_name, teens= False):
+
+# Define the GCP bucket
+bucket_name = 'innit_articles_bucket'
+
+# Function to read JSON data from GCP bucket and convert it to DataFrame
+def read_json_from_gcp(bucket_name, blob_name):
+    # Initialize the GCP client
+    storage_client = storage.Client()
+    # Get the bucket
+    bucket = storage_client.bucket(bucket_name)
+    # Get the blob (file)
+    blob = bucket.blob(blob_name)
+    # Download the blob content as a strings
+    json_data = blob.download_as_text()
+    # Convert the JSON string to a DataFrame
+    return pd.read_json(json_data)
+
+# Function to upload the scraped data to a GCP bucket in JSON format
+def upload_to_gcp_bucket(bucket_name, blob_name, data):
+    # Initialize the GCP client
+    storage_client = storage.Client()
+
+    # Get the bucket
+    bucket = storage_client.get_bucket(bucket_name)
+
+    # Create a new blob (object) in the bucket
+    blob = bucket.blob(blob_name)
+
+    # Convert the DataFrame to JSON and upload
+    json_data = data.to_json(orient='records', lines=True)
+    blob.upload_from_string(json_data, content_type='application/json')
+
+    print(f"Data uploaded to GCP bucket {bucket_name} with blob name {blob_name}")
+
+
+def scrape_transcripts(bucket_name, blob_name, target_blob_name):
     # Read all the links from the CSV file
-    df = pd.read_csv(csv_name)
+    df = read_json_from_gcp(bucket_name, blob_name)
 
     # Initialize lists to store the scraped data
     transcripts = []
@@ -13,20 +50,22 @@ def scrape_transcripts(csv_name, teens= False):
     links_processed = []
     missing_transcripts_urls = []
 
-    if teens == False:
+
+    if blob_name == "scraped_all_links.json":
         url_root = 'https://learnenglish.britishcouncil.org'
         # Headers to include in the request
         headers = {
             "authority": "learnenglish.britishcouncil.org",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
         }
-    else:
+    elif blob_name == "scraped_all_links_teens.json":
         url_root = 'https://learnenglishteens.britishcouncil.org'
         # Headers to include in the request
         headers = {
             "authority": "learnenglishteens.britishcouncil.org",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
         }
+        
     # Loop through each link in the CSV
     for index, row in df.iterrows():
         # Construct the full link
@@ -39,6 +78,7 @@ def scrape_transcripts(csv_name, teens= False):
         if response.status_code == 200:
             # Parse the HTML
             soup = BeautifulSoup(response.text, 'html.parser')
+
 
             # Transcript or Reading Text
             cases = [
@@ -60,9 +100,9 @@ def scrape_transcripts(csv_name, teens= False):
                 missing_transcripts_urls.append(link_complete)
 
             # Label (Language Level)
-            if teens == False: 
+            if blob_name == "scraped_all_links.json":
                 level_div = soup.find('h3', string="Language level")
-            else: 
+            elif blob_name == "scraped_all_links_teens.json": 
                 level_div = soup.find('div', string="Language level")
 
             if level_div:
@@ -73,9 +113,9 @@ def scrape_transcripts(csv_name, teens= False):
             
 
             # Topic (Handling multiple topics)
-            if teens == False: 
+            if blob_name == "scraped_all_links.json":
                 topic_div = soup.find('h3', string="Topics")
-            else: 
+            elif blob_name == "scraped_all_links_teens.json": 
                 topic_div = soup.find('div', string="Topics")
 
             if topic_div:
@@ -107,13 +147,12 @@ def scrape_transcripts(csv_name, teens= False):
         'Topic': topics
     })
 
-    # Save the DataFrame to a CSV file
-    if teens == False:
-        scraped_data.to_csv('scraped_all_content.csv', index=False)
-        print(f"All data has been written to scraped_all_content.csv")
-    else:
-        scraped_data.to_csv('scraped_all_content_teens.csv', index=False)
-        print(f"All data has been written to scraped_all_content_teens.csv")
+    # Save the scraped data to a JSON file
+    scraped_data.to_json(target_blob_name, orient='records', lines=True)
+
+    # Upload the scraped content to the GCP bucket (add this if needed)
+    upload_to_gcp_bucket(bucket_name, target_blob_name, scraped_data)
+
 
     # Save the URLs of pages missing transcript/reading text to a txt file
     with open('missing_transcripts.txt', 'w') as f:
@@ -123,4 +162,5 @@ def scrape_transcripts(csv_name, teens= False):
     print(f"Missing transcripts or reading texts URLs have been saved to missing_transcripts.txt")
 
 #scrape_transcripts("scraped_all_links.csv",False)
-scrape_transcripts("scraped_all_links_teens.csv",True)
+scrape_transcripts(bucket_name, 'scraped_all_links.json', 'scraped_all_content.json')
+scrape_transcripts(bucket_name, 'scraped_all_links_teens.json', 'scraped_all_content_teens.json')
