@@ -8,6 +8,7 @@ requests = "*"
 pandas = "*"
 bs4 = "*"
 numpy = "*"
+"google.cloud" = "*"
 
 [dev-packages]
 
