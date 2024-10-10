@@ -1,14 +1,18 @@
 #!/bin/bash
 
-# Set the Google Application Credentials environment variable
-export GOOGLE_APPLICATION_CREDENTIALS="../../../secrets/data-service-account.json"
+set -e
 
-# Activate the conda environment if needed (uncomment and modify the path if necessary)
-# source activate your_env_name
+# Build the image based on the Dockerfile
+docker build -t webscrape -f Dockerfile .
 
-# Run the Python script
-python scrape_all_links.py
-python scrape_all_transcripts.py
 
-# Optional: Print a message when the script finishes
-echo "Data scraping and upload completed."
+# Remove container if it exists
+docker rm -f webscrape 2>/dev/null || true
+
+
+# Run data-label-cli container
+docker run --rm -ti \
+  --name webscrape \
+  -v "$(pwd)/../../../secrets:/secrets" \
+  -e GOOGLE_APPLICATION_CREDENTIALS="/secrets/data-service-account.json" \
+  webscrape

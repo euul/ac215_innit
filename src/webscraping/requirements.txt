@@ -2,4 +2,4 @@ requests
 pandas
 numpy
 bs4
-google.cloud
+google-cloud-storage
