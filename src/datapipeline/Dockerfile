@@ -12,9 +12,10 @@ RUN set -ex; \
     apt-get install -y --no-install-recommends build-essential git && \
     pip install --no-cache-dir --upgrade pip && \
     pip install pipenv && \
-    mkdir -p /app 
+    mkdir -p /app
 WORKDIR /app
 
+RUN mkdir -p /app/data
 # Add Pipfile, Pipfile.lock + python code
 ADD Pipfile Pipfile.lock /app/
 
