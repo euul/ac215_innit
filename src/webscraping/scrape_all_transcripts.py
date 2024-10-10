@@ -90,11 +90,12 @@ def scrape_transcripts(bucket_name, blob_name, target_blob_name):
             for case in cases:
                 tag = case.get("tag")
                 class_name = case.get("class")
-            transcript_div = soup.find(tag, class_=class_name)
+                transcript_div = soup.find(tag, class_=class_name)
 
-            if transcript_div:
-                transcript = transcript_div.get_text(separator='\n')
-            else:
+                if transcript_div:
+                    transcript = transcript_div.get_text(separator='\n')
+                    break
+            if not transcript:
                 transcript = "Transcript/Reading text not found"
                 # Add the URL to the missing list if neither is found
                 missing_transcripts_urls.append(link_complete)
