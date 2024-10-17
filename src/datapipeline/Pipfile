@@ -7,6 +7,7 @@ name = "pypi"
 pandas = "*"
 google-cloud-storage = "*"
 numpy = "*"
+torch = "*"
 
 [dev-packages]
 
