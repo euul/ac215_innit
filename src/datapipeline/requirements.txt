@@ -2,3 +2,4 @@ numpy
 pandas
 google-cloud-storage
 torch
+datasets
