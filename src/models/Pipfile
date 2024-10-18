@@ -6,7 +6,8 @@ name = "pypi"
 [packages]
 transformers = "*"
 wandb = "*"
-tiktoken = "*"
+protobuf = "*"
+sentencepiece = "*"
 
 [dev-packages]
 

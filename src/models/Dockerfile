@@ -1,5 +1,6 @@
 # Use the pre-built Docker image as the base
 FROM euxl/datapipeline:latest
+# FROM python:3.11-slim-buster
 
 # Tell pipenv where the shell is.
 # This allows us to use "pipenv shell" as a container entry point.
