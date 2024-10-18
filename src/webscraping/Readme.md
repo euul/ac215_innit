@@ -26,6 +26,10 @@ To start the container, execute the following command:
 ```bash
 sh run_scraper.sh
 ```
+
+![Screenshot of running container](./container_screenshot.png)
+
+
 Inside the running container, scrape the links to all available content by executing:
 
 ```python

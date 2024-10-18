@@ -14,6 +14,10 @@ To start the container, execute the following command:
 ```bash
 sh docker-shell.sh
 ```
+
+![Screenshot of running container](./container_screenshot.png)
+
+
 Inside the running container, load and preprocess datasets by executing:
 
 ```python

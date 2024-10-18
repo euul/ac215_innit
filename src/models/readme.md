@@ -13,6 +13,8 @@ To build the container, run:
 sh docker-shell.sh
 ```
 
+![Screenshot of running container](./container_screenshot.png)
+
 ## Model Training
 
 To train the model, run the following command:
