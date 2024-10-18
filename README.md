@@ -72,10 +72,10 @@ In this project, we aim to develop an English language learning application that
 
 In this milestone, we have the components for data scraping and data processing as well as a DeBERTA model capable of rating the difficulty of a given corpus.
 
-**Data: **
+**Data**
 We gathered a dataset of approximately 1500 labeled texts of varying difficulty from the LearnEnglish British Council organization. The dataset has been scored on a private Google Cloud Bucket. Additionally, in further milestones, we plan to use generative AI to create more labeled example for our model to train on.
 
-**Milestone 2 Containers and Overview: **
+**Milestone 2 Containers and Overview**
 The following documents contain an overview of each container, its components and how to run each container.
 1. [webscraping](./src/webscraping/Readme.md)
 2. [datapipline](./src/datapipeline/Readme.md)
