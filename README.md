@@ -1,7 +1,7 @@
 ## Milestone 2 Template
 
 ```
-Welcome to Team Save the Penguin's Milestone 2! Remember to close your instances on GCP or you will kill more penguins!
+Welcome to Team Save the Penguin's Milestone 2! Remember to close your instances on GCP or you will kill more penguins! 🐧
 ```
 
 #### Project Milestone 2 Organization
@@ -62,7 +62,7 @@ Welcome to Team Save the Penguin's Milestone 2! Remember to close your instances
 Christian Aagnes, James Cao and Alyssa Chang
 
 **Group Name**
-Save the Penguins
+Save the Penguins🐧
 
 **Project**
 In this project, we aim to develop an English language learning application that leverages online media sources to create an immersive learning experience, matching users with content at their proficiency level and allowing users to learn dynamically while engaging with everyday content.
@@ -72,10 +72,10 @@ In this project, we aim to develop an English language learning application that
 
 In this milestone, we have the components for data scraping and data processing as well as a DeBERTA model capable of rating the difficulty of a given corpus.
 
-**Data**
+**Data: **
 We gathered a dataset of approximately 1500 labeled texts of varying difficulty from the LearnEnglish British Council organization. The dataset has been scored on a private Google Cloud Bucket. Additionally, in further milestones, we plan to use generative AI to create more labeled example for our model to train on.
 
-**Milestone 2 Containers and Overview**
+**Milestone 2 Containers and Overview: **
 The following documents contain an overview of each container, its components and how to run each container.
 1. [webscraping](./src/webscraping/Readme.md)
 2. [datapipline](./src/datapipeline/Readme.md)
