@@ -2,6 +2,9 @@
 
 This repository contains scripts for training and inference using the `"microsoft/deberta-v3-small"` model. The training script uploads the trained model weights to a Google Cloud Storage (GCS) bucket, and the inference script uses the saved weights to make predictions.
 
+For detailed steps on fine-tuning, please refer to [fine_tuning_process.md](./fine_tuning_process.md).
+
+
 ## Build Container
 
 To build the container, run:
