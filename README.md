@@ -1,5 +1,4 @@
-## Milestone 2 Template
-
+## Milestone 2
 ```
 Welcome to Team Save the Penguin's Milestone 2! Remember to close your instances on GCP or you will kill more penguins! 🐧
 ```
