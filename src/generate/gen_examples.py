@@ -9,7 +9,6 @@ import google.generativeai as genai
 def download_dataset_folder(bucket_name, blob_prefix, local_dataset_dir):
     """Download all files in a GCP folder (blob prefix) to the local directory."""
     local_folder_path = os.path.join(local_dataset_dir, blob_prefix.strip('/'))
-    
     if not os.path.exists(local_folder_path):
         print(f"{local_folder_path} does not exist. Downloading from GCS...")
         os.makedirs(local_folder_path, exist_ok=True)
@@ -122,6 +121,15 @@ with open(os.environ['GOOGLE_APPLICATION_CREDENTIALS']) as f:
 genai.configure(api_key=api_key)
 api_url = "what goes here?"  #
 model = genai.GenerativeModel("gemini-1.5-flash")
+# response = model.generate_content(
+#     "Tell me a story about a magic backpack.",
+#     generation_config=genai.types.GenerationConfig(
+#         # Only one candidate for now.
+#         candidate_count=1,
+#         max_output_tokens=800,
+#         temperature=1.0,
+#     )
+# )
 
 #single example test
 entry = {
@@ -134,7 +142,7 @@ entry = {
 
     By the weekend, unfortunately, the dry weather will make way for mostly cloudy skies and rain. The rain will move from Scotland, down towards the north and reach the south coast by Saturday afternoon. Temperatures, at least, will stay mostly warm at around 21 degrees for the weekend. It might feel like a nice change from the high twenties and early thirties we'll see in the week. That's all from me until tomorrow. Enjoy the mini-heatwave while you can!
     """,
-    "label": "B1"  # Adjust to test different levels
+    "label": "B1" 
 }
 
 synthetic_text = generate_one_synthetic_text(entry, api_url, api_key)
