@@ -5,6 +5,8 @@ import argparse
 import os
 from datasets import Dataset, load_from_disk
 import json
+import time
+import random
 
 # Setup the arguments for the trainer task
 parser = argparse.ArgumentParser()
@@ -12,13 +14,13 @@ parser.add_argument(
     "--level", dest="level", required=True, type=str, choices=["A1", "A2", "B1", "B2", "C1"], help="Target level for the generated text"
 )
 # TBC
-parser.add_argument("--n_samples", dest="n_samples", default=1, type=int, help="Number of samples to generate")
+parser.add_argument("--n_samples", dest="n_samples", default=10, type=int, help="Number of samples to generate")
 args = parser.parse_args()
 
 # Local directory to read the train dataset
 LOCAL_DATASET_DIR = './datasets'
 # Output file path of the generated text and corresponding prompt
-OUTPUT_FILE_PATH = "output.json"
+OUTPUT_FILE_PATH = "output-" + args.level +".json"
 
 # Number of examples for few-shot learning
 N_EXAMPLES = 5 
@@ -80,9 +82,9 @@ system_instruction = (
     "Please wrap the transcript using <Transcript> tags."
 )
 
-prompt = ""
-for i, example in enumerate(transcripts, start=1):
-    prompt += f"Example {i}:\n{example}\n\n"
+# prompt = ""
+# for i, example in enumerate(transcripts, start=1):
+#     prompt += f"Example {i}:\n{example}\n\n"
 
 
 # Initialize the Vertex AI client
@@ -103,20 +105,31 @@ def get_chat_response(chat: ChatSession, prompt: str) -> str:
                                   generation_config=generation_config)
     return response.text
 
-# Get the response
-response = get_chat_response(chat_session, prompt)
+output_data = []
 
-# Save prompt and response to a JSON file
-output_data = {
-    "prompt": prompt,
-    "response": response
-}
+for _ in range(args.n_samples):
+    # Shuffle and select new examples for each prompt
+    shuffled_subset = label_subset.shuffle(seed=42 + _)  # Change seed to get different samples
+    random_samples = shuffled_subset.select(range(N_EXAMPLES))
+    transcripts = random_samples['Transcript']
+    
+    # Generate a new prompt with updated examples
+    prompt = ""
+    for i, example in enumerate(transcripts, start=1):
+        prompt += f"Example {i}:\n{example}\n\n"
+    
+    # Get the response
+    response = get_chat_response(chat_session, prompt)
+    
+    # Append the prompt and response to the output data
+    output_data.append({
+        "prompt": prompt,
+        "response": response
+    })
 
-# Specify the output file path
-output_file_path = "output.json"
+    time.sleep(random.uniform(0, 2))
 
-# Write the output data to the JSON file
 with open(OUTPUT_FILE_PATH, "w") as f:
     json.dump(output_data, f, indent=4)
 
-print("Prompt and response saved to", OUTPUT_FILE_PATH)
+
