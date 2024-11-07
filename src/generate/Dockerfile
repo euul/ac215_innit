@@ -1,30 +1,75 @@
-# Use the pre-built Docker image as the base
-# FROM euxl/datapipeline:latest
+# Use the official Debian-hosted Python image
 FROM python:3.11-slim-buster
 
-# Tell pipenv where the shell is.
-# This allows us to use "pipenv shell" as a container entry point.
-ENV PYENV_SHELL=/bin/bash
+ARG DEBIAN_PACKAGES="build-essential"
 
-# Ensure we have an up to date baseline, install dependencies
+# Prevent apt from showing prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Python wants UTF-8 locale
+ENV LANG=C.UTF-8
+
+# Disable buffering to avoid lost logs
+ENV PYTHONUNBUFFERED=1
+
+# Ensure we have an up to date baseline, install dependencies and
+# create a user so we don't run the app as root
 RUN set -ex; \
+    for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done && \
     apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends build-essential git && \
+    apt-get install -y --no-install-recommends $DEBIAN_PACKAGES && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
     pip install --no-cache-dir --upgrade pip && \
-    pip install pipenv && \
-    mkdir -p /app
+    pip install pipenv  && \
+    useradd -ms /bin/bash app -d /home/app -u 1000 -p "$(openssl passwd -1 Passw0rd)" && \
+    mkdir -p /app && \
+    chown app:app /app
+
+# Switch to the new user
+USER app
 WORKDIR /app
 
-RUN mkdir -p /app/data
-# Add Pipfile, Pipfile.lock + python code
-ADD Pipfile Pipfile.lock /app/
+# Install python packages
+ADD --chown=app:app Pipfile Pipfile.lock /app/
 
 RUN pipenv sync
 
-ADD . /app
-# Entry point
-ENTRYPOINT ["/bin/bash"]
+# Add the rest of the source code
+ADD --chown=app:app . /app
 
-# Get into the pipenv shell
-CMD ["-c", "pipenv shell"]
+# Entry point to run the Python script in the pipenv environment
+ENTRYPOINT ["pipenv", "run", "python", "cli.py"]
+# Use the official Debian-hosted Python image
+# FROM python:3.11-slim-buster
+
+# # Environment variables
+# ENV PYTHONUNBUFFERED=1
+
+# # Install system dependencies
+# RUN apt-get update && \
+#     apt-get upgrade -y && \
+#     apt-get install -y --no-install-recommends build-essential bash ffmpeg && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
+
+# # Install pip and pipenv
+# RUN pip install --no-cache-dir --upgrade pip && \
+#     pip install pipenv
+
+# # Verify pipenv installation
+# RUN pipenv --version
+
+# # Set working directory
+# WORKDIR /app
+
+# # Copy Pipfile and install dependencies
+# COPY Pipfile Pipfile.lock /app/
+# RUN pipenv install --deploy --ignore-pipfile --system
+
+# # Copy application code
+# COPY . /app
+
+# # Set entrypoint to run the Python script directly
+# ENTRYPOINT ["python", "cli.py.py"]

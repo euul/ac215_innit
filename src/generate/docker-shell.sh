@@ -1,18 +1,19 @@
 #!/bin/bash
 
+# Exit immediately if a command exits with a non-zero status
 set -e
 
-# Build the image based on the Dockerfile
-docker build -t generate -f Dockerfile .
+export IMAGE_NAME="generate_samples"
 
+# Build the image with the target platform
+docker build -t $IMAGE_NAME --platform=linux/amd64 -f Dockerfile .
 
-# Remove container if it exists
-docker rm -f generate 2>/dev/null || true
-
-
-# Run models container
+# Run the container, ensuring platform compatibility and passing arguments
 docker run --rm -ti \
-  --name generate \
+  --platform=linux/amd64 \
+  --name $IMAGE_NAME \
   -v "$(pwd)/../../../secrets:/secrets" \
   -e GOOGLE_APPLICATION_CREDENTIALS="/secrets/text-generator.json" \
-  generate
+  -p 8080:8080 \
+  -e DEV=1 \
+  $IMAGE_NAME python gen_samples.py --level A1 --n_samples 10
