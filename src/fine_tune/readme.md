@@ -36,6 +36,8 @@ This script performs the following:
 
 The results will be visible in your WandB workspace.
 
+![Screenshot of WandB](./wandb.png)
+
 Make sure to replace \<Your WandB API Key\> with your actual WandB API key.
 
 
