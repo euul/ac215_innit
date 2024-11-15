@@ -80,9 +80,9 @@ folder_name = 'yt_transcripts'
 save_transcripts(videos, local_folder)
 
 # Upload all saved JSON files to the GCP bucket in a single batch
-# upload_to_gcp_bucket(bucket_name, folder_name, local_folder)
+upload_to_gcp_bucket(bucket_name, folder_name, local_folder)
 
 # Clean up the local transcripts folder
-# cleanup_local_folder(local_folder)
+cleanup_local_folder(local_folder)
 
 

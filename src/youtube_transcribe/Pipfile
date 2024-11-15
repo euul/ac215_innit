@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 youtube-transcript-api = "*"
 google-cloud-storage = "*"
+transformers = "*"
 
 [dev-packages]
 
