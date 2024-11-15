@@ -1,3 +1,5 @@
 youtube-transcript-api
 google-cloud-storage
 transformers
+tiktoken
+sentencepiece
