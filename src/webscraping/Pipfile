@@ -10,6 +10,8 @@ bs4 = "*"
 numpy = "*"
 "google.cloud" = "*"
 google-cloud-storage = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
