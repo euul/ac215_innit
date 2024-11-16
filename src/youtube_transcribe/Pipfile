@@ -7,6 +7,9 @@ name = "pypi"
 youtube-transcript-api = "*"
 google-cloud-storage = "*"
 transformers = "*"
+selenium = "*"
+webdriver-manager = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 
