@@ -45,4 +45,3 @@ jobs:
     - name: Tear down containers
       if: always()
       run: docker-compose -f src/docker-compose.yml down
-      working-directory: src/
