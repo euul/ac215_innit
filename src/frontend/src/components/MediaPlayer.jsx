@@ -1,51 +1,31 @@
 // src/components/MediaPlayer.jsx
-import React from "react"
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Container,
-} from "@mui/material"
+import React, { useEffect } from "react"
 
-function MediaPlayer({ content }) {
+function MediaPlayer({ videoId }) {
+  useEffect(() => {
+    console.log("Loading YouTube Player for videoId:", videoId)
+  }, [videoId])
+
+  if (!videoId) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "2rem" }}>
+        <p>Select a video to display.</p>
+      </div>
+    )
+  }
+
   return (
-    <Container maxWidth="md" style={{ marginTop: "2rem" }}>
-      <Typography variant="h4" align="center" gutterBottom>
-        Media Display
-      </Typography>
-      {content ? (
-        <Card
-          style={{
-            marginTop: "1rem",
-            backgroundColor: "#f9f9f9",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          {content.type === "video" && content.videoUrl ? (
-            <CardMedia
-              component="iframe"
-              src={content.videoUrl}
-              title={content.title}
-              style={{ height: "300px", marginBottom: "1rem" }}
-            />
-          ) : (
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                {content.title || "No Title"}
-              </Typography>
-              <Typography variant="body1">
-                {content.text || "No Content"}
-              </Typography>
-            </CardContent>
-          )}
-        </Card>
-      ) : (
-        <Typography variant="subtitle1" align="center" color="textSecondary">
-          Select an article or media to display.
-        </Typography>
-      )}
-    </Container>
+    <div style={{ textAlign: "center", marginTop: "2rem" }}>
+      <iframe
+        width="100%"
+        height="315"
+        src={`https://www.youtube.com/embed/${videoId}`}
+        title="YouTube video player"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
+    </div>
   )
 }
 
