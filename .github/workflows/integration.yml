@@ -1,0 +1,48 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - milestone4  # Trigger on pushes to the milestone4 branch
+  pull_request:
+    branches:
+      - milestone4  # Trigger on pull requests to milestone4
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Test Access to Secrets
+      run: |
+        echo "Testing secrets..."
+        echo "${{ secrets.DATA_SERVICE_ACCOUNT }}" | jq '.'
+        echo "${{ secrets.TEXT_GENERATOR }}"
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+
+    - name: Build and start containers
+      run: |
+        docker-compose -f src/docker-compose.yml up -d
+      working-directory: src/
+
+    - name: Run integration tests
+      run: pytest tests/integration_test
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      working-directory: .
+
+    - name: Tear down containers
+      if: always()
+      run: docker-compose -f src/docker-compose.yml down
+      working-directory: src/

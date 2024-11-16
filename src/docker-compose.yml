@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}

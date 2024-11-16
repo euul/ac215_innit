@@ -1,9 +1,11 @@
-## Milestone 2
+## Milestone 4
 ```
 Welcome to Team Save the Penguin's Milestone 2! Remember to close your instances on GCP or you will kill more penguins! 🐧
 ```
+![Integration Tests](https://github.com/euul/ac215_innit//actions/workflows/integration.yml/badge.svg?branch=milestone4)
 
-#### Project Milestone 2 Organization
+
+#### Project Milestone 4 Organization
 
 ```
 ├── LICENSE
