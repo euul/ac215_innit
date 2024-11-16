@@ -32,7 +32,7 @@ jobs:
 
     - name: Build and start containers
       run: |
-        docker-compose -f src/docker-compose.yml up down
+        docker-compose -f src/docker-compose.yml up -d
 
     - name: Run integration tests
       run: pytest tests/integration_test
