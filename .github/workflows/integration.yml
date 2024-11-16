@@ -30,6 +30,9 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
+    - name: Install pytest
+      run: pip install pytest
+
     - name: Build and start containers
       run: |
         docker-compose -f src/docker-compose.yml up -d
@@ -39,7 +42,7 @@ jobs:
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-      working-directory: .
+      working-directory: src
 
     - name: Tear down containers
       if: always()
