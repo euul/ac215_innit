@@ -30,16 +30,13 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    - name: Install dependencies
-      run: |
-        pip install pytest pytest-cov  # Directly install pytest and pytest-cov
-
     - name: Build and start containers
       run: |
         docker-compose -f src/docker-compose.yml up -d
 
-    - name: Run integration tests with coverage
-      run: pytest --cov=src --cov-report=html --cov-report=term-missing tests/integration_tests
+    - name: Run integration tests with coverage inside the container
+      run: |
+        docker exec -T <your_webscraping_container_name> pytest --cov=src --cov-report=html --cov-report=term-missing tests/integration_tests
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
