@@ -32,7 +32,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt  # Ensure dependencies from a requirements.txt are installed, including pytest and pytest-cov
+        pip install pytest pytest-cov  # Directly install pytest and pytest-cov
 
     - name: Build and start containers
       run: |
