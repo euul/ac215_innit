@@ -22,10 +22,10 @@ jobs:
         sudo apt-get install -y docker-compose
 
     - name: Test Access to Secrets
-      run: |
-        echo "Testing secrets..."
-        echo "${{ secrets.DATA_SERVICE_ACCOUNT }}" | jq '.'
-        echo "${{ secrets.TEXT_GENERATOR }}"
+        run: |
+            echo "Testing secrets..."
+            echo "$DATA_SERVICE_ACCOUNT" | jq '.' || echo "DATA_SERVICE_ACCOUNT is not valid JSON"
+            echo "TEXT_GENERATOR: $TEXT_GENERATOR"
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
