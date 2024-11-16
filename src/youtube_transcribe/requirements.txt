@@ -4,3 +4,5 @@ transformers
 selenium
 webdriver-manager
 beautifulsoup4
+tiktoken
+sentencepiece
