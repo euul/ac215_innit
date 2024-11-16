@@ -98,5 +98,5 @@ def scrape_links(target_links,teens):
     print(f"Scraping complete. All data saved to {blob_name}")
 
 
-scrape_links("target_links.txt",False)
-scrape_links("target_links_teens.txt",True)
+# scrape_links("target_links.txt",False)
+# scrape_links("target_links_teens.txt",True)
