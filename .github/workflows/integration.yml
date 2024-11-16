@@ -16,19 +16,12 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v4
 
-    - name: Set up Docker Compose
+    - name: Debug Directory Structure
       run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
-
-    - name: Test Access to Secrets
-      run: |
-        echo "Testing secrets..."
-        echo "$DATA_SERVICE_ACCOUNT" | jq '.' || echo "DATA_SERVICE_ACCOUNT is not valid JSON"
-        echo "TEXT_GENERATOR: $TEXT_GENERATOR"
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+        echo "Listing root directory:"
+        ls -R .
+        echo "Listing tests directory:"
+        ls -R tests
 
     - name: Install pytest
       run: pip install pytest
@@ -38,11 +31,10 @@ jobs:
         docker-compose -f src/docker-compose.yml up -d
 
     - name: Run integration tests
-      run: pytest tests/integration_test
+      run: pytest tests/integration_tests
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-      working-directory: src
 
     - name: Tear down containers
       if: always()
