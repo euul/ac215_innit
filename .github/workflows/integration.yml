@@ -54,8 +54,12 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    - name: Get container logs (debug)
-      run: docker logs src_webscraping_1
+    # - name: Get container logs
+    #   run: docker logs src_webscraping_1
+    
+    #Step 6.5: Mandatory(?) Sleep
+    - name: Wait for container stabilization
+      run: sleep 5
 
     # Step 7: Upload Coverage Report  
     - name: Upload coverage report
