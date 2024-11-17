@@ -54,7 +54,10 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 7: Upload Coverage Report
+    - name: Get container logs (debug)
+      run: docker logs src_webscraping_1
+
+    # Step 7: Upload Coverage Report  
     - name: Upload coverage report
       if: always()  # Ensure this always runs, even if the tests fail
       uses: actions/upload-artifact@v3
