@@ -13,14 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Check out repository
     - name: Check out repository
       uses: actions/checkout@v4
 
+    # Step 2: Set up Docker Compose
     - name: Set up Docker Compose
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
+    # Step 3: Test Access to Secrets
     - name: Test Access to Secrets
       run: |
         echo "Testing secrets..."
@@ -30,27 +33,35 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
+    # Step 4: Build and Start Containers
     - name: Build and start containers
       run: |
         docker-compose -f src/docker-compose.yml up -d
-
-    - name: List running Docker containers
-      run: docker ps  # This will show the container names, useful for debugging
-
-    - name: Run integration tests with coverage inside the container
-      run: |
-        docker exec src_webscraping_1 pytest --cov=src --cov-report=html --cov-report=term-missing tests/integration_tests
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
+    # Step 5: List Running Containers
+    - name: List running Docker containers
+      run: docker ps  # This will show the container names, useful for debugging
+
+    # Step 6: Run Integration Tests Inside the Container
+    - name: Run integration tests with coverage inside the container
+      run: |
+        docker exec src_webscraping_1 pipenv run pytest --cov=/app --cov-report=html --cov-report=term-missing /app/tests/integration_tests
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+
+    # Step 7: Upload Coverage Report
     - name: Upload coverage report
       if: always()  # Ensure this always runs, even if the tests fail
       uses: actions/upload-artifact@v3
       with:
         name: coverage-report
-        path: htmlcov  # Upload the htmlcov directory
+        path: src/webscraping/htmlcov  # Adjust path if htmlcov is created elsewhere
 
+    # Step 8: Tear Down Containers
     - name: Tear down containers
       if: always()  # Ensure this always runs, even if the tests fail
       run: docker-compose -f src/docker-compose.yml down
