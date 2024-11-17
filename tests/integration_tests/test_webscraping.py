@@ -4,12 +4,14 @@ import unittest
 from unittest.mock import patch, Mock
 import tempfile
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
-from webscraping.scrape_all_links import scrape_page, upload_to_gcp_bucket, scrape_links
+# Ensure /app is in the Python path
+sys.path.insert(0, '/app')
+
+from scrape_all_links import scrape_page, upload_to_gcp_bucket, scrape_links
 
 class TestWebScraping(unittest.TestCase):
 
-    @patch("webscraping.scrape_all_links.requests.get")
+    @patch("scrape_all_links.requests.get")
     def test_scrape_page_success(self, mock_get):
         # Mock the requests.get() response
         mock_response = Mock()
@@ -28,7 +30,7 @@ class TestWebScraping(unittest.TestCase):
         self.assertEqual(titles, ["Test Title"])
         self.assertEqual(links, ["/path/to/resource"])
 
-    @patch("webscraping.scrape_all_links.requests.get")
+    @patch("scrape_all_links.requests.get")
     def test_scrape_page_failure(self, mock_get):
         # Mock a failed response
         mock_response = Mock()
@@ -42,7 +44,7 @@ class TestWebScraping(unittest.TestCase):
         self.assertEqual(titles, [])
         self.assertEqual(links, [])
 
-    @patch("webscraping.scrape_all_links.storage.Client")
+    @patch("scrape_all_links.storage.Client")
     def test_upload_to_gcp_bucket(self, mock_storage_client):
         # Mock the GCP client
         mock_bucket = Mock()
@@ -66,8 +68,8 @@ class TestWebScraping(unittest.TestCase):
             '{"Title": ["Test Title"], "Link": ["https://example.com"]}', content_type="application/json"
         )
 
-    @patch("webscraping.scrape_all_links.scrape_page")
-    @patch("webscraping.scrape_all_links.upload_to_gcp_bucket")
+    @patch("scrape_all_links.scrape_page")
+    @patch("scrape_all_links.upload_to_gcp_bucket")
     def test_scrape_links(self, mock_upload_to_gcp, mock_scrape_page):
         # Create a temporary file with test data
         with tempfile.NamedTemporaryFile(mode="w", delete=False) as temp_file:

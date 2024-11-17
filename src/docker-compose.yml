@@ -9,6 +9,8 @@ services:
     environment:
       DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
       TEXT_GENERATOR: ${TEXT_GENERATOR}
-    ports:
-      - "8000:8000"  # Adjust port mapping if needed
-    command: ["tail", "-f", "/dev/null"] 
+    volumes:
+      - ../tests:/app/tests:ro  # Mount the tests directory into the container
+    working_dir: /app
+    command: ["pipenv", "run", "pytest", "/app/tests/integration_tests/test_webscraping.py"]
+    #command: ["tail", "-f", "/dev/null"] 

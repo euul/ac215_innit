@@ -16,15 +16,16 @@ RUN set -ex; \
 WORKDIR /app
 
 # Add Pipfile, Pipfile.lock + python code
-ADD Pipfile Pipfile.lock /app/
+COPY Pipfile Pipfile.lock /app/
 
 RUN pipenv sync
 
-ADD . /app
+COPY . /app
+
 # Entry point
 #ENTRYPOINT ["/bin/bash"] #this is for debugging and MS5...probably
 
 # Get into the pipenv shell
 #CMD ["-c", "pipenv shell"] #this is for debugging
 #CMD ["pipenv", "run", "python", "app.py"] #this is for MS5
-CMD ["/bin/sh", "-c", "echo 'Container is running'"] #this is CI testing!
+#CMD ["/bin/sh", "-c", "echo 'Container is running'"]
