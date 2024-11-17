@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04-large
 
     steps:
     # Step 1: Check out repository
@@ -56,10 +56,6 @@ jobs:
 
     # - name: Get container logs
     #   run: docker logs src_webscraping_1
-    
-    #Step 6.5: Mandatory(?) Sleep
-    - name: Wait for container stabilization
-      run: sleep 5
 
     # Step 7: Upload Coverage Report  
     - name: Upload coverage report
