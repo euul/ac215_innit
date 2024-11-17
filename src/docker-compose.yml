@@ -14,3 +14,9 @@ services:
       - ./htmlcov:/app/htmlcov
     working_dir: /app
     command: ["pipenv", "run", "pytest", "/app/tests/integration_tests"]  # Run tests only
+    deploy:
+      resources:
+        limits:
+          memory: 1g  # Set memory limit to 1 GB
+        reservations:
+          memory: 512m  # Reserve 512 MB of memory
