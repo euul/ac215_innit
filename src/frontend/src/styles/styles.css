@@ -1,8 +1,115 @@
-/* styles.css */
+/* Global Styles */
+html,
 body {
-  font-family: Arial, sans-serif;
+  background-color: #f9f9f9; /* Light and modern background */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Poppins", sans-serif; /* Modern font */
+  color: #333; /* Neutral text color */
 }
 
-h2 {
+header {
+  background: linear-gradient(90deg, #4facfe, #00f2fe); /* Gradient header */
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+header img {
+  height: 50px;
+  width: auto;
+}
+
+header a {
+  color: #fff;
+  margin: 0 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+header a:hover {
+  color: #d9d9d9;
+}
+
+/* Main Page Hero */
+.hero {
+  text-align: center;
+  margin-top: 5rem;
+  padding: 2rem;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
   color: #333;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.hero button {
+  background: #4facfe;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.hero button:hover {
+  background: #00c6ff;
+}
+
+/* Media Page */
+.media-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.media-container .video-player {
+  flex: 2;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.media-container .video-list {
+  flex: 1;
+}
+
+/* Add box styles for media cards */
+.card {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Add background for the media details page */
+.container {
+  margin-top: 2rem;
+  padding: 2rem;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

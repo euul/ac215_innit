@@ -1,21 +1,11 @@
-// src/pages/Media.jsx
 import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import "../styles/styles.css"
-import {
-  Typography,
-  Card,
-  CardContent,
-  CircularProgress,
-  Container,
-  Grid,
-  Divider,
-} from "@mui/material"
-import MediaPlayer from "../components/MediaPlayer"
+import { Container, Typography, Grid, Card, CardContent } from "@mui/material"
 
 function Media() {
   const [transcripts, setTranscripts] = useState([])
-  const [selectedVideo, setSelectedVideo] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Fetch the transcripts from the backend
@@ -23,18 +13,12 @@ function Media() {
       .then((response) => response.json())
       .then((data) => {
         setTranscripts(data.transcripts)
-        setLoading(false)
       })
-      .catch((error) => {
-        console.error("Error fetching transcripts:", error)
-        setLoading(false)
-      })
+      .catch((error) => console.error("Error fetching transcripts:", error))
   }, [])
 
-  const handleVideoSelect = (video) => {
-    const cleanVideoId = video.video_id.split("&")[0] // Remove anything after &
-    console.log("Selected video (cleaned):", cleanVideoId)
-    setSelectedVideo({ ...video, video_id: cleanVideoId })
+  const handleClick = (video) => {
+    navigate(`/media/${video.video_id}`, { state: { video } })
   }
 
   return (
@@ -42,60 +26,32 @@ function Media() {
       <Typography variant="h4" component="h2" align="center" gutterBottom>
         Media
       </Typography>
-      <Divider style={{ marginBottom: "1rem" }} />
       <Typography variant="subtitle1" align="center" gutterBottom>
-        Select a video to display.
+        Browse and select a video to explore.
       </Typography>
-      {loading ? (
-        <div style={{ textAlign: "center", marginTop: "2rem" }}>
-          <CircularProgress />
-        </div>
-      ) : (
-        <Grid container spacing={3}>
-          {/* Left side: Video Player */}
-          <Grid item xs={12} md={6}>
-            <div style={{ textAlign: "center" }}>
-              {selectedVideo ? (
-                <>
-                  <Typography variant="h6" gutterBottom>
-                    {selectedVideo.video_name}
-                  </Typography>
-                  <MediaPlayer videoId={selectedVideo.video_id} />
-                </>
-              ) : (
-                <Typography variant="body1">
-                  Select a video to display.
+      <Grid container spacing={4} style={{ marginTop: "2rem" }}>
+        {transcripts.map((video, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card
+              onClick={() => handleClick(video)}
+              style={{
+                cursor: "pointer",
+                background: "linear-gradient(135deg, #4facfe, #00f2fe)",
+                color: "#fff",
+                borderRadius: "12px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6" component="div" gutterBottom>
+                  {video.video_name}
                 </Typography>
-              )}
-            </div>
+                <Typography variant="body2">Label: {video.label}</Typography>
+              </CardContent>
+            </Card>
           </Grid>
-
-          {/* Right side: Video List */}
-          <Grid item xs={12} md={6}>
-            {transcripts.map((transcript, index) => (
-              <Card
-                key={index}
-                variant="outlined"
-                style={{
-                  marginBottom: "1rem",
-                  backgroundColor: "#f9f9f9",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleVideoSelect(transcript)}
-              >
-                <CardContent>
-                  <Typography variant="h6" component="div">
-                    {transcript.video_name}
-                  </Typography>
-                  <Typography color="textSecondary">
-                    Label: {transcript.label}
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
-          </Grid>
-        </Grid>
-      )}
+        ))}
+      </Grid>
     </Container>
   )
 }

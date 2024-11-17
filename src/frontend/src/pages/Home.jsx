@@ -1,17 +1,15 @@
 import React from "react"
-import { Container, Typography } from "@mui/material"
+import { useNavigate } from "react-router-dom"
 
 function Home() {
+  const navigate = useNavigate()
+
   return (
-    <Container maxWidth="md" style={{ textAlign: "center", marginTop: "2rem" }}>
-      <Typography variant="h2" component="h2" gutterBottom>
-        Welcome to the Language Learning App
-      </Typography>
-      <Typography variant="body1">
-        Take a diagnostic test to find your level, or explore articles and
-        videos suited to your level.
-      </Typography>
-    </Container>
+    <div className="hero">
+      <h2>Welcome to innit</h2>
+      <p>Learn practical language skills that are relevant to everyday life!</p>
+      <button onClick={() => navigate("/diagnostic")}>Get Started</button>
+    </div>
   )
 }
 
