@@ -1,0 +1,9 @@
+tiktoken
+sentencepiece
+pandas
+google-cloud-storage
+torch
+transformers
+datasets
+beautifulsoup4
+requests
