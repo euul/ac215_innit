@@ -11,5 +11,6 @@ services:
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
       - ../tests:/app/tests:ro  # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov
     working_dir: /app
     command: ["pipenv", "run", "pytest", "--cov=/app", "--cov-report=html", "--cov-report=term-missing", "/app/tests/integration_tests"]
