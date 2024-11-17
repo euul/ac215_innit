@@ -53,27 +53,27 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 7: Generate Coverage Report
-    - name: Generate coverage report inside the container
-      run: |
-        docker exec src_webscraping_1 pipenv run coverage run -m pytest /app/tests/integration_tests
-        docker exec src_webscraping_1 pipenv run coverage html
-        docker cp src_webscraping_1:/app/htmlcov ./htmlcov
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+    # # Step 7: Generate Coverage Report
+    # - name: Generate coverage report inside the container
+    #   run: |
+    #     docker exec src_webscraping_1 pipenv run coverage run -m pytest /app/tests/integration_tests
+    #     docker exec src_webscraping_1 pipenv run coverage html
+    #     docker cp src_webscraping_1:/app/htmlcov ./htmlcov
+    #   env:
+    #     DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+    #     TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
     # Step 8: Get Container Logs
     - name: Get container logs
       run: docker logs src_webscraping_1
 
-    # Step 9: Upload Coverage Report  
-    - name: Upload coverage report
-      if: always()  # Ensure this always runs, even if the tests fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: ./htmlcov  # Adjust path if htmlcov is created elsewhere
+    # # Step 9: Upload Coverage Report  
+    # - name: Upload coverage report
+    #   if: always()  # Ensure this always runs, even if the tests fail
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: coverage-report
+    #     path: ./htmlcov  # Adjust path if htmlcov is created elsewhere
 
     # Step 10: Tear Down Containers
     - name: Tear down containers
