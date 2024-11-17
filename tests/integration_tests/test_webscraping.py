@@ -1,5 +1,6 @@
 import os
 import sys
+import gc
 import unittest
 from unittest.mock import patch, Mock
 import tempfile
@@ -103,6 +104,9 @@ class TestWebScraping(unittest.TestCase):
             # Clean up: Delete the temporary file
             if os.path.exists(temp_file_name):
                 os.remove(temp_file_name)
+    
+    def tearDown(self):
+        gc.collect()
 
 if __name__ == "__main__":
     unittest.main()
