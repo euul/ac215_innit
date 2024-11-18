@@ -113,3 +113,23 @@ header a:hover {
   background: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.transcript-entry {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.transcript-entry.active {
+  background-color: #d0f0fd; /* Highlight color */
+  border-left: 3px solid #007bff;
+}
+
+.transcript-entry:hover {
+  background-color: #f0f0f0;
+}
+
+.transcript {
+  max-height: 400px;
+  overflow-y: scroll;
+}

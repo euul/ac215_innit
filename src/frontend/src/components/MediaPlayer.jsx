@@ -1,32 +1,75 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 
-function MediaPlayer({ videoId }) {
+function MediaPlayer({ videoId, onTimeUpdate }) {
+  const playerRef = useRef(null)
+  const playerInstance = useRef(null)
+
   useEffect(() => {
-    console.log("Loading YouTube Player for videoId:", videoId)
-  }, [videoId])
+    let interval
 
-  if (!videoId) {
-    return (
-      <div style={{ textAlign: "center", marginTop: "2rem" }}>
-        <p>Select a video to display.</p>
-      </div>
-    )
-  }
+    const initializePlayer = () => {
+      if (window.YT && window.YT.Player) {
+        playerInstance.current = new window.YT.Player(playerRef.current, {
+          videoId: videoId.split("&")[0], // Clean videoId here
+          events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+          },
+          playerVars: {
+            autoplay: 1, // Attempt autoplay
+            rel: 0, // Disable related videos at the end
+            modestbranding: 1, // Reduce YouTube branding
+          },
+        })
+      } else {
+        console.error("YouTube Player API not available")
+      }
+    }
 
-  // Ensure videoId is cleaned of any extra query parameters
-  const cleanVideoId = videoId.split("&")[0] // Split by "&" and take the first part
+    const onPlayerReady = () => {
+      console.log("YouTube Player is ready")
+      playerInstance.current.playVideo() // Attempt to play the video immediately
+    }
+
+    const onPlayerStateChange = (event) => {
+      if (event.data === window.YT.PlayerState.PLAYING) {
+        interval = setInterval(() => {
+          const currentTime = playerInstance.current?.getCurrentTime()
+          if (currentTime && onTimeUpdate) {
+            onTimeUpdate(currentTime)
+          }
+        }, 500) // Check every 500ms
+      } else {
+        clearInterval(interval)
+      }
+    }
+
+    const loadYouTubeAPI = () => {
+      if (!window.YT || !window.YT.Player) {
+        const script = document.createElement("script")
+        script.src = "https://www.youtube.com/iframe_api"
+        script.async = true
+        document.body.appendChild(script)
+      }
+
+      window.onYouTubeIframeAPIReady = () => {
+        initializePlayer()
+      }
+    }
+
+    loadYouTubeAPI()
+
+    return () => {
+      clearInterval(interval)
+      if (playerInstance.current) {
+        playerInstance.current.destroy()
+      }
+    }
+  }, [videoId, onTimeUpdate])
 
   return (
     <div style={{ textAlign: "center", marginTop: "2rem" }}>
-      <iframe
-        width="100%"
-        height="315"
-        src={`https://www.youtube.com/embed/${cleanVideoId}`} // Use cleanVideoId here
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      ></iframe>
+      <div ref={playerRef} style={{ width: "100%", height: "315px" }} />
     </div>
   )
 }
