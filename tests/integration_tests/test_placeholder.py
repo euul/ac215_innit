@@ -1,6 +1,6 @@
 import os
 
-def assert_github_secrets():
+def test_github_secrets():
     data_service_account = os.getenv("DATA_SERVICE_ACCOUNT")
     text_generator = os.getenv("TEXT_GENERATOR")
     
