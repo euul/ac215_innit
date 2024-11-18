@@ -45,9 +45,13 @@ jobs:
     - name: List running Docker containers
       run: docker ps  # This will show the container names, useful for debugging
 
-    # Observe memory usage
-    - name: Monitor Memory Usage
-      run: free -m
+    # Monitor memory usage before running tests
+    - name: Monitor Memory Usage Before Tests
+      run: |
+        echo "Memory usage before tests:"
+        free -m
+        echo "Docker container stats:"
+        docker stats --no-stream
 
     # Step 6: Run Integration Tests
     - name: Run integration tests inside the container
@@ -57,9 +61,13 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
     
-    # Observe memory usage
-    - name: Monitor Memory Usage
-      run: free -m
+    # Monitor memory usage before running tests
+    - name: Monitor Memory Usage Before Tests
+      run: |
+        echo "Memory usage before tests:"
+        free -m
+        echo "Docker container stats:"
+        docker stats --no-stream
     
     # Step 7: Generate Coverage Report
     - name: Generate coverage report inside the container
@@ -70,7 +78,7 @@ jobs:
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-
+    
     # Step 8: Get Container Logs
     - name: Get container logs
       run: docker logs src_webscraping_1
