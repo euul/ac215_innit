@@ -85,8 +85,8 @@ jobs:
     # Step 7: Generate Coverage Report
     - name: Generate coverage report inside the container
       run: |
-        docker exec src_webscraping_1 pipenv run coverage run -m pytest /app/tests/integration_tests
-        docker exec src_webscraping_1 pipenv run coverage html
+        docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests
+        docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
         docker cp src_webscraping_1:/app/htmlcov ./htmlcov
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
