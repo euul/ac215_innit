@@ -138,21 +138,41 @@ def update_json_files_with_labels(predictions_with_files):
             json.dump(data, f, indent=4)
         print(f"Updated {file_path} with label '{label}'")
 
-def upload_to_gcp_bucket(bucket_name, folder_name, local_folder):
+def upload_to_gcp_bucket(bucket_name, local_folder, predictions_with_files):
     # Initialize the GCP client
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
 
-    # Upload each JSON file in the local folder
-    for filename in os.listdir(local_folder):
-        if filename.endswith(".json"):
-            file_path = os.path.join(local_folder, filename)
-            blob_path = f"{folder_name}/{filename}"
-            blob = bucket.blob(blob_path)
+    # Define the label mapping (same as in `update_json_files_with_labels`)
+    LABEL_MAPPING = {
+        0: "A1",
+        1: "A2",
+        2: "B1",
+        3: "B2",
+        4: "C1"
+    }
 
-            # Upload JSON file to GCP bucket
-            blob.upload_from_filename(file_path, content_type='application/json')
-            print(f"Uploaded '{filename}' to GCP bucket '{bucket_name}' in folder '{folder_name}'")
+    # Upload each JSON file to its respective label folder
+    for file_path, label_id in predictions_with_files:
+        # Map the numeric label to the readable label
+        label = LABEL_MAPPING.get(label_id, "Unknown")  # Default to "Unknown" otherwise
+
+        # Ensure the label is valid
+        if label == "Unknown":
+            print(f"Skipping file {file_path} due to unknown label.")
+            continue
+
+        # Get the filename from the file path
+        filename = os.path.basename(file_path)
+
+        # Define the blob path in the bucket (e.g., yt_transcripts/A1/filename.json)
+        blob_path = f"yt_transcripts/{label}/{filename}"
+        blob = bucket.blob(blob_path)
+
+        # Upload the file to the GCP bucket
+        blob.upload_from_filename(file_path, content_type='application/json')
+        print(f"Uploaded '{filename}' to GCP bucket '{bucket_name}' in folder '{label}'")
+
 
 download_transcripts(BUCKET_NAME, "yt_transcripts")
 dataset = TranscriptDataset()
