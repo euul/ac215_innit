@@ -1,0 +1,9 @@
+[run]
+omit =
+    tests/*  # Exclude all files in the tests directory
+
+[report]
+exclude_lines =
+    # Exclude lines like these from coverage metrics
+    pragma: no cover
+    if __name__ == "__main__":

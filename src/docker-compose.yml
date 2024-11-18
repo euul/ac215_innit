@@ -12,6 +12,7 @@ services:
     volumes:
       - ../tests:/app/tests:ro  # Mount the tests directory into the container
       - ./htmlcov:/app/htmlcov
+      - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     #command: ["pipenv", "run", "pytest", "/app/tests/integration_tests"]  # Run tests only
     command: tail -f /dev/null
