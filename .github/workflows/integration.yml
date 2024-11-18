@@ -44,6 +44,19 @@ jobs:
     # Step 5: List Running Containers
     - name: List running Docker containers
       run: docker ps  # This will show the container names, useful for debugging
+    
+    # Monitor container health
+    - name: Check Container Status
+      run: |
+        docker ps -a
+        docker inspect src_webscraping_1
+
+    - name: Get Container Logs
+      run: |
+        docker logs src_webscraping_1 > container_logs.txt
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
     # Monitor memory usage before running tests
     - name: Monitor Memory Usage Before Tests
