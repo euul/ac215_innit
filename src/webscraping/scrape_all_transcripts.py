@@ -162,6 +162,6 @@ def scrape_transcripts(bucket_name, blob_name, target_blob_name):
 
     print(f"Missing transcripts or reading texts URLs have been saved to missing_transcripts.txt")
 
-#scrape_transcripts("scraped_all_links.csv",False)
-scrape_transcripts(bucket_name, 'scraped_all_links.json', 'scraped_all_content.json')
-scrape_transcripts(bucket_name, 'scraped_all_links_teens.json', 'scraped_all_content_teens.json')
+# #scrape_transcripts("scraped_all_links.csv",False)
+# scrape_transcripts(bucket_name, 'scraped_all_links.json', 'scraped_all_content.json')
+# scrape_transcripts(bucket_name, 'scraped_all_links_teens.json', 'scraped_all_content_teens.json')
