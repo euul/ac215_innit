@@ -183,4 +183,4 @@ num_labels = NUM_LABELS
 model = load_model(LOCAL_MODEL_PATH, num_labels)
 predictions = infer(model, hf_dataset)
 update_json_files_with_labels(predictions)
-upload_to_gcp_bucket(BUCKET_NAME, 'yt_transcripts', TRANSCRIPT_DIR)
+upload_to_gcp_bucket(BUCKET_NAME, TRANSCRIPT_DIR, predictions)
