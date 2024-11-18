@@ -1,7 +1,7 @@
 [run]
 omit =
-    tests/*  # Exclude all files in the tests directory
-
+    /app/tests/*
+    
 [report]
 exclude_lines =
     # Exclude lines like these from coverage metrics
