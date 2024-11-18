@@ -4,6 +4,19 @@ import MediaPlayer from "../components/MediaPlayer"
 import "../styles/styles.css"
 import { Container, Grid, Typography, Box } from "@mui/material"
 
+// Convert "hh:mm:ss" to seconds
+function convertToSeconds(timeString) {
+  const parts = timeString.split(":").map(Number)
+  if (parts.length === 3) {
+    const [hours, minutes, seconds] = parts
+    return hours * 3600 + minutes * 60 + seconds
+  } else if (parts.length === 2) {
+    const [minutes, seconds] = parts
+    return minutes * 60 + seconds
+  }
+  return parseFloat(timeString)
+}
+
 function MediaDetail() {
   const location = useLocation()
   const { video } = location.state || {}
@@ -14,23 +27,18 @@ function MediaDetail() {
     return <Typography variant="h5">Video not found</Typography>
   }
 
-  // Function to scroll the transcript into view
-  const scrollToCurrentEntry = (index) => {
-    const transcriptElement = transcriptRef.current
-    const entryElement =
-      transcriptElement.querySelectorAll(".transcript-entry")[index]
-    if (entryElement) {
-      entryElement.scrollIntoView({ behavior: "smooth", block: "center" })
-    }
-  }
+  // Process the transcript into seconds
+  const processedTranscript = video.transcript.map((entry) => ({
+    ...entry,
+    startInSeconds: convertToSeconds(entry.start),
+  }))
 
-  // Highlight the current transcript entry
   const getCurrentEntryIndex = () => {
-    for (let i = 0; i < video.transcript.length; i++) {
-      const startTime = parseFloat(video.transcript[i].start.replace(/:/g, ""))
+    for (let i = 0; i < processedTranscript.length; i++) {
+      const startTime = processedTranscript[i].startInSeconds
       const nextStartTime =
-        i + 1 < video.transcript.length
-          ? parseFloat(video.transcript[i + 1].start.replace(/:/g, ""))
+        i + 1 < processedTranscript.length
+          ? processedTranscript[i + 1].startInSeconds
           : Infinity
 
       if (currentTime >= startTime && currentTime < nextStartTime) {
@@ -44,7 +52,12 @@ function MediaDetail() {
 
   useEffect(() => {
     if (currentIndex !== -1) {
-      scrollToCurrentEntry(currentIndex)
+      const transcriptElement = transcriptRef.current
+      const entryElement =
+        transcriptElement.querySelectorAll(".transcript-entry")[currentIndex]
+      if (entryElement) {
+        entryElement.scrollIntoView({ behavior: "smooth", block: "center" })
+      }
     }
   }, [currentIndex])
 
@@ -54,7 +67,6 @@ function MediaDetail() {
         {video.video_name}
       </Typography>
       <Grid container spacing={4}>
-        {/* Left: Video Player */}
         <Grid item xs={12} md={6}>
           <Box>
             <MediaPlayer
@@ -63,7 +75,6 @@ function MediaDetail() {
             />
           </Box>
         </Grid>
-        {/* Right: Transcript */}
         <Grid item xs={12} md={6}>
           <Typography variant="h6" gutterBottom>
             Transcript
@@ -72,7 +83,7 @@ function MediaDetail() {
             ref={transcriptRef}
             style={{ maxHeight: "400px", overflowY: "scroll" }}
           >
-            {video.transcript.map((entry, index) => (
+            {processedTranscript.map((entry, index) => (
               <div
                 key={index}
                 className={`transcript-entry ${
