@@ -15,6 +15,6 @@ docker run --rm -ti \
   --name news-text \
   -v "$(pwd)/../../../secrets:/secrets" \
   -e GOOGLE_APPLICATION_CREDENTIALS="/secrets/data-service-account.json" \
-  --memory=4g \
+  --memory=10g \
   --cpus=2 \
   news-text
