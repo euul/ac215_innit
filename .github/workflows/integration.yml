@@ -23,36 +23,37 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      # Step 3: Test Webscraping Service
+      # Step 3: Prepare coverage directory
+      - name: Prepare coverage directory
+        run: mkdir -p ./coverage_combined
+
+      # Step 4: Test Webscraping Service
       - name: Test webscraping service
         run: |
           docker-compose -f src/docker-compose.yml up -d webscraping
           docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
           docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
-          docker cp src_webscraping_1:/app/coverage_combined/.coverage ./coverage_combined/.coverage.webscraping
+          docker cp src_webscraping_1:/app/.coverage ./coverage_combined/.coverage.webscraping
           docker-compose -f src/docker-compose.yml down
         env:
           DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
           TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-      # Step 4: Test question_bank Service
+      # Step 5: Test question_bank Service
       - name: Test question_bank service
         run: |
           docker-compose -f src/docker-compose.yml up -d question_bank
           docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/test_question_bank.py
           docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
-          docker cp src_question_bank_1:/app/coverage_combined/.coverage ./coverage_combined/.coverage.question_bank
+          docker cp src_question_bank_1:/app/.coverage ./coverage_combined/.coverage.question_bank
           docker-compose -f src/docker-compose.yml down
         env:
           DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
           TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-      # Step 5: Generate Unified Coverage Report
+      # Step 6: Generate Unified Coverage Report
       - name: Generate unified coverage report
         run: |
-          mkdir -p ./coverage_combined
-          cp ./coverage_combined/.coverage.webscraping ./coverage_combined/.coverage
-          cp ./coverage_combined/.coverage.question_bank ./coverage_combined/.coverage
           pip install coverage
           coverage combine ./coverage_combined/.coverage*
           coverage html --rcfile=src/.coveragerc
@@ -60,11 +61,10 @@ jobs:
           DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
           TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-      # Step 6: Upload Coverage Report
+      # Step 7: Upload Coverage Report
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: unified-coverage-report
           path: ./htmlcov
-
