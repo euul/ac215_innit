@@ -56,7 +56,7 @@ jobs:
         run: |
           pip install coverage
           coverage combine ./coverage_combined/.coverage*
-          coverage html --rcfile=src/.coveragerc
+          coverage html --rcfile=./app/.coveragerc
         env:
           DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
           TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
@@ -67,4 +67,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: unified-coverage-report
-          path: ./htmlcov
+          path: ./app/htmlcov
+
