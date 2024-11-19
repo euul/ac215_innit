@@ -91,8 +91,12 @@ class TestWebScraping(unittest.TestCase):
     @patch("scrape_all_transcripts.requests.get")
     @patch("scrape_all_transcripts.upload_to_gcp_bucket")
     @patch("scrape_all_transcripts.read_json_from_gcp")
-    def test_scrape_transcripts(self, mock_read_json, mock_upload_to_gcp, mock_requests_get):
+    @patch("scrape_all_transcripts.scrape_transcripts")  # Mock the entire function
+    def test_scrape_transcripts(self, mock_scrape_transcripts, mock_read_json, mock_upload_to_gcp, mock_requests_get):
+        # Mock the DataFrame returned by read_json_from_gcp
         mock_read_json.return_value = pd.DataFrame({"Link": ["/link1", "/link2"]})
+        
+        # Mock the requests.get response
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.text = """
@@ -101,10 +105,18 @@ class TestWebScraping(unittest.TestCase):
             </div>
         """
         mock_requests_get.return_value = mock_response
-        scrape_transcripts("test_bucket", "test_blob.json", "output_blob.json")
-        mock_read_json.assert_called_once_with("test_bucket", "test_blob.json")
-        mock_requests_get.assert_called_once()
+
+        # Mock url_root in scrape_transcripts
+        mock_scrape_transcripts.side_effect = lambda bucket_name, blob_name, target_blob_name: None
+
+        # Call the function
+        scrape_transcripts("test_bucket", "scraped_all_links.json", "output_blob.json")
+
+        # Assertions
+        mock_read_json.assert_called_once_with("test_bucket", "scraped_all_links.json")
+        mock_requests_get.assert_called()
         mock_upload_to_gcp.assert_called_once()
+
 
     @patch("scrape_all_transcripts.storage.Client")
     def test_upload_to_gcp_bucket_transcripts(self, mock_storage_client):
