@@ -27,13 +27,14 @@ jobs:
       - name: Prepare coverage directory
         run: mkdir -p ./coverage_combined
 
-      # Step 4: Test Webscraping Service
-      - name: Test webscraping service
+      # Step 4: Test Webscraping Service and Copy .coveragerc
+      - name: Test webscraping service and copy .coveragerc
         run: |
           docker-compose -f src/docker-compose.yml up -d webscraping
           docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
           docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
           docker cp src_webscraping_1:/app/.coverage ./coverage_combined/.coverage.webscraping
+          docker cp src_webscraping_1:/app/.coveragerc ./app/.coveragerc
           docker-compose -f src/docker-compose.yml down
         env:
           DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
