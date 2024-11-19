@@ -62,12 +62,13 @@ function MediaDetail() {
   }, [currentIndex])
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: "2rem" }}>
-      <Typography variant="h4" component="h2" align="center" gutterBottom>
+    <Container maxWidth="lg" style={{ marginTop: "3rem" }}>
+      <h2 align="center" style={{ color: "#00ffcc" }}>
         {video.video_name}
-      </Typography>
+      </h2>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
+          <h4 style={{ color: "#ffcc00" }}>Video</h4>
           <Box>
             <MediaPlayer
               videoId={video.video_id}
@@ -76,9 +77,7 @@ function MediaDetail() {
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="h6" gutterBottom>
-            Transcript
-          </Typography>
+          <h4 style={{ color: "#ffcc00" }}>Transcript</h4>
           <div
             ref={transcriptRef}
             style={{ maxHeight: "400px", overflowY: "scroll" }}
@@ -92,15 +91,23 @@ function MediaDetail() {
                 style={{
                   padding: "1rem",
                   backgroundColor:
-                    index === currentIndex ? "#d0f0fd" : "transparent",
+                    index === currentIndex ? "#3333ff" : "transparent",
                   borderRadius: "5px",
                 }}
               >
-                <Typography variant="body2">
-                  <strong>Text:</strong> {entry.text}
-                  <br />
-                  <strong>Start:</strong> {entry.start}
-                </Typography>
+                <h6
+                  variant="body2"
+                  style={{
+                    color: "#fff",
+                    fontFamily: "sans-serif",
+                    fontSize: 15,
+                    margin: 0,
+                  }}
+                >
+                  {/*<strong>Text:</strong>*/} {entry.text}
+                  {/*<br />
+                  <strong>Start:</strong> {entry.start}*/}
+                </h6>
               </div>
             ))}
           </div>

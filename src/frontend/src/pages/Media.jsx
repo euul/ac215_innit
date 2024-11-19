@@ -32,11 +32,8 @@ function Media() {
       }}
     >
       <Container maxWidth="lg" style={{ marginTop: "2rem" }}>
-        <Typography
-          variant="h4"
-          component="h2"
+        <h2
           align="center"
-          gutterBottom
           style={{
             color: "#00ffcc", // Neon green title
             textShadow: "2px 2px #000", // Retro shadow
@@ -44,7 +41,7 @@ function Media() {
           }}
         >
           Media
-        </Typography>
+        </h2>
         <Typography
           variant="subtitle1"
           align="center"
@@ -64,7 +61,7 @@ function Media() {
                 onClick={() => handleClick(video)}
                 style={{
                   cursor: "pointer",
-                  background: "linear-gradient(135deg, #4facfe, #00f2fe)", // Neon gradient
+                  background: "linear-gradient(135deg, #3333ff, #00f2fe)", // Neon gradient
                   color: "#fff",
                   borderRadius: "12px",
                   boxShadow: "0 8px 20px rgba(0, 0, 0, 0.4)", // Strong retro shadow
@@ -95,7 +92,7 @@ function Media() {
                     style={{
                       fontFamily: "Press Start 2P, cursive",
                       fontSize: "0.8rem",
-                      color: "#00ffcc", // Neon green for details
+                      color: "#ffcc00", // Neon green for details
                     }}
                   >
                     Label: {video.label}

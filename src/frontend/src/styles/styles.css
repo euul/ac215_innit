@@ -7,16 +7,16 @@ body {
   height: 100%;
   width: 100%;
   font-family: "Press Start 2P", cursive; /* Retro font */
-  color: #00ffcc; /* Neon green text */
+  color: #33c859; /* Neon green text */
 }
 
 header {
-  background: linear-gradient(90deg, #ff00cc, #3333ff); /* Retro gradient */
+  background: linear-gradient(90deg, #ffcc00, #ffcc00); /* Retro gradient */
   padding: 1rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 4px solid #00ffcc; /* Neon border */
+  border-bottom: 4px solid #09b4c6; /* Neon border */
 }
 
 header img {
@@ -25,17 +25,17 @@ header img {
 }
 
 header a {
-  color: #00ffcc;
+  color: #3333ff;
   margin: 0 1rem;
   font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
-  text-shadow: 2px 2px #000; /* Retro shadow effect */
+  /*text-shadow: 2px 2px #000; /* Retro shadow effect */
   transition: color 0.3s ease;
 }
 
 header a:hover {
-  color: #ffcc00;
+  color: #09b4c6;
 }
 
 /* Main Page Hero */
@@ -60,7 +60,7 @@ header a:hover {
 
 .hero button {
   background: #3333ff;
-  border: 4px solid #ff00cc;
+  border: 4px solid #ffcc00;
   padding: 1rem 2rem;
   font-size: 1rem;
   font-family: "Press Start 2P", cursive;
