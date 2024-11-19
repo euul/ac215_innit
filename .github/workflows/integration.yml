@@ -53,7 +53,7 @@ jobs:
       - name: Generate unified coverage report
         run: |
           pip install coverage
-          coverage combine /app/coverage_combined/.coverage*
+          coverage combine /app/coverage_combined/
           coverage html --rcfile=/app/.coveragerc
         env:
           DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
