@@ -16,4 +16,35 @@ services:
     working_dir: /app
     #command: ["pipenv", "run", "pytest", "/app/tests/integration_tests"]  # Run tests only
     command: tail -f /dev/null
-    
+
+  # datapipeline:
+  #   build:
+  #     context: ./datapipeline
+  #     dockerfile: Dockerfile
+  #   image: datapipeline
+  #   environment:
+  #     DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+  #     TEXT_GENERATOR: ${TEXT_GENERATOR}
+  #   volumes:
+  #     - ../tests:/app/tests:ro  # Mount the tests directory into the container
+  #     - ./htmlcov:/app/htmlcov
+  #     - ../.coveragerc:/app/.coveragerc:ro
+  #   working_dir: /app
+  #   #command: ["pipenv", "run", "pytest", "/app/tests/integratioa3121a2891afn_tests"]  # Run tests only
+  #   command: tail -f /dev/null
+
+  question_bank:
+    build:
+      context: ./question_bank
+      dockerfile: Dockerfile
+    image: question_bank
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro  # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+

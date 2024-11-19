@@ -3,108 +3,67 @@ name: Integration Tests
 on:
   push:
     branches:
-      - milestone4  # Trigger on pushes to the milestone4 branch
+      - milestone4
   pull_request:
     branches:
-      - milestone4  # Trigger on pull requests to milestone4
+      - milestone4
 
 jobs:
-  test:
+  integration_tests:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Check out repository
-    - name: Check out repository
-      uses: actions/checkout@v4
+      # Step 1: Check out repository
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    # Step 2: Set up Docker Compose
-    - name: Set up Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
+      # Step 2: Set up Docker Compose
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-    # Step 3: Test Access to Secrets
-    - name: Test Access to Secrets
-      run: |
-        echo "Testing secrets..."
-        echo "$DATA_SERVICE_ACCOUNT" | jq '.' || echo "DATA_SERVICE_ACCOUNT is not valid JSON"
-        echo "TEXT_GENERATOR: $TEXT_GENERATOR"
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      # Step 3: Test Webscraping Service
+      - name: Test webscraping service
+        run: |
+          docker-compose -f src/docker-compose.yml up -d webscraping
+          docker exec src_webscraping_1 pipenv run pytest /app/tests/integration/test_webscraping.py
+          docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration/test_webscraping.py
+          docker cp src_webscraping_1:/app/tests/.coverage ./coverage_webscraping
+          docker-compose -f src/docker-compose.yml down
+        env:
+          DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+          TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 4: Build and Start Containers
-    - name: Build and start containers
-      run: |
-        docker-compose -f src/docker-compose.yml up -d
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      # Step 4: Test question_bank Service
+      - name: Test question_bank service
+        run: |
+          docker-compose -f src/docker-compose.yml up -d question_bank
+          docker exec src_question_bank_1 pipenv run pytest /app/tests/integration/test_question_bank.py
+          docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration/test_question_bank.py
+          docker cp src_question_bank_1:/app/tests/.coverage ./coverage_question_bank
+          docker-compose -f src/docker-compose.yml down
+        env:
+          DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+          TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 5: List Running Containers
-    - name: List running Docker containers
-      run: docker ps  # This will show the container names, useful for debugging
-    
-    # Monitor container health
-    - name: Check Container Status
-      run: |
-        docker ps -a
-        docker inspect src_webscraping_1
+      # Step 5: Generate Unified Coverage Report
+      - name: Generate unified coverage report
+        run: |
+          mkdir -p ./coverage_combined
+          cp ./coverage_webscraping ./coverage_combined/.coverage.webscraping
+          cp ./coverage_question_bank ./coverage_combined/.coverage.question_bank
+          pip install coverage
+          coverage combine ./coverage_combined/.coverage*
+          coverage html --rcfile=src/.coveragerc
+        env:
+          DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+          TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    - name: Get Container Logs
-      run: |
-        docker logs src_webscraping_1 > container_logs.txt
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-
-    # Monitor memory usage before running tests
-    - name: Monitor Memory Usage Before Tests
-      run: |
-        echo "Memory usage before tests:"
-        free -m
-        echo "Docker container stats:"
-        docker stats --no-stream
-
-    # Step 6: Run Integration Tests
-    - name: Run integration tests inside the container
-      run: |
-        docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py --ignore=/app/tests/unit_tests
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-    
-    # Monitor memory usage before running tests
-    - name: Monitor Memory Usage Before Tests
-      run: |
-        echo "Memory usage before tests:"
-        free -m
-        echo "Docker container stats:"
-        docker stats --no-stream
-    
-    # Step 7: Generate Coverage Report
-    - name: Generate coverage report inside the container
-      run: |
-        docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests
-        docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_webscraping_1:/app/htmlcov ./htmlcov
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-    
-    # Step 8: Get Container Logs
-    - name: Get container logs
-      run: docker logs src_webscraping_1
-
-    # Step 9: Upload Coverage Report  
-    - name: Upload coverage report
-      if: always()  # Ensure this always runs, even if the tests fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: ./htmlcov  # Adjust path if htmlcov is created elsewhere
-
-    # Step 10: Tear Down Containers
-    - name: Tear down containers
-      if: always()  # Ensure this always runs, even if the tests fail
-      run: docker-compose -f src/docker-compose.yml down
+      # Step 6: Upload Coverage Report
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: unified-coverage-report
+          path: ./htmlcov
