@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 google-cloud-storage = "*"
 vertexai = "*"
+pytest = "*"
+pytest-cov = "*"
+pandas = "*"
 
 [dev-packages]
 

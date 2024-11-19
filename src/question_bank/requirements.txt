@@ -1,2 +1,5 @@
 google-cloud-storage
 vertexai
+pandas
+pytest
+pytest-cov
