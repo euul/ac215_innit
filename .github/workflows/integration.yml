@@ -48,7 +48,10 @@ jobs:
         env:
           DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
           TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-
+      # Step 5.5: Debug
+      - name: Debug coverage files
+        run: ls -l /app/coverage_combined
+      
       # Step 6: Generate Unified Coverage Report
       - name: Generate unified coverage report
         run: |
