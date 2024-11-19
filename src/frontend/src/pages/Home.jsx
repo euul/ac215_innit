@@ -6,8 +6,8 @@ function Home() {
 
   return (
     <div className="hero">
-      <h2>Welcome to innit</h2>
-      <p>Learn practical language skills that are relevant to everyday life!</p>
+      <h2>innit</h2>
+      <p>Practical Language Learning</p>
       <button onClick={() => navigate("/diagnostic")}>Get Started</button>
     </div>
   )

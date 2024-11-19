@@ -1,22 +1,22 @@
 /* Global Styles */
 html,
 body {
-  background-color: #f9f9f9; /* Light and modern background */
+  background-color: #1a1a1a; /* Dark background for retro feel */
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
-  font-family: "Poppins", sans-serif; /* Modern font */
-  color: #333; /* Neutral text color */
+  font-family: "Press Start 2P", cursive; /* Retro font */
+  color: #00ffcc; /* Neon green text */
 }
 
 header {
-  background: linear-gradient(90deg, #4facfe, #00f2fe); /* Gradient header */
+  background: linear-gradient(90deg, #ff00cc, #3333ff); /* Retro gradient */
   padding: 1rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-bottom: 4px solid #00ffcc; /* Neon border */
 }
 
 header img {
@@ -25,16 +25,17 @@ header img {
 }
 
 header a {
-  color: #fff;
+  color: #00ffcc;
   margin: 0 1rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
+  text-shadow: 2px 2px #000; /* Retro shadow effect */
   transition: color 0.3s ease;
 }
 
 header a:hover {
-  color: #d9d9d9;
+  color: #ffcc00;
 }
 
 /* Main Page Hero */
@@ -42,34 +43,36 @@ header a:hover {
   text-align: center;
   margin-top: 5rem;
   padding: 2rem;
+  color: #00ffcc;
+  text-shadow: 2px 2px #000;
 }
 
 .hero h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #333;
 }
 
 .hero p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 2rem;
-  color: #555;
 }
 
 .hero button {
-  background: #4facfe;
-  border: none;
+  background: #3333ff;
+  border: 4px solid #ff00cc;
   padding: 1rem 2rem;
-  font-size: 1.2rem;
-  color: white;
-  border-radius: 25px;
+  font-size: 1rem;
+  font-family: "Press Start 2P", cursive;
+  color: #fff;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .hero button:hover {
-  background: #00c6ff;
+  background: #ff00cc;
+  transform: scale(1.1);
 }
 
 /* Media Page */
@@ -82,54 +85,43 @@ header a:hover {
 
 .media-container .video-player {
   flex: 2;
-  border: 1px solid #ddd;
+  border: 4px solid #00ffcc;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .media-container .video-list {
   flex: 1;
 }
 
-/* Add box styles for media cards */
+/* Card Styles */
 .card {
   text-align: center;
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
+  border: 4px solid #ff00cc;
+  background: #3333ff;
+  color: #fff;
+  text-shadow: 1px 1px #000;
   transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px rgba(255, 0, 204, 0.8);
 }
 
-/* Add background for the media details page */
-.container {
-  margin-top: 2rem;
-  padding: 2rem;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
+/* Transcript Styles */
 .transcript-entry {
   margin-bottom: 1rem;
   padding: 0.5rem;
-  transition: background-color 0.3s ease;
+  background: #222;
+  color: #00ffcc;
+  text-shadow: 1px 1px #000;
+  border-left: 4px solid #3333ff;
 }
 
 .transcript-entry.active {
-  background-color: #d0f0fd; /* Highlight color */
-  border-left: 3px solid #007bff;
-}
-
-.transcript-entry:hover {
-  background-color: #f0f0f0;
-}
-
-.transcript {
-  max-height: 400px;
-  overflow-y: scroll;
+  background-color: #444;
+  border-left: 4px solid #ff00cc;
 }
