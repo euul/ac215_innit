@@ -5,7 +5,7 @@ import logo from "../images/innit_logo.png"
 function Header() {
   return (
     <header>
-      <img src={logo} alt="Innit Logo" />
+      <img src={logo} alt="Logo" />
       <nav>
         <Link to="/">Home</Link>
         <Link to="/diagnostic">Diagnostic Test</Link>
