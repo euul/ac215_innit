@@ -74,6 +74,15 @@ jobs:
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+  # Step 6.5: Debug Coverage Files
+    - name: Debug coverage files
+      run: |
+        echo "Checking contents of webscraping_coverage directory:"
+        ls -al ./webscraping_coverage || echo "Directory does not exist or is empty"
+
+        echo "Checking contents of question_bank_coverage directory:"
+        ls -al ./question_bank_coverage || echo "Directory does not exist or is empty"
+
 
     # Step 8: Upload Coverage Reports and Raw Data
     - name: Upload webscraping coverage report
