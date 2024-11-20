@@ -101,13 +101,13 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: webscraping-raw-coverage
-        path: ./webscraping_coverage/.coverage
+        path: ${{ github.workspace }}/webscraping_coverage/.coverage
       
     - name: Upload question bank raw coverage data
       uses: actions/upload-artifact@v3
       with:
         name: question-bank-raw-coverage
-        path: ./question_bank_coverage/.coverage    
+        path: ${{ github.workspace }}/question_bank_coverage/.coverage
 
     # Step 9: Tear Down Containers
     - name: Tear down containers
