@@ -58,7 +58,7 @@ jobs:
       run: |
         docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
         docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_webscraping_1:/app/htmlcov ./htmlcov
+        docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
