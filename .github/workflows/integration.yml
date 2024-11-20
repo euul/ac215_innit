@@ -82,7 +82,17 @@ jobs:
 
         echo "Checking contents of question_bank_coverage directory:"
         ls -al ./question_bank_coverage || echo "Directory does not exist or is empty"
+    - name: Log current working directory
+      run: |
+        echo "Current working directory:"
+        pwd
 
+        echo "Verifying coverage files before upload:"
+        echo "Webscraping file:"
+        ls -al ./webscraping_coverage/.coverage || echo "Webscraping file not found"
+
+        echo "Question bank file:"
+        ls -al ./question_bank_coverage/.coverage || echo "Question bank file not found"
 
     # Step 8: Upload Coverage Reports and Raw Data
     - name: Upload webscraping coverage report
