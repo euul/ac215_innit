@@ -98,5 +98,20 @@ def scrape_links(target_links,teens):
     print(f"Scraping complete. All data saved to {blob_name}")
 
 
-# scrape_links("target_links.txt",False)
-# scrape_links("target_links_teens.txt",True)
+# Main function
+def main():  # pragma: no cover
+    # Define the files containing the URLs
+    target_links_adults = "target_links.txt"
+    target_links_teens = "target_links_teens.txt"
+
+    # Scrape adult links
+    print("Starting scrape for adult links...")
+    scrape_links(target_links_adults, False)
+
+    # Scrape teen links
+    print("Starting scrape for teen links...")
+    scrape_links(target_links_teens, True)
+
+
+if __name__ == "__main__":
+    main()

@@ -24,7 +24,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def main():
+def main():  # pragma: no cover
     args = parse_arguments()
 
     OUTPUT_FILE_PATH = os.path.join(OUTPUT_DIR, f"generated_questions_{args.level}.json")

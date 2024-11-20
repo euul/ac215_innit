@@ -31,7 +31,7 @@ def upload_files_to_gcp():
     print("All files uploaded successfully.")
 
 
-def main():
+def main():  # pragma: no cover
     """Main function to execute the upload process."""
     upload_files_to_gcp()
 
