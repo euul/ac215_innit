@@ -3,10 +3,10 @@ name: Integration Tests
 on:
   push:
     branches:
-      - milestone4
+      - milestone4  # Trigger on pushes to the milestone4 branch
   pull_request:
     branches:
-      - milestone4
+      - milestone4  # Trigger on pull requests to milestone4
 
 jobs:
   test:
@@ -22,7 +22,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
-
     # Step 3: Test Access to Secrets
     - name: Test Access to Secrets
       run: |
@@ -41,52 +40,65 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 5: Debug .coveragerc Mounting
-    - name: Debug .coveragerc in webscraping
-      run: docker exec src_webscraping_1 ls -l /app/.coveragerc
-
-    - name: Debug .coveragerc in question_bank
-      run: docker exec src_question_bank_1 ls -l /app/.coveragerc
-
-    - name: Debug .coveragerc in collector
-      run: docker exec src_collector_1 ls -l /app/.coveragerc
+    # Step 5: List Running Containers
+    - name: List running Docker containers
+      run: docker ps  # This will show the container names, useful for debugging
 
     # Step 6: Run Integration Tests for webscraping
-    - name: Run integration tests for webscraping
+    - name: Run integration tests inside the container
+      run: |
+        docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+
+    
+    # Step 7: Generate Coverage Report for webscraping
+    - name: Generate coverage report inside the container
       run: |
         docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
-        docker cp src_webscraping_1:/app/.coverage src_collector_1:/app/coverage_data/.coverage_webscraping
+        docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
+        docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 7: Run Integration Tests for question_bank
-    - name: Run integration tests for question_bank
+    # Step 8: Run Integration Tests for question_bank
+    - name: Run integration tests inside question_bank container
+      run: |
+        docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/test_question_bank.py
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+
+    # Step 9: Generate Coverage Report for question_bank
+    - name: Generate coverage report inside question_bank container
       run: |
         docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
-        docker cp src_question_bank_1:/app/.coverage src_collector_1:/app/coverage_data/.coverage_question_bank
+        docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
+        docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 8: Combine Coverage Reports with collector
-    - name: Combine coverage reports using collector
-      run: |
-        docker exec src_collector_1 pip install coverage
-        docker exec src_collector_1 coverage combine --rcfile=/app/.coveragerc /app/coverage_data/.coverage_webscraping /app/coverage_data/.coverage_question_bank
-        docker exec src_collector_1 coverage html --rcfile=/app/.coveragerc -d /app/htmlcov_combined
-        docker exec src_collector_1 ls -R /app/htmlcov_combined
-        docker cp src_collector_1:/app/htmlcov_combined ./htmlcov_combined
-
-    # Step 9: Upload Combined Coverage Report
-    - name: Upload combined coverage report
-      if: always()
+    # Step 10: Upload webscraping Coverage Reports  
+    - name: Upload src_webscraping coverage report
+      if: always()  # Ensure this always runs, even if the tests fail
       uses: actions/upload-artifact@v3
       with:
-        name: combined-coverage-report
-        path: ./htmlcov_combined
+        name: webscraping-coverage-report
+        path: ./htmlcov_webscraping  # Adjust path if htmlcov is created elsewhere
+    
+    # Step 11: Upload question_bank Coverage Reports  
+    - name: Upload question_bank coverage report
+      if: always()  # Ensure this always runs, even if the tests fail
+      uses: actions/upload-artifact@v3
+      with:
+        name: question-bank-coverage-report
+        path: ./htmlcov_question_bank  # Adjust path if htmlcov is created elsewhere
 
-    # Step 10: Tear Down Containers
+    # Step 12: Tear Down Containers
     - name: Tear down containers
-      if: always()
+      if: always()  # Ensure this always runs, even if the tests fail
       run: docker-compose -f src/docker-compose.yml down
+    
