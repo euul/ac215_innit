@@ -86,7 +86,7 @@ jobs:
       if: always()  # Ensure this always runs, even if the tests fail
       uses: actions/upload-artifact@v3
       with:
-        name: src-webscraping-coverage-report
+        name: webscraping-coverage-report
         path: ./htmlcov_webscraping  # Adjust path if htmlcov is created elsewhere
     
     # Step 11: Upload question_bank Coverage Reports  
