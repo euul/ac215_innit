@@ -76,7 +76,7 @@ jobs:
       run: |
         docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
         docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp question_bank:/app/htmlcov ./htmlcov_question_bank
+        docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
