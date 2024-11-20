@@ -11,7 +11,7 @@ services:
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
       - ../tests:/app/tests:ro  # Mount the tests directory into the container
-      - ./htmlcov:/app/htmlcov
+      - ./htmlcov:/app/htmlcov_webscraping
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     #command: ["pipenv", "run", "pytest", "/app/tests/integration_tests"]  # Run tests only
@@ -43,7 +43,7 @@ services:
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
       - ../tests:/app/tests:ro  # Mount the tests directory into the container
-      - ./htmlcov:/app/htmlcov
+      - ./htmlcov:/app/htmlcov_question_bank
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     command: tail -f /dev/null
