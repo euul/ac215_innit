@@ -101,4 +101,47 @@ jobs:
     - name: Tear down containers
       if: always()  # Ensure this always runs, even if the tests fail
       run: docker-compose -f src/docker-compose.yml down
-    
+
+  post-processing:
+    runs-on: ubuntu-latest
+    needs: test  # Ensure this runs after the test job
+    steps:
+      # Step 1: Check out the repository
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Step 2: Download webscraping coverage report
+      - name: Download webscraping coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: webscraping-coverage-report
+          path: ./artifacts/webscraping
+
+      # Step 3: Download question_bank coverage report
+      - name: Download question_bank coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: question-bank-coverage-report
+          path: ./artifacts/question_bank
+
+      # Step 4: Combine Coverage Reports
+      - name: Combine coverage reports
+        run: |
+          mkdir -p combined_coverage
+          cp -r ./artifacts/webscraping/* ./combined_coverage
+          cp -r ./artifacts/question_bank/* ./combined_coverage
+        shell: bash
+      
+      # Step 5: Upload Combined Report
+      - name: Upload combined coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: combined-coverage-report
+          path: ./combined_coverage
+          
+      # Step 5: Make HTML report    
+      - name: Generate combined HTML report
+        run: |
+          pip install coverage  # Ensure coverage is available
+          coverage combine ./artifacts/webscraping ./artifacts/question_bank
+          coverage html -d ./combined_coverage
