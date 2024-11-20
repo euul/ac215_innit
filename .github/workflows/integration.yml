@@ -74,8 +74,8 @@ jobs:
     # Step 9: Generate Coverage Report for question_bank
     - name: Generate coverage report inside question_bank container
       run: |
-        docker exec question_bank pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
-        docker exec question_bank pipenv run coverage html --rcfile=/app/.coveragerc
+        docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
+        docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
         docker cp question_bank:/app/htmlcov ./htmlcov_question_bank
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
