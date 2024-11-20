@@ -34,7 +34,7 @@ jobs:
     # Step 4: Run Integration Tests for Webscraping
     - name: Run integration tests for webscraping
       run: |
-        docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/webscraping --ignore=/app/tests/integration_tests/question_bank
+        docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/webscraping.py
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
@@ -42,7 +42,7 @@ jobs:
     # Step 5: Generate Coverage Report for Webscraping
     - name: Generate coverage report for webscraping
       run: |
-        docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/webscraping
+        docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/webscraping.py
         docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
         docker cp src_webscraping_1:/app/htmlcov ./htmlcov
       env:
@@ -62,7 +62,7 @@ jobs:
       if: always()
       run: docker-compose -f src/docker-compose.yml down
 
-  test_question_bank:
+  test_datapipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -76,7 +76,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
-    # Step 3: Build and Start Question Bank Service
+    # Step 3: Build and Start Datapipeline Service
     - name: Build and start question_bank container
       run: |
         docker-compose -f src/docker-compose.yml up -d question_bank
@@ -84,25 +84,25 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 4: Run Integration Tests for Question Bank
+    # Step 4: Run Integration Tests for question_bank
     - name: Run integration tests for question_bank
       run: |
-        docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/question_bank --ignore=/app/tests/integration_tests/webscraping
+        docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/question_bank.py
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 5: Generate Coverage Report for Question Bank
+    # Step 5: Generate Coverage Report for question_bank
     - name: Generate coverage report for question_bank
       run: |
-        docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/question_bank
+        docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/question_bank.py
         docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
         docker cp src_question_bank_1:/app/htmlcov ./htmlcov
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 6: Upload Coverage Report for Question Bank
+    # Step 6: Upload Coverage Report for Datapipeline
     - name: Upload question_bank coverage report
       if: always()
       uses: actions/upload-artifact@v3
@@ -110,7 +110,7 @@ jobs:
         name: question_bank-coverage-report
         path: ./htmlcov
 
-    # Step 7: Tear Down Question Bank Container
+    # Step 7: Tear Down Datapipeline Container
     - name: Tear down question_bank container
       if: always()
       run: docker-compose -f src/docker-compose.yml down
