@@ -1,5 +1,5 @@
 # Use the official Python image with Debian as a base
-FROM euxl/datapipeline:latest
+FROM euxl/datapipeline:base-v1.1.0
 
 # Tell pipenv where the shell is.
 # This allows us to use "pipenv shell" as a container entry point.
@@ -56,6 +56,6 @@ RUN pipenv sync
 # Add the application code
 ADD . /app
 
-# Entry point: use bash and run pipenv shell by default
-ENTRYPOINT ["/bin/bash"]
-CMD ["-c", "pipenv shell"]
+# # Entry point: use bash and run pipenv shell by default
+# ENTRYPOINT ["/bin/bash"]
+# CMD ["-c", "pipenv shell"]

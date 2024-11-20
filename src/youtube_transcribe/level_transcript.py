@@ -174,13 +174,16 @@ def upload_to_gcp_bucket(bucket_name, local_folder, predictions_with_files):
         print(f"Uploaded '{filename}' to GCP bucket '{bucket_name}' in folder '{label}'")
 
 
-download_transcripts(BUCKET_NAME, "yt_transcripts")
-dataset = TranscriptDataset()
-hf_dataset = dataset.to_hf_dataset()
+def main():
+    download_transcripts(BUCKET_NAME, "yt_transcripts")
+    dataset = TranscriptDataset()
+    hf_dataset = dataset.to_hf_dataset()
+    download_weights(BUCKET_NAME, BLOB_NAME, LOCAL_MODEL_PATH)
+    model = load_model(LOCAL_MODEL_PATH, NUM_LABELS)
+    predictions = infer(model, hf_dataset)
+    update_json_files_with_labels(predictions)
+    upload_to_gcp_bucket(BUCKET_NAME, TRANSCRIPT_DIR, predictions)
 
-download_weights(BUCKET_NAME, BLOB_NAME, LOCAL_MODEL_PATH)
-num_labels = NUM_LABELS
-model = load_model(LOCAL_MODEL_PATH, num_labels)
-predictions = infer(model, hf_dataset)
-update_json_files_with_labels(predictions)
-upload_to_gcp_bucket(BUCKET_NAME, TRANSCRIPT_DIR, predictions)
+
+if __name__ == "__main__":
+    main()

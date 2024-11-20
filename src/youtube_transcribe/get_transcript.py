@@ -6,11 +6,6 @@ import os
 import video_id_scraper
 import argparse
 
-parser = argparse.ArgumentParser(description="Scrape YouTube search results.")
-parser.add_argument("--keyword", type=str, help="Search keyword for YouTube.")
-parser.add_argument("--n_scroll", type=int, default=2, help="Number of scroll actions to load content (default: 2)")
-args = parser.parse_args()
-
 def get_transcript(video_id):
     if video_id:
         try:
@@ -69,29 +64,28 @@ def save_transcripts(videos, local_folder):
                 json.dump(data, json_file, indent=4)
             print(f"Saved transcript for '{video['video_name']}' locally.")
 
-# videos = [
-#     {"video_name": "ai_and_math", "video_id": "e049IoFBnLA"},
-#     {"video_name": "john_oliver_trump_reelection", "video_id": "LU2atCWyAos"},
-#     # Add more video dictionaries as needed
-# ]
-
-videos = video_id_scraper.main(args.keyword, args.n_scroll)
 
 def cleanup_local_folder(local_folder):
     shutil.rmtree(local_folder)
     print(f"Deleted local folder '{local_folder}' and all its contents.")
 
-local_folder = "transcripts"
-bucket_name = 'innit_articles_bucket'
-folder_name = 'yt_transcripts'
+def main():
+    parser = argparse.ArgumentParser(description="Scrape YouTube search results.")
+    parser.add_argument("--keyword", type=str, help="Search keyword for YouTube.")
+    parser.add_argument("--n_scroll", type=int, default=2, help="Number of scroll actions to load content (default: 2)")
+    args = parser.parse_args()
 
-# Save all transcripts locally
-save_transcripts(videos, local_folder)
+    videos = video_id_scraper.main(args.keyword, args.n_scroll)
 
-# Upload all saved JSON files to the GCP bucket in a single batch
-upload_to_gcp_bucket(bucket_name, folder_name, local_folder)
+    local_folder = "transcripts"
+    bucket_name = 'innit_articles_bucket'
+    folder_name = 'yt_transcripts'
 
-# Clean up the local transcripts folder
-cleanup_local_folder(local_folder)
+    save_transcripts(videos, local_folder)
+    upload_to_gcp_bucket(bucket_name, folder_name, local_folder)
+    cleanup_local_folder(local_folder)
 
+
+if __name__ == "__main__":
+    main()
 
