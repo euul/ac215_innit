@@ -106,20 +106,20 @@ jobs:
       with:
         name: question-bank-coverage-report
         path: ./htmlcov_question_bank
-        
+
     - name: Upload webscraping raw coverage data
       uses: actions/upload-artifact@v3
       with:
         name: webscraping-raw-coverage
         path: ./webscraping_coverage/.coverage
-        debug: true
+        include-hidden-files: true
       
     - name: Upload question bank raw coverage data
       uses: actions/upload-artifact@v3
       with:
         name: question-bank-raw-coverage
         path: ./question_bank_coverage/.coverage
-        debug: true
+        include-hidden-files: true
       
 
 
