@@ -33,7 +33,7 @@ def upload_json_to_gcp(bucket_name, destination_blob_name, json_file_path):
     print(f"Uploaded {json_file_path} to {bucket_name}/{destination_blob_name}")
 
 
-if __name__ == "__main__":
+def main(): # pragma: no cover
     # Example DataFrame
     df = pd.read_csv('bbc_news_articles.csv')
     # Remove null values (if any)
@@ -49,3 +49,6 @@ if __name__ == "__main__":
 
     # Upload JSON to GCP bucket
     upload_json_to_gcp(bucket_name, destination_blob_name, json_file_path)
+
+if __name__ == "__main__":
+    main() # pragma: no cover

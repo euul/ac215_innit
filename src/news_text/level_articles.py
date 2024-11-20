@@ -124,7 +124,7 @@ def upload_predictions_to_gcp_json(dataset, bucket_name, filename):
     print(f"Uploaded '{filename}' to GCP bucket '{bucket_name}'")
 
 
-def main():
+def main(): # pragma: no cover
     # Download article data from GCP, convert to HF dataset
     download_json_from_gcp(BUCKET_NAME, ARTICLE_DIR, ARTICLE_DIR)
     hf_dataset = convert_json_to_hf_dataset(ARTICLE_DIR)
@@ -139,4 +139,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main() # pragma: no cover

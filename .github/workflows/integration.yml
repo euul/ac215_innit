@@ -148,3 +148,38 @@ jobs:
 
       - name: Tear down datapipeline container
         run: docker-compose -f src/docker-compose.yml down datapipeline
+
+  # News text Tests
+  news_text:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start news_text container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d news_text
+
+      - name: Run integration tests inside news_text container
+        run: |
+          docker exec src_news_text_1 pipenv run pytest /app/tests/integration_tests/test_news_text.py
+
+      - name: Generate coverage report for news_text
+        run: |
+          docker exec src_news_text_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_news_text.py
+          docker exec src_news_text_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_news_text_1:/app/htmlcov ./htmlcov_news_text
+
+      - name: Upload news_text coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: news_text-coverage-report
+          path: ./htmlcov_news_text
+
+      - name: Tear down news_text container
+        run: docker-compose -f src/docker-compose.yml down news_text

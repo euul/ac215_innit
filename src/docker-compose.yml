@@ -62,3 +62,18 @@ services:
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     command: tail -f /dev/null
+
+  news_text:
+    build:
+      context: ./news_text
+      dockerfile: Dockerfile
+    image: news_text
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_news_text
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
