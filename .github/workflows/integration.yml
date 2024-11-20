@@ -97,13 +97,17 @@ jobs:
         name: question-bank-coverage-report
         path: ./htmlcov_question_bank
     
-    - name: Upload raw coverage data
+    - name: Upload webscraping raw coverage data
       uses: actions/upload-artifact@v3
       with:
-        name: raw-coverage-files
-        path: |
-          ./webscraping_coverage/.coverage
-          ./question_bank_coverage/.coverage
+        name: webscraping-raw-coverage
+        path: ./webscraping_coverage/.coverage
+      
+    - name: Upload question bank raw coverage data
+      uses: actions/upload-artifact@v3
+      with:
+        name: question-bank-raw-coverage
+        path: ./question_bank_coverage/.coverage    
 
     # Step 9: Tear Down Containers
     - name: Tear down containers
