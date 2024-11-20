@@ -51,7 +51,7 @@ jobs:
         docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
         docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
         docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
-        docker cp src_webscraping_1:/app/.coverage ./webscraping_coverage/.coverage
+        docker exec src_webscraping_1 mv /app/.coverage /app/coverage_data/.coverage
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
@@ -62,7 +62,7 @@ jobs:
         docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
         docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
         docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
-        docker cp src_question_bank_1:/app/.coverage ./question_bank_coverage/.coverage
+        docker exec src_question_bank_1 mv /app/.coverage /app/coverage_data/.coverage
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}

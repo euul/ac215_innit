@@ -13,7 +13,7 @@ services:
       - ../tests:/app/tests:ro  # Mount the tests directory into the container
       - ./htmlcov:/app/htmlcov_webscraping
       - ../.coveragerc:/app/.coveragerc:ro
-      - ./webscraping_coverage:/app/.coverage
+      - ./webscraping_coverage:/app/coverage_data
     working_dir: /app
     #command: ["pipenv", "run", "pytest", "/app/tests/integration_tests"]  # Run tests only
     command: tail -f /dev/null
@@ -46,7 +46,7 @@ services:
       - ../tests:/app/tests:ro  # Mount the tests directory into the container
       - ./htmlcov:/app/htmlcov_question_bank
       - ../.coveragerc:/app/.coveragerc:ro
-      - ./question_bank_coverage:/app/.coverage
+      - ./question_bank_coverage:/app/coverage_data
     working_dir: /app
     command: tail -f /dev/null
 
