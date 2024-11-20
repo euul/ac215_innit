@@ -106,18 +106,22 @@ jobs:
       with:
         name: question-bank-coverage-report
         path: ./htmlcov_question_bank
-    
+        
     - name: Upload webscraping raw coverage data
       uses: actions/upload-artifact@v3
       with:
         name: webscraping-raw-coverage
-        path: ${{ github.workspace }}/webscraping_coverage/.coverage
+        path: ./webscraping_coverage/.coverage
+        debug: true
       
     - name: Upload question bank raw coverage data
       uses: actions/upload-artifact@v3
       with:
         name: question-bank-raw-coverage
-        path: ${{ github.workspace }}/question_bank_coverage/.coverage
+        path: ./question_bank_coverage/.coverage
+        debug: true
+      
+
 
     # Step 9: Tear Down Containers
     - name: Tear down containers
