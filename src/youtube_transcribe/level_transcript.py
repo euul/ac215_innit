@@ -174,7 +174,7 @@ def upload_to_gcp_bucket(bucket_name, local_folder, predictions_with_files):
         print(f"Uploaded '{filename}' to GCP bucket '{bucket_name}' in folder '{label}'")
 
 
-def main():
+def main():  # pragma: no cover
     download_transcripts(BUCKET_NAME, "yt_transcripts")
     dataset = TranscriptDataset()
     hf_dataset = dataset.to_hf_dataset()

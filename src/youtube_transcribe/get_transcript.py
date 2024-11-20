@@ -69,7 +69,7 @@ def cleanup_local_folder(local_folder):
     shutil.rmtree(local_folder)
     print(f"Deleted local folder '{local_folder}' and all its contents.")
 
-def main():
+def main():  # pragma: no cover
     parser = argparse.ArgumentParser(description="Scrape YouTube search results.")
     parser.add_argument("--keyword", type=str, help="Search keyword for YouTube.")
     parser.add_argument("--n_scroll", type=int, default=2, help="Number of scroll actions to load content (default: 2)")
