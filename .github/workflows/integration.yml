@@ -44,7 +44,11 @@ jobs:
     # Step 5: List Running Containers
     - name: List running Docker containers
       run: docker ps
-
+    
+    # Step 5.5: List Running Containers
+    - name: Prepare webscraping coverage directory
+      run: mkdir -p ./webscraping_coverage
+    
     # Step 6: Run Integration Tests for webscraping
     - name: Run integration tests inside webscraping container
       run: |
@@ -54,6 +58,10 @@ jobs:
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+    
+    # Step 6.5: List Running Containers
+    - name: Prepare question_bank coverage directory
+      run: mkdir -p ./question_bank_coverage
 
     # Step 7: Run Integration Tests for question_bank
     - name: Run integration tests inside question_bank container
