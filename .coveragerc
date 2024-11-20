@@ -9,3 +9,8 @@ exclude_lines =
     # Exclude lines like these from coverage metrics
     pragma: no cover
     if __name__ == "__main__":
+
+[paths]
+source =
+    /app
+    /home/runner/work/ac215_innit/ac215_innit

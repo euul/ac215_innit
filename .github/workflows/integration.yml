@@ -146,20 +146,28 @@ jobs:
           name: question-bank-raw-coverage
           path: ./coverage_files/question_bank
 
-      # Step 2: Combine raw coverage files
+      # Step 2: Debug .coverage files
+      - name: Debug .coverage files
+        run: |
+          echo "Webscraping .coverage paths:"
+          coverage debug data -d ./coverage_files/webscraping/.coverage || echo "Debug failed for webscraping"
+
+          echo "Question bank .coverage paths:"
+          coverage debug data -d ./coverage_files/question_bank/.coverage || echo "Debug failed for question bank"
+
+      # Step 3: Combine .coverage files with path remapping
       - name: Combine .coverage files
         run: |
           pip install coverage
           mkdir -p combined_coverage
           cp ./coverage_files/webscraping/.coverage ./combined_coverage/.coverage.webscraping
           cp ./coverage_files/question_bank/.coverage ./combined_coverage/.coverage.question_bank
-          coverage combine ./combined_coverage/.coverage.webscraping ./combined_coverage/.coverage.question_bank
+          coverage combine --rcfile=.coveragerc ./combined_coverage/.coverage.webscraping ./combined_coverage/.coverage.question_bank
           coverage html -d ./combined_coverage
 
-      # Step 3: Upload Combined Report
+      # Step 4: Upload Combined Report
       - name: Upload combined coverage report
         uses: actions/upload-artifact@v3
         with:
           name: combined-coverage-report
           path: ./combined_coverage
-
