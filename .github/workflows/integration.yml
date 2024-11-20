@@ -96,47 +96,13 @@ jobs:
       with:
         name: question-bank-coverage-report
         path: ./htmlcov_question_bank  # Adjust path if htmlcov is created elsewhere
-
+        
     # Step 12: List all coverage reports
     - name: List all coverage reports
       run: |
         echo "Listing all coverage reports..."
         ls -R ./htmlcov_webscraping || echo "No webscraping coverage report found"
         ls -R ./htmlcov_question_bank || echo "No question_bank coverage report found"
-
-    #Step 12.4: Install Coverage
-    - name: Install coverage
-      run: pip install coverage
-    # Step 12.5: Merge Reports
-    - name: Copy .coverage from webscraping
-      run: |
-        docker cp src_webscraping_1:/app/.coverage ./.coverage_webscraping
-    - name: Copy .coverage from question_bank
-      run: |
-        docker cp src_question_bank_1:/app/.coverage ./.coverage_question_bank
-    - name: Copy .coveragerc
-      run:
-        docker cp src_webscraping_1:/app/.coveragerc ./.coveragerc
-    # Step to Combine Coverage Files
-    - name: Combine coverage reports
-      run: |
-        mv .coverage_webscraping .coverage
-        coverage combine .coverage ./.coverage_question_bank
-
-    # Step to Generate Merged Report
-    - name: Generate merged coverage report
-      run: |
-        coverage html --rcfile=/app/.coveragerc
-        mv htmlcov merged_htmlcov
-
-    # Step to Upload Merged Coverage Report
-    - name: Upload merged coverage report
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: merged-coverage-report
-        path: ./merged_htmlcov
-
 
     # Step 12: Tear Down Containers
     - name: Tear down containers
