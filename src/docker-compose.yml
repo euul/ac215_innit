@@ -34,5 +34,6 @@ services:
     volumes:
       - ./coverage_data:/app/coverage_data  # Shared directory for .coverage files
       - ./htmlcov_combined:/app/htmlcov_combined  # Directory for the combined coverage report
+      - ../.coveragerc:/app/.coveragerc:ro 
     working_dir: /app
     command: tail -f /dev/null
