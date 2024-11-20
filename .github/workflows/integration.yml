@@ -3,10 +3,10 @@ name: Integration Tests
 on:
   push:
     branches:
-      - milestone4  # Trigger on pushes to the milestone4 branch
+      - milestone4
   pull_request:
     branches:
-      - milestone4  # Trigger on pull requests to milestone4
+      - milestone4
 
 jobs:
   test:
@@ -40,26 +40,18 @@ jobs:
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-    
-    # Debug step
-    - name: Debug workspace structure
-      run: ls -R  
-      
-    - name: Print working directory
-      run: pwd  # Show current directory
-    
-    - name: List files in working directory
-      run: ls -l  # List files to check for .coveragerc
-    
-    - name: List parent directory
-      run: ls -l ../  # Check if .coveragerc exists in the expected parent directory
-    
-    # Step 5: Copy .coveragerc into collector container
-    - name: Copy .coveragerc to collector container
-      run: |
-        docker cp src/.coveragerc src_collector_1:/app/.coveragerc
 
-    # Step 6: Run Integration Tests for webscraping and write to collector
+    # Step 5: Debug .coveragerc Mounting
+    - name: Debug .coveragerc in webscraping
+      run: docker exec src_webscraping_1 ls -l /app/.coveragerc
+
+    - name: Debug .coveragerc in question_bank
+      run: docker exec src_question_bank_1 ls -l /app/.coveragerc
+
+    - name: Debug .coveragerc in collector
+      run: docker exec src_collector_1 ls -l /app/.coveragerc
+
+    # Step 6: Run Integration Tests for webscraping
     - name: Run integration tests for webscraping
       run: |
         docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
@@ -68,7 +60,7 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 7: Run Integration Tests for question_bank and write to collector
+    # Step 7: Run Integration Tests for question_bank
     - name: Run integration tests for question_bank
       run: |
         docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
@@ -80,31 +72,21 @@ jobs:
     # Step 8: Combine Coverage Reports with collector
     - name: Combine coverage reports using collector
       run: |
-        # Install coverage in the collector container
         docker exec src_collector_1 pip install coverage
-
-        # Combine the coverage files inside the collector container
         docker exec src_collector_1 coverage combine --rcfile=/app/.coveragerc /app/coverage_data/.coverage_webscraping /app/coverage_data/.coverage_question_bank
-
-        # Generate the combined coverage report
         docker exec src_collector_1 coverage html --rcfile=/app/.coveragerc -d /app/htmlcov_combined
-
-        # List the combined report
-        echo "Combined coverage report generated in htmlcov_combined:"
         docker exec src_collector_1 ls -R /app/htmlcov_combined
-
-        # Copy the combined report back to the host
         docker cp src_collector_1:/app/htmlcov_combined ./htmlcov_combined
 
     # Step 9: Upload Combined Coverage Report
     - name: Upload combined coverage report
-      if: always()  # Ensure this always runs, even if the tests fail
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: combined-coverage-report
-        path: ./htmlcov_combined  # Path to the combined coverage report on the host
+        path: ./htmlcov_combined
 
     # Step 10: Tear Down Containers
     - name: Tear down containers
-      if: always()  # Ensure this always runs, even if the tests fail
+      if: always()
       run: docker-compose -f src/docker-compose.yml down
