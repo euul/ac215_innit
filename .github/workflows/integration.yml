@@ -9,96 +9,94 @@ on:
       - milestone4  # Trigger on pull requests to milestone4
 
 jobs:
-  test:
+  setup-containers:
     runs-on: ubuntu-latest
-
     steps:
-    # Step 1: Check out repository
-    - name: Check out repository
-      uses: actions/checkout@v4
+      # Step 1: Check out repository
+      - name: Check out repository
+        uses: actions/checkout@v4
+      
+      # Step 2: Set up Docker Compose
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-    # Step 2: Set up Docker Compose
-    - name: Set up Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
-    # Step 3: Test Access to Secrets
-    - name: Test Access to Secrets
-      run: |
-        echo "Testing secrets..."
-        echo "$DATA_SERVICE_ACCOUNT" | jq '.' || echo "DATA_SERVICE_ACCOUNT is not valid JSON"
-        echo "TEXT_GENERATOR: $TEXT_GENERATOR"
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      # Step 3: Build and Start Containers
+      - name: Build and start containers
+        run: |
+          docker-compose -f src/docker-compose.yml up -d
+        env:
+          DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+          TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 4: Build and Start Containers
-    - name: Build and start containers
-      run: |
-        docker-compose -f src/docker-compose.yml up -d
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      # Step 4: List Running Containers
+      - name: List running Docker containers
+        run: docker ps
 
-    # Step 5: List Running Containers
-    - name: List running Docker containers
-      run: docker ps  # This will show the container names, useful for debugging
+  test-webscraping:
+    needs: setup-containers
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out repository
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    # Step 6: Run Integration Tests for webscraping
-    - name: Run integration tests inside the container
-      run: |
-        docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      # Step 2: Run Integration Tests
+      - name: Run integration tests for webscraping
+        run: |
+          docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
+        env:
+          DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+          TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    
-    # Step 7: Generate Coverage Report for webscraping
-    - name: Generate coverage report inside the container
-      run: |
-        docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
-        docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      # Step 3: Generate Coverage Report
+      - name: Generate coverage report
+        run: |
+          docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
+          docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
 
-    # Step 8: Run Integration Tests for question_bank
-    - name: Run integration tests inside question_bank container
-      run: |
-        docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/test_question_bank.py
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      # Step 4: Upload Coverage Report
+      - name: Upload webscraping coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: webscraping-coverage-report
+          path: ./htmlcov_webscraping
 
-    # Step 9: Generate Coverage Report for question_bank
-    - name: Generate coverage report inside question_bank container
-      run: |
-        docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
-        docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+  test-question-bank:
+    needs: setup-containers
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out repository
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    # Step 10: Upload webscraping Coverage Reports  
-    - name: Upload src_webscraping coverage report
-      if: always()  # Ensure this always runs, even if the tests fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: webscraping-coverage-report
-        path: ./htmlcov_webscraping  # Adjust path if htmlcov is created elsewhere
-    
-    # Step 11: Upload question_bank Coverage Reports  
-    - name: Upload question_bank coverage report
-      if: always()  # Ensure this always runs, even if the tests fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: question-bank-coverage-report
-        path: ./htmlcov_question_bank  # Adjust path if htmlcov is created elsewhere
+      # Step 2: Run Integration Tests
+      - name: Run integration tests for question_bank
+        run: |
+          docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/test_question_bank.py
+        env:
+          DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+          TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 12: Tear Down Containers
-    - name: Tear down containers
-      if: always()  # Ensure this always runs, even if the tests fail
-      run: docker-compose -f src/docker-compose.yml down
-    
+      # Step 3: Generate Coverage Report
+      - name: Generate coverage report
+        run: |
+          docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
+          docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
+
+      # Step 4: Upload Coverage Report
+      - name: Upload question_bank coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: question-bank-coverage-report
+          path: ./htmlcov_question_bank
+
+  tear-down:
+    needs: [test-webscraping, test-question-bank]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tear down containers
+        run: docker-compose -f src/docker-compose.yml down
