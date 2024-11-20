@@ -1,5 +1,5 @@
 # Use the official Debian-hosted Python image
-FROM euxl/datapipeline:latest
+FROM euxl/datapipeline:base-v1.1.0
 
 # Tell pipenv where the shell is. 
 # This allows us to use "pipenv shell" as a container entry point.
@@ -21,9 +21,9 @@ ADD Pipfile Pipfile.lock /app/
 RUN pipenv sync
 
 ADD . /app
-# Entry point
-ENTRYPOINT ["/bin/bash"]
+# # Entry point
+# ENTRYPOINT ["/bin/bash"]
 
-# Get into the pipenv shell
-CMD ["-c", "pipenv shell"]
+# # Get into the pipenv shell
+# CMD ["-c", "pipenv shell"]
 
