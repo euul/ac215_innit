@@ -96,4 +96,4 @@ def main(): # pragma: no cover
     split_dataset(dataset)
 
 if __name__=="__main__": 
-    main()
+    main() # pragma: no cover

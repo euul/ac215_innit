@@ -29,7 +29,7 @@ def main(): # pragma: no cover
         read_json_from_gcp(bucket_name, blob_name, save_path)
 
 if __name__=="__main__": 
-    main()
+    main() # pragma: no cover
 
 
 
