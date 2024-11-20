@@ -133,6 +133,8 @@ jobs:
     needs: test
 
     steps:
+      - name: Install coverage
+        run: pip install coverage
       # Step 1: Download raw coverage files
       - name: Download webscraping raw coverage file
         uses: actions/download-artifact@v3
