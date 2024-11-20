@@ -45,7 +45,7 @@ jobs:
       run: docker ps  # This will show the container names, useful for debugging
 
     # Step 6: Run Integration Tests for webscraping
-    - name: Run integration tests inside the container
+    - name: Run integration tests inside the webscraping container
       run: |
         docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
       env:
@@ -54,7 +54,7 @@ jobs:
 
     
     # Step 7: Generate Coverage Report for webscraping
-    - name: Generate coverage report inside the container
+    - name: Generate coverage report inside the webscraping container
       run: |
         docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
         docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
@@ -81,7 +81,26 @@ jobs:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
 
-    # Step 10: Upload webscraping Coverage Reports  
+    # Step 10: Run Integration Tests for youtube_transcribe
+    - name: Run integration tests inside youtube_transcribe container
+      run: |
+        docker exec src_youtube_transcribe_1 pipenv run pytest /app/tests/integration_tests/test_youtube_transcribe.py
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+
+    # Step 11: Generate Coverage Report for youtube_transcribe
+    - name: Generate coverage report inside youtube_transcribe container
+      run: |
+        docker exec src_youtube_transcribe_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_youtube_transcribe.py
+        docker exec src_youtube_transcribe_1 pipenv run coverage html --rcfile=/app/.coveragerc
+        docker cp src_youtube_transcribe_1:/app/htmlcov ./htmlcov_youtube_transcribe
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+
+
+    # Step 12: Upload webscraping Coverage Reports  
     - name: Upload src_webscraping coverage report
       if: always()  # Ensure this always runs, even if the tests fail
       uses: actions/upload-artifact@v3
@@ -89,13 +108,21 @@ jobs:
         name: webscraping-coverage-report
         path: ./htmlcov_webscraping  # Adjust path if htmlcov is created elsewhere
     
-    # Step 11: Upload question_bank Coverage Reports  
+    # Step 13: Upload question_bank Coverage Reports  
     - name: Upload question_bank coverage report
       if: always()  # Ensure this always runs, even if the tests fail
       uses: actions/upload-artifact@v3
       with:
         name: question-bank-coverage-report
         path: ./htmlcov_question_bank  # Adjust path if htmlcov is created elsewhere
+    
+    # Step 14: Upload youtube_transcribe Coverage Reports  
+    - name: Upload youtube_transcribe coverage report
+      if: always()  # Ensure this always runs, even if the tests fail
+      uses: actions/upload-artifact@v3
+      with:
+        name: youtube-transcribe-coverage-report
+        path: ./htmlcov_youtube_transcribe  # Adjust path if htmlcov is created elsewhere
 
     # Step 12: Tear Down Containers
     - name: Tear down containers
