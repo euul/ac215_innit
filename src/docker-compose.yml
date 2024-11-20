@@ -47,3 +47,18 @@ services:
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     command: tail -f /dev/null
+  
+  youtube_transcribe:
+    build:
+      context: ./youtube_transcribe
+      dockerfile: Dockerfile
+    image: youtube_transcribe
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro  # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_youtube_transcribe
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
