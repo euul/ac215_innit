@@ -114,37 +114,37 @@ jobs:
       - name: Tear down youtube_transcribe container
         run: docker-compose -f src/docker-compose.yml down youtube_transcribe
 
-# Datapipeline Tests
-datapipeline:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Check out repository
-      uses: actions/checkout@v4
+  # Datapipeline Tests
+  datapipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    - name: Set up Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-    - name: Build and start datapipeline container
-      run: |
-        docker-compose -f src/docker-compose.yml up -d datapipeline
+      - name: Build and start datapipeline container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d datapipeline
 
-    - name: Run integration tests inside datapipeline container
-      run: |
-        docker exec src_datapipeline_1 pipenv run pytest /app/tests/integration_tests/test_datapipeline.py
+      - name: Run integration tests inside datapipeline container
+        run: |
+          docker exec src_datapipeline_1 pipenv run pytest /app/tests/integration_tests/test_datapipeline.py
 
-    - name: Generate coverage report for datapipeline
-      run: |
-        docker exec src_datapipeline_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_datapipeline.py
-        docker exec src_datapipeline_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_datapipeline_1:/app/htmlcov ./htmlcov_datapipeline
+      - name: Generate coverage report for datapipeline
+        run: |
+          docker exec src_datapipeline_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_datapipeline.py
+          docker exec src_datapipeline_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_datapipeline_1:/app/htmlcov ./htmlcov_datapipeline
 
-    - name: Upload datapipeline coverage report
-      uses: actions/upload-artifact@v3
-      with:
-        name: datapipeline-coverage-report
-        path: ./htmlcov_datapipeline
+      - name: Upload datapipeline coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: datapipeline-coverage-report
+          path: ./htmlcov_datapipeline
 
-    - name: Tear down datapipeline container
-      run: docker-compose -f src/docker-compose.yml down datapipeline
+      - name: Tear down datapipeline container
+        run: docker-compose -f src/docker-compose.yml down datapipeline
