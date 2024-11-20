@@ -63,7 +63,10 @@ jobs:
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-
+    
+    # Debug step
+    - name: Debug workspace structure
+      run: ls -R
     # Step 8: Combine Coverage Reports with collector
     - name: Combine coverage reports using collector
       run: |
