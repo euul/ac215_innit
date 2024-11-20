@@ -133,9 +133,11 @@ jobs:
     needs: test
 
     steps:
+      # Step 1: Install coverage
       - name: Install coverage
         run: pip install coverage
-      # Step 1: Download raw coverage files
+
+      # Step 2: Download raw coverage files
       - name: Download webscraping raw coverage file
         uses: actions/download-artifact@v3
         with:
@@ -148,26 +150,29 @@ jobs:
           name: question-bank-raw-coverage
           path: ./coverage_files/question_bank
 
-      # Step 2: Debug .coverage files
+      # Step 3: Debug .coverage files
       - name: Debug .coverage files
         run: |
           echo "Webscraping .coverage paths:"
-          coverage debug data -d ./coverage_files/webscraping/.coverage || echo "Debug failed for webscraping"
+          coverage debug data -f ./coverage_files/webscraping/.coverage || echo "Debug failed for webscraping"
 
           echo "Question bank .coverage paths:"
-          coverage debug data -d ./coverage_files/question_bank/.coverage || echo "Debug failed for question bank"
+          coverage debug data -f ./coverage_files/question_bank/.coverage || echo "Debug failed for question bank"
 
-      # Step 3: Combine .coverage files with path remapping
+      # Step 4: Combine .coverage files with path remapping
       - name: Combine .coverage files
         run: |
-          pip install coverage
           mkdir -p combined_coverage
           cp ./coverage_files/webscraping/.coverage ./combined_coverage/.coverage.webscraping
           cp ./coverage_files/question_bank/.coverage ./combined_coverage/.coverage.question_bank
           coverage combine --rcfile=.coveragerc ./combined_coverage/.coverage.webscraping ./combined_coverage/.coverage.question_bank
           coverage html -d ./combined_coverage
 
-      # Step 4: Upload Combined Report
+      # Step 5: Debug combined .coverage file
+      - name: Debug combined .coverage file
+        run: coverage debug data -f ./combined_coverage/.coverage || echo "Debug failed for combined coverage"
+
+      # Step 6: Upload Combined Report
       - name: Upload combined coverage report
         uses: actions/upload-artifact@v3
         with:
