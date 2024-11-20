@@ -33,6 +33,10 @@ jobs:
       # Step 4: List Running Containers
       - name: List running Docker containers
         run: docker ps
+        
+      # Add Sleep to Wait for Containers to Start
+      - name: Wait for containers to initialize
+        run: sleep 10
 
   test-webscraping:
     needs: setup-containers
