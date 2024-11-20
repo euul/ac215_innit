@@ -66,7 +66,7 @@ jobs:
     # Step 8: Run Integration Tests for question_bank
     - name: Run integration tests inside question_bank container
       run: |
-        docker exec question_bank pipenv run pytest /app/tests/integration_tests/test_question_bank.py
+        docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/test_question_bank.py
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
