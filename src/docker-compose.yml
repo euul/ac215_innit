@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   webscraping:
     build:
@@ -10,28 +8,11 @@ services:
       DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
-      - ../tests:/app/tests:ro  # Mount the tests directory into the container
-      - ./htmlcov:/app/htmlcov_webscraping
+      - ./coverage_data:/app/coverage_data  # Shared directory for coverage files
+      - ../tests:/app/tests:ro
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
-    #command: ["pipenv", "run", "pytest", "/app/tests/integration_tests"]  # Run tests only
     command: tail -f /dev/null
-
-  # datapipeline:
-  #   build:
-  #     context: ./datapipeline
-  #     dockerfile: Dockerfile
-  #   image: datapipeline
-  #   environment:
-  #     DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
-  #     TEXT_GENERATOR: ${TEXT_GENERATOR}
-  #   volumes:
-  #     - ../tests:/app/tests:ro  # Mount the tests directory into the container
-  #     - ./htmlcov:/app/htmlcov
-  #     - ../.coveragerc:/app/.coveragerc:ro
-  #   working_dir: /app
-  #   #command: ["pipenv", "run", "pytest", "/app/tests/integratioa3121a2891afn_tests"]  # Run tests only
-  #   command: tail -f /dev/null
 
   question_bank:
     build:
@@ -42,8 +23,8 @@ services:
       DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
-      - ../tests:/app/tests:ro  # Mount the tests directory into the container
-      - ./htmlcov:/app/htmlcov_question_bank
+      - ./coverage_data:/app/coverage_data  # Shared directory for coverage files
+      - ../tests:/app/tests:ro
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     command: tail -f /dev/null
@@ -54,6 +35,4 @@ services:
       - ./coverage_data:/app/coverage_data  # Shared directory for .coverage files
       - ./htmlcov_combined:/app/htmlcov_combined  # Directory for the combined coverage report
     working_dir: /app
-    command: tail -f /dev/null  # Keeps the container running for interaction
-
-
+    command: tail -f /dev/null
