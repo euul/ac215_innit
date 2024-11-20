@@ -89,10 +89,11 @@ def split_dataset(dataset, directory = 'app/data/', bucket_name = "innit_article
     print(f'Train, Validation and Test datasets created and saved to GCP bucket')
 
 
+def main(): # pragma: no cover
+    df = combine_jsons()
+    df = data_clean(df,'Label', 'Level not found')
+    dataset = make_dataset(df)
+    split_dataset(dataset)
 
-
-
-df = combine_jsons()
-df = data_clean(df,'Label', 'Level not found')
-dataset = make_dataset(df)
-split_dataset(dataset)
+if __name__=="__main__": 
+    main()

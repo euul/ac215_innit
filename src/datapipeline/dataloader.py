@@ -20,12 +20,16 @@ def read_json_from_gcp(bucket_name, blob_name, save_path):
     print(f"JSON data from {blob_name} saved to {save_path}")
 
 
+def main(): # pragma: no cover
+    bucket_name = 'innit_articles_bucket'
+    blob_names = ['scraped_all_content.json', 'scraped_all_content_teens.json'] 
 
-bucket_name = 'innit_articles_bucket'
-blob_names = ['scraped_all_content.json', 'scraped_all_content_teens.json'] 
+    for blob_name in blob_names:
+        save_path = '/app/data/' + blob_name
+        read_json_from_gcp(bucket_name, blob_name, save_path)
 
-for blob_name in blob_names:
-    save_path = '/app/data/' + blob_name
-    read_json_from_gcp(bucket_name, blob_name, save_path)
+if __name__=="__main__": 
+    main()
+
 
 

@@ -10,7 +10,7 @@ services:
       DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
-      - ../tests:/app/tests:ro  # Mount the tests directory into the container
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
       - ./htmlcov:/app/htmlcov_webscraping
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
@@ -26,7 +26,7 @@ services:
       DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
-      - ../tests:/app/tests:ro  # Mount the tests directory into the container
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
       - ./htmlcov:/app/htmlcov_datapipeline
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
@@ -42,12 +42,12 @@ services:
       DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
-      - ../tests:/app/tests:ro  # Mount the tests directory into the container
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
       - ./htmlcov:/app/htmlcov_question_bank
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     command: tail -f /dev/null
-  
+
   youtube_transcribe:
     build:
       context: ./youtube_transcribe
@@ -57,7 +57,7 @@ services:
       DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
-      - ../tests:/app/tests:ro  # Mount the tests directory into the container
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
       - ./htmlcov:/app/htmlcov_youtube_transcribe
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
