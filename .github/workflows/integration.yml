@@ -58,6 +58,7 @@ jobs:
       run: |
         docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
         docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
+        docker cp src_webscraping_1:/app/.coverage .coverage_webscraping
         docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
@@ -76,6 +77,7 @@ jobs:
       run: |
         docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
         docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
+        docker cp src_question_bank_1:/app/.coverage .coverage_question_bank
         docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
@@ -103,6 +105,32 @@ jobs:
         echo "Listing all coverage reports..."
         ls -R ./htmlcov_webscraping || echo "No webscraping coverage report found"
         ls -R ./htmlcov_question_bank || echo "No question_bank coverage report found"
+        
+    # Step 13: Combine Coverage Reports
+    - name: Combine coverage reports
+      run: |
+
+        # Combine coverage files
+        pip install coverage  # Ensure coverage is available
+        coverage combine .coverage_webscraping .coverage_question_bank
+
+        # Generate combined coverage report
+        coverage html -d htmlcov_combined
+
+        # List the combined coverage report
+        echo "Combined coverage report generated at htmlcov_combined"
+        ls -R ./htmlcov_combined
+      env:
+        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
+        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+
+    # Step 14: Upload Combined Coverage Report
+    - name: Upload combined coverage report
+      if: always()  # Ensure this always runs, even if the tests fail
+      uses: actions/upload-artifact@v3
+      with:
+        name: combined-coverage-report
+        path: ./htmlcov_combined  # Adjust path if needed
 
     # Step 12: Tear Down Containers
     - name: Tear down containers
