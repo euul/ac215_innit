@@ -3,128 +3,113 @@ name: Integration Tests
 on:
   push:
     branches:
-      - milestone4  # Trigger on pushes to the milestone4 branch
+      - milestone4
   pull_request:
     branches:
-      - milestone4  # Trigger on pull requests to milestone4
+      - milestone4
 
 jobs:
-  test:
+  # Webscraping Tests
+  webscraping:
     runs-on: ubuntu-latest
-
     steps:
-    # Step 1: Check out repository
-    - name: Check out repository
-      uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    # Step 2: Set up Docker Compose
-    - name: Set up Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
-    # Step 3: Test Access to Secrets
-    - name: Test Access to Secrets
-      run: |
-        echo "Testing secrets..."
-        echo "$DATA_SERVICE_ACCOUNT" | jq '.' || echo "DATA_SERVICE_ACCOUNT is not valid JSON"
-        echo "TEXT_GENERATOR: $TEXT_GENERATOR"
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-    # Step 4: Build and Start Containers
-    - name: Build and start containers
-      run: |
-        docker-compose -f src/docker-compose.yml up -d
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      - name: Build and start webscraping container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d webscraping
 
-    # Step 5: List Running Containers
-    - name: List running Docker containers
-      run: docker ps  # This will show the container names, useful for debugging
+      - name: Run integration tests inside webscraping container
+        run: |
+          docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
 
-    # Step 6: Run Integration Tests for webscraping
-    - name: Run integration tests inside the webscraping container
-      run: |
-        docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      - name: Generate coverage report for webscraping
+        run: |
+          docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
+          docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
 
-    
-    # Step 7: Generate Coverage Report for webscraping
-    - name: Generate coverage report inside the webscraping container
-      run: |
-        docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
-        docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      - name: Upload webscraping coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: webscraping-coverage-report
+          path: ./htmlcov_webscraping
 
-    # Step 8: Run Integration Tests for question_bank
-    - name: Run integration tests inside question_bank container
-      run: |
-        docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/test_question_bank.py
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      - name: Tear down webscraping container
+        run: docker-compose -f src/docker-compose.yml down webscraping
 
-    # Step 9: Generate Coverage Report for question_bank
-    - name: Generate coverage report inside question_bank container
-      run: |
-        docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
-        docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+  # Question Bank Tests
+  question_bank:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    # Step 10: Run Integration Tests for youtube_transcribe
-    - name: Run integration tests inside youtube_transcribe container
-      run: |
-        docker exec src_youtube_transcribe_1 pipenv run pytest /app/tests/integration_tests/test_youtube_transcribe.py
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-    # Step 11: Generate Coverage Report for youtube_transcribe
-    - name: Generate coverage report inside youtube_transcribe container
-      run: |
-        docker exec src_youtube_transcribe_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_youtube_transcribe.py
-        docker exec src_youtube_transcribe_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_youtube_transcribe_1:/app/htmlcov ./htmlcov_youtube_transcribe
-      env:
-        DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
-        TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
+      - name: Build and start question_bank container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d question_bank
 
+      - name: Run integration tests inside question_bank container
+        run: |
+          docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/test_question_bank.py
 
-    # Step 12: Upload webscraping Coverage Reports  
-    - name: Upload src_webscraping coverage report
-      if: always()  # Ensure this always runs, even if the tests fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: webscraping-coverage-report
-        path: ./htmlcov_webscraping  # Adjust path if htmlcov is created elsewhere
-    
-    # Step 13: Upload question_bank Coverage Reports  
-    - name: Upload question_bank coverage report
-      if: always()  # Ensure this always runs, even if the tests fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: question-bank-coverage-report
-        path: ./htmlcov_question_bank  # Adjust path if htmlcov is created elsewhere
-    
-    # Step 14: Upload youtube_transcribe Coverage Reports  
-    - name: Upload youtube_transcribe coverage report
-      if: always()  # Ensure this always runs, even if the tests fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: youtube-transcribe-coverage-report
-        path: ./htmlcov_youtube_transcribe  # Adjust path if htmlcov is created elsewhere
+      - name: Generate coverage report for question_bank
+        run: |
+          docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
+          docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
 
-    # Step 12: Tear Down Containers
-    - name: Tear down containers
-      if: always()  # Ensure this always runs, even if the tests fail
-      run: docker-compose -f src/docker-compose.yml down
+      - name: Upload question_bank coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: question-bank-coverage-report
+          path: ./htmlcov_question_bank
+
+      - name: Tear down question_bank container
+        run: docker-compose -f src/docker-compose.yml down question_bank
+
+  # YouTube Transcribe Tests
+  youtube_transcribe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start youtube_transcribe container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d youtube_transcribe
+
+      - name: Run integration tests inside youtube_transcribe container
+        run: |
+          docker exec src_youtube_transcribe_1 pipenv run pytest /app/tests/integration_tests/test_youtube_transcribe.py
+
+      - name: Generate coverage report for youtube_transcribe
+        run: |
+          docker exec src_youtube_transcribe_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_youtube_transcribe.py
+          docker exec src_youtube_transcribe_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_youtube_transcribe_1:/app/htmlcov ./htmlcov_youtube_transcribe
+
+      - name: Upload youtube_transcribe coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: youtube-transcribe-coverage-report
+          path: ./htmlcov_youtube_transcribe
+
+      - name: Tear down youtube_transcribe container
+        run: docker-compose -f src/docker-compose.yml down youtube_transcribe
