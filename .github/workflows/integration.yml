@@ -134,19 +134,25 @@ jobs:
 
     steps:
       # Step 1: Download raw coverage files
-      - name: Download raw coverage files
+      - name: Download webscraping raw coverage file
         uses: actions/download-artifact@v3
         with:
-          name: raw-coverage-files
-          path: ./coverage_files
+          name: webscraping-raw-coverage
+          path: ./coverage_files/webscraping
+
+      - name: Download question bank raw coverage file
+        uses: actions/download-artifact@v3
+        with:
+          name: question-bank-raw-coverage
+          path: ./coverage_files/question_bank
 
       # Step 2: Combine raw coverage files
       - name: Combine .coverage files
         run: |
           pip install coverage
           mkdir -p combined_coverage
-          cp ./coverage_files/.coverage ./combined_coverage/.coverage.webscraping
-          cp ./coverage_files/.coverage ./combined_coverage/.coverage.question_bank
+          cp ./coverage_files/webscraping/.coverage ./combined_coverage/.coverage.webscraping
+          cp ./coverage_files/question_bank/.coverage ./combined_coverage/.coverage.question_bank
           coverage combine ./combined_coverage/.coverage.webscraping ./combined_coverage/.coverage.question_bank
           coverage html -d ./combined_coverage
 
@@ -156,3 +162,4 @@ jobs:
         with:
           name: combined-coverage-report
           path: ./combined_coverage
+
