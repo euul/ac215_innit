@@ -48,3 +48,12 @@ services:
     working_dir: /app
     command: tail -f /dev/null
 
+  collector:
+    image: python:3.11-slim-buster
+    volumes:
+      - ./coverage_data:/app/coverage_data  # Shared directory for .coverage files
+      - ./htmlcov_combined:/app/htmlcov_combined  # Directory for the combined coverage report
+    working_dir: /app
+    command: tail -f /dev/null  # Keeps the container running for interaction
+
+
