@@ -96,6 +96,13 @@ jobs:
       with:
         name: question-bank-coverage-report
         path: ./htmlcov_question_bank  # Adjust path if htmlcov is created elsewhere
+        
+    # Step 12: List all coverage reports
+    - name: List all coverage reports
+      run: |
+        echo "Listing all coverage reports..."
+        ls -R ./htmlcov_webscraping || echo "No webscraping coverage report found"
+        ls -R ./htmlcov_question_bank || echo "No question_bank coverage report found"
 
     # Step 12: Tear Down Containers
     - name: Tear down containers
