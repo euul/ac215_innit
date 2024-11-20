@@ -103,8 +103,10 @@ jobs:
         echo "Listing all coverage reports..."
         ls -R ./htmlcov_webscraping || echo "No webscraping coverage report found"
         ls -R ./htmlcov_question_bank || echo "No question_bank coverage report found"
-
-
+        
+    #Step 12.4: Install Coverage
+    - name: Install coverage
+      run: pip install coverage
     # Step 12.5: Merge Reports
     - name: Copy .coverage from webscraping
       run: |
