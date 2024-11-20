@@ -45,136 +45,53 @@ jobs:
     - name: List running Docker containers
       run: docker ps
 
-    # Step 5.5: idk
-    - name: Prepare coverage directory
-      run: mkdir -p ./webscraping_coverage
-
     # Step 6: Run Integration Tests for webscraping
     - name: Run integration tests inside webscraping container
       run: |
         docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
         docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
         docker cp src_webscraping_1:/app/.coverage ./webscraping_coverage/.coverage
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-    
-    # Step 6.5: idk
-    - name: Prepare coverage directory
-      run: mkdir -p ./question_bank_coverage
 
     # Step 7: Run Integration Tests for question_bank
     - name: Run integration tests inside question_bank container
       run: |
         docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
         docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
-        docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
         docker cp src_question_bank_1:/app/.coverage ./question_bank_coverage/.coverage
       env:
         DATA_SERVICE_ACCOUNT: ${{ secrets.DATA_SERVICE_ACCOUNT }}
         TEXT_GENERATOR: ${{ secrets.TEXT_GENERATOR }}
-  # Step 6.5: Debug Coverage Files
-    - name: Debug coverage files
+
+    # Step 8: Combine Coverage and Generate Report in Container
+    - name: Generate combined coverage report
       run: |
-        echo "Checking contents of webscraping_coverage directory:"
-        ls -al ./webscraping_coverage || echo "Directory does not exist or is empty"
+        docker run --rm \
+          -v $PWD/webscraping_coverage:/app/webscraping_coverage \
+          -v $PWD/question_bank_coverage:/app/question_bank_coverage \
+          -v $PWD/combined_coverage:/app/combined_coverage \
+          python:3.10-slim bash -c "
+            pip install coverage &&
+            cp /app/webscraping_coverage/.coverage /app/combined_coverage/.coverage.webscraping &&
+            cp /app/question_bank_coverage/.coverage /app/combined_coverage/.coverage.question_bank &&
+            coverage combine /app/combined_coverage/.coverage.webscraping /app/combined_coverage/.coverage.question_bank &&
+            coverage html -d /app/combined_coverage
+          "
 
-        echo "Checking contents of question_bank_coverage directory:"
-        ls -al ./question_bank_coverage || echo "Directory does not exist or is empty"
-    - name: Log current working directory
-      run: |
-        echo "Current working directory:"
-        pwd
+    # Step 9: Debug Combined Report
+    - name: Debug combined coverage report
+      run: ls -al ./combined_coverage
 
-        echo "Verifying coverage files before upload:"
-        echo "Webscraping file:"
-        ls -al ./webscraping_coverage/.coverage || echo "Webscraping file not found"
-
-        echo "Question bank file:"
-        ls -al ./question_bank_coverage/.coverage || echo "Question bank file not found"
-
-    # Step 8: Upload Coverage Reports and Raw Data
-    - name: Upload webscraping coverage report
+    # Step 10: Upload Combined Coverage Report
+    - name: Upload combined coverage report
       uses: actions/upload-artifact@v3
       with:
-        name: webscraping-coverage-report
-        path: ./htmlcov_webscraping
-    
-    - name: Upload question_bank coverage report
-      uses: actions/upload-artifact@v3
-      with:
-        name: question-bank-coverage-report
-        path: ./htmlcov_question_bank
+        name: combined-coverage-report
+        path: ./combined_coverage
 
-    - name: Upload webscraping raw coverage data
-      uses: actions/upload-artifact@v3
-      with:
-        name: webscraping-raw-coverage
-        path: ./webscraping_coverage/.coverage
-        include-hidden-files: true
-      
-    - name: Upload question bank raw coverage data
-      uses: actions/upload-artifact@v3
-      with:
-        name: question-bank-raw-coverage
-        path: ./question_bank_coverage/.coverage
-        include-hidden-files: true
-      
-
-
-    # Step 9: Tear Down Containers
+    # Step 11: Tear Down Containers
     - name: Tear down containers
       if: always()
       run: docker-compose -f src/docker-compose.yml down
-
-  post-processing:
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      # Step 1: Install coverage
-      - name: Install coverage
-        run: pip install coverage
-
-      # Step 2: Download raw coverage files
-      - name: Download webscraping raw coverage file
-        uses: actions/download-artifact@v3
-        with:
-          name: webscraping-raw-coverage
-          path: ./coverage_files/webscraping
-
-      - name: Download question bank raw coverage file
-        uses: actions/download-artifact@v3
-        with:
-          name: question-bank-raw-coverage
-          path: ./coverage_files/question_bank
-
-      # Step 3: Debug .coverage files
-      - name: Debug .coverage files
-        run: |
-          echo "Webscraping .coverage paths:"
-          coverage debug data -f ./coverage_files/webscraping/.coverage || echo "Debug failed for webscraping"
-
-          echo "Question bank .coverage paths:"
-          coverage debug data -f ./coverage_files/question_bank/.coverage || echo "Debug failed for question bank"
-
-      # Step 4: Combine .coverage files with path remapping
-      - name: Combine .coverage files
-        run: |
-          mkdir -p combined_coverage
-          cp ./coverage_files/webscraping/.coverage ./combined_coverage/.coverage.webscraping
-          cp ./coverage_files/question_bank/.coverage ./combined_coverage/.coverage.question_bank
-          coverage combine --rcfile=.coveragerc ./combined_coverage/.coverage.webscraping ./combined_coverage/.coverage.question_bank
-          coverage html -d ./combined_coverage
-
-      # Step 5: Debug combined .coverage file
-      - name: Debug combined .coverage file
-        run: coverage debug data -f ./combined_coverage/.coverage || echo "Debug failed for combined coverage"
-
-      # Step 6: Upload Combined Report
-      - name: Upload combined coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: combined-coverage-report
-          path: ./combined_coverage
