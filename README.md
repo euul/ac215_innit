@@ -63,9 +63,9 @@ The following documents contain an overview of each container, its components an
 3. [models](./src/models/readme.md)
 4. [fine_tune](./src/fine_tune/readme.md)
 5. [generate](./src/generate/readme.md)
-6. [youtube_transcribe](./src/models/README.md)
+6. [youtube_transcribe](./src/youtube_transcribe//README.md)
 7. [news_text](./src/news_text/readme.md)
-8. [question_bank](./src/question_bank/readme.md)
+8. [question_bank](./src/question_bank/readmef.md)
 9. [api-service](./src/api-service/README.md)
 10. [frontend](./src/frontend/README.md)
 
