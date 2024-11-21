@@ -58,14 +58,14 @@ In this milestone, we added new components to scrape bbc news for articles and Y
 **Milestone4 Containers and Overview**
 The following documents contain an overview of each container, its components and how to run each container.
 
-1. [webscraping](./src/webscraping/README.md)
-2. [datapipline](./src/datapipeline/README.md)
-3. [models](./src/models/README.md)
-4. [fine_tune](./src/fine_tune/README.md)
-5. [generate](./src/generate/README.md)
+1. [webscraping](./src/webscraping/Readme.md)
+2. [datapipline](./src/datapipeline/Readme.md)
+3. [models](./src/models/readme.md)
+4. [fine_tune](./src/fine_tune/readme.md)
+5. [generate](./src/generate/readme.md)
 6. [youtube_transcribe](./src/models/README.md)
-7. [news_text](./src/news_text/README.md)
-8. [question_bank](./src/question_bank/README.md)
+7. [news_text](./src/news_text/readme.md)
+8. [question_bank](./src/question_bank/readme.md)
 9. [api-service](./src/api-service/README.md)
 10. [frontend](./src/frontend/README.md)
 
