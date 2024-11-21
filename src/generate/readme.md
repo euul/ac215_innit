@@ -1,6 +1,7 @@
 # Generate Module
 
 ## Overview
+
 The `Generate` module generates additional training data based on an existing labeled dataset using the 'gemini-1.5-flash-002' model. This module is designed to help create customized English learning materials tailored to specific proficiency levels.
 
 The module works by downloading the training dataset from Google Cloud Platform (GCP) and generating new samples. It does this by creating a Cloud Run job in GCP with the following configuration:
@@ -15,6 +16,7 @@ The module works by downloading the training dataset from Google Cloud Platform 
    - **Vertex AI Administrator**
 
 ### Available Proficiency Levels
+
 - A1
 - A2
 - B1

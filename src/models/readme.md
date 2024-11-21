@@ -4,7 +4,6 @@ This repository contains scripts for training and inference using the `"microsof
 
 For detailed steps on fine-tuning, please refer to [fine_tuning_process.md](./fine_tuning_process.md).
 
-
 ## Build Container
 
 To build the container, run:
@@ -24,6 +23,7 @@ python train_model.py --wandb_key <Your WandB API Key>
 ```
 
 This script does the following:
+
 - Reads train, validation, test dataset from GCP bucket.
 - Finetunes the "microsoft/deberta-v3-small" model on the train dataset.
 - Saves the trained model weights locally.
@@ -31,13 +31,14 @@ This script does the following:
 
 Make sure to replace <Your WandB API Key> with your actual WandB API key.
 
-
 ## Inference
+
 To run inference, execute:
 
 ```bash
 python infer_model.py
 ```
+
 This will:
 
 - Download the model weights from GCS.

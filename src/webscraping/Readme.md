@@ -1,6 +1,7 @@
 # Scraping Module
 
 ## Overview
+
 This module is designed to scrape transcripts (video, audio, reading, and speaking) from the following websites:
 
 - [LearnEnglish (British Council)](https://learnenglish.britishcouncil.org)
@@ -22,13 +23,14 @@ Additionally, each transcript is tagged with a topic label. The collected data i
 ## Instructions
 
 ### 1. Running the Container
+
 To start the container, execute the following command:
+
 ```bash
 sh run_scraper.sh
 ```
 
 ![Screenshot of running container](./container_screenshot.png)
-
 
 Inside the running container, scrape the links to all available content by executing:
 

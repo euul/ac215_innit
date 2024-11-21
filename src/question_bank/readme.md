@@ -1,13 +1,15 @@
 # Question Bank
 
 ## Overview
+
 This module creates a test question bank for a diagnostic test that determines the user's proficiency level. It uses English Unlimited placement test questions as examples to create few-shot prompts and leverages Gemini (`gemini-1.5-pro-002`) to generate synthetic test questions. These generated questions are added to the test bank.
 
-*Note: English Unlimited is a comprehensive English language course developed by Cambridge University Press, designed for adult learners ranging from beginner (A1) to advanced (C1) levels.*
+_Note: English Unlimited is a comprehensive English language course developed by Cambridge University Press, designed for adult learners ranging from beginner (A1) to advanced (C1) levels._
 
 ## Instructions
 
 ### 1. Running the Container
+
 To start the container, use the following command:
 
 ```bash
@@ -15,16 +17,17 @@ sh docker-shell.sh
 ```
 
 ### 2. Executing the Script
+
 Once inside the running container, execute the following command:
 
 ```python
 python cli.py
 ```
 
-
 #### What the Script Does:
 
 For each proficiency level:
+
 - Select test questions of the corresponding level.
 - Randomly pick 5 questions from the sample to use as prompts.
 - Generate 50 similar test questions using Gemini.
@@ -36,9 +39,10 @@ Upload the generated questions to a GCP bucket at the following location:
 ```
 
 For each level:
+
 - take the test question of that level, randomly select 5 questions from the sample, use them for prompt
 - ask Gemini to generate 50 similar samples.
-Uploads the generated samples to GCP bucket with blob './generated_questions/generated_questions_{LEVEL}.json'
+  Uploads the generated samples to GCP bucket with blob './generated*questions/generated_questions*{LEVEL}.json'
 
 #### Prompt Used
 
@@ -64,14 +68,10 @@ prompt = (
 #### Example of Generated Question
 
 ```json
-    {
-        "question": "_____ you like a cup of tea?",
-        "choices": [
-            "Do",
-            "Would",
-            "Are"
-        ],
-        "answer": "B",
-        "level": "A1"
-    }
+{
+  "question": "_____ you like a cup of tea?",
+  "choices": ["Do", "Would", "Are"],
+  "answer": "B",
+  "level": "A1"
+}
 ```
