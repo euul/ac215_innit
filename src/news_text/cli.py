@@ -1,6 +1,6 @@
 import subprocess
 
-def main():
+def main(): # pragma: no cover
     scripts = ["get_bbc_news.py", "upload_articles.py", "level_articles.py"]
 
     for script in scripts:
@@ -12,4 +12,4 @@ def main():
             break
 
 if __name__ == "__main__":
-    main() 
+    main() # pragma: no cover

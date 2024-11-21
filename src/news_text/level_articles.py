@@ -108,21 +108,28 @@ def infer(model, dataset):
     return dataset
 
 
-def upload_predictions_to_gcp_json(dataset, bucket_name, filename):
+def upload_predictions_to_gcp_json(dataset, bucket_name, filename, temp_file="temp_predictions.json"):
+    """
+    Convert a Hugging Face Dataset to JSON and upload it to a GCP bucket.
+    """
     # Convert Hugging Face dataset to Pandas DataFrame
     dataset_df = pd.DataFrame(dataset)
 
-    # Upload the JSON data directly to GCP
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket(bucket_name)
-    blob = bucket.blob(filename)  # No folder name, directly under the root of the bucket
+    # Save DataFrame to a local JSON file
+    dataset_df.to_json(temp_file, orient="records", lines=True)
+    print(f"Saved dataset to temporary file: {temp_file}")
 
-    # Save the DataFrame to a JSON in-memory buffer and upload
-    with blob.open("w") as f:
-        dataset_df.to_json(f, orient="records", lines=True)
-    
+    # Upload the JSON file to GCP
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(filename)
+    blob.upload_from_filename(temp_file)
     print(f"Uploaded '{filename}' to GCP bucket '{bucket_name}'")
 
+    # Clean up the temporary file
+    os.remove(temp_file)
+    print(f"Deleted temporary file: {temp_file}")
+    
 
 def main(): # pragma: no cover
     # Download article data from GCP, convert to HF dataset
