@@ -12,8 +12,125 @@ from datasets import Dataset
 # Ensure /app is in the Python path
 sys.path.insert(0, '/app')
 
-import level_articles
-import cli
+from get_bbc_news import (
+    fetch_page,
+    parse_sections,
+    scrape_article,
+    save_to_csv,
+    scrape_bbc_news,
+)
+
+from level_articles import (
+    download_json_from_gcp,
+    convert_json_to_hf_dataset,
+    download_weights,
+    load_model,
+    infer,
+    upload_predictions_to_gcp_json,
+    LABEL_MAPPING
+)
+
+class TestBBCNewsScraper(unittest.TestCase):
+
+    @patch("requests.get")
+    def test_fetch_page(self, mock_get):
+        # Mock requests.get to return a fake HTML page
+        mock_get.return_value.text = "<html><head><title>Test</title></head></html>"
+        headers = {"user-agent": "test-agent"}
+        soup = fetch_page("http://test.com", headers)
+
+        # Assertions
+        mock_get.assert_called_once_with("http://test.com", headers=headers)
+        self.assertIsInstance(soup, BeautifulSoup)
+        self.assertEqual(soup.title.string, "Test")
+
+    def test_parse_sections(self):
+        # Mock BeautifulSoup object with JSON-like script
+        mock_soup = MagicMock()
+        mock_soup.find.return_value.string = json.dumps({
+            "props": {
+                "pageProps": {
+                    "page": {
+                        "@\"news\",": {
+                            "sections": [{"content": [{"title": "Sample Title"}]}]
+                        }
+                    }
+                }
+            }
+        })
+
+        sections = parse_sections(mock_soup)
+
+        # Assertions
+        mock_soup.find.assert_called_once_with('script', id='__NEXT_DATA__')
+        self.assertEqual(len(sections), 1)
+        self.assertEqual(sections[0]["content"][0]["title"], "Sample Title")
+
+    @patch("requests.get")
+    def test_scrape_article(self, mock_get):
+        # Mock requests.get to return a fake article page
+        mock_get.return_value.text = """
+            <html>
+                <div data-component="text-block">Sample text 1</div>
+                <div data-component="text-block">Sample text 2</div>
+            </html>
+        """
+        headers = {"user-agent": "test-agent"}
+        article_text = scrape_article("http://test-article.com", headers)
+
+        # Assertions
+        mock_get.assert_called_once_with("http://test-article.com", headers=headers, timeout=10)
+        self.assertEqual(article_text, "Sample text 1 Sample text 2")
+
+    @patch("pandas.DataFrame.to_csv")
+    def test_save_to_csv(self, mock_to_csv):
+        # Mock input data
+        titles = ["Title 1", "Title 2"]
+        hrefs = ["/article1", "/article2"]
+        metadatas = ["Meta1", "Meta2"]
+        texts = ["Text 1", "Text 2"]
+
+        # Call the function
+        save_to_csv(titles, hrefs, metadatas, texts, filename="test.csv")
+
+        # Assertions
+        mock_to_csv.assert_called_once()
+        args, kwargs = mock_to_csv.call_args
+
+        # Verify the filename passed as the first positional argument
+        self.assertEqual(args[0], "test.csv")
+
+        # Verify additional keyword arguments
+        self.assertEqual(kwargs.get("index", False), False)  # Check if 'index' is False
+        self.assertEqual(kwargs.get("mode", "w"), "a")  # Check if 'mode' is 'a'
+
+
+    @patch("get_bbc_news.scrape_article")
+    @patch("get_bbc_news.save_to_csv")
+    @patch("get_bbc_news.fetch_page")
+    @patch("get_bbc_news.parse_sections")
+    def test_scrape_bbc_news(self, mock_parse_sections, mock_fetch_page, mock_save_to_csv, mock_scrape_article):
+        # Mock BeautifulSoup page and sections
+        mock_soup = MagicMock()
+        mock_fetch_page.return_value = mock_soup
+        mock_parse_sections.return_value = [
+            {
+                "content": [
+                    {"title": "Article 1", "href": "/article1", "metadata": "Meta1"},
+                    {"title": "Article 2", "href": "/article2", "metadata": "Meta2"},
+                ]
+            }
+        ]
+        mock_scrape_article.side_effect = ["Text 1", "Text 2"]
+
+        headers = {"user-agent": "test-agent"}
+        scrape_bbc_news("http://test.com", headers)
+
+        # Assertions
+        mock_fetch_page.assert_called_once_with("http://test.com", headers)
+        mock_parse_sections.assert_called_once_with(mock_soup)
+        self.assertEqual(mock_scrape_article.call_count, 2)
+        mock_save_to_csv.assert_called()
 
 
 class TestLevelArticles(unittest.TestCase):
@@ -26,21 +143,22 @@ class TestLevelArticles(unittest.TestCase):
         mock_storage_client.return_value.bucket.return_value = mock_bucket
 
         # Call the function
-        level_articles.download_json_from_gcp("test_bucket", "test_blob.json", "local_file.json")
+        download_json_from_gcp("test_bucket", "test_blob.json", "local_file.json")
 
         # Assertions
         mock_storage_client.assert_called_once()
         mock_bucket.blob.assert_called_once_with("test_blob.json")
         mock_blob.download_to_filename.assert_called_once_with("local_file.json")
 
-    @patch("level_articles.Dataset.from_list")
     @patch("builtins.open", new_callable=mock_open, read_data='{"Text": "Sample text"}\n{"Text": "Another sample"}')
-    def test_convert_json_to_hf_dataset(self, mock_file, mock_from_list):
+    @patch("level_articles.Dataset.from_list")
+    def test_convert_json_to_hf_dataset(self, mock_from_list, mock_file):
         dataset = MagicMock()
         mock_from_list.return_value = dataset
 
-        result = level_articles.convert_json_to_hf_dataset("local_file.json")
+        result = convert_json_to_hf_dataset("local_file.json")
 
+        # Assertions
         mock_file.assert_called_once_with("local_file.json", "r")
         mock_from_list.assert_called_once()
         self.assertEqual(result, dataset)
@@ -49,7 +167,7 @@ class TestLevelArticles(unittest.TestCase):
     def test_download_weights(self, mock_storage_client):
         # Case: file already exists
         with patch("os.path.exists", return_value=True):
-            level_articles.download_weights("test_bucket", "test_blob.pth", "local_weights.pth")
+            download_weights("test_bucket", "test_blob.pth", "local_weights.pth")
             mock_storage_client.assert_not_called()
 
         # Case: file does not exist
@@ -59,7 +177,7 @@ class TestLevelArticles(unittest.TestCase):
             mock_bucket.blob.return_value = mock_blob
             mock_storage_client.return_value.bucket.return_value = mock_bucket
 
-            level_articles.download_weights("test_bucket", "test_blob.pth", "local_weights.pth")
+            download_weights("test_bucket", "test_blob.pth", "local_weights.pth")
 
             mock_storage_client.assert_called_once()
             mock_bucket.blob.assert_called_once_with("test_blob.pth")
@@ -71,108 +189,35 @@ class TestLevelArticles(unittest.TestCase):
         mock_model = MagicMock()
         mock_from_pretrained.return_value = mock_model
 
-        model = level_articles.load_model("weights.pth", 5)
+        model = load_model("weights.pth", 5)
 
+        # Assertions
         mock_from_pretrained.assert_called_once_with("microsoft/deberta-v3-small", num_labels=5)
         mock_torch_load.assert_called_once_with("weights.pth", map_location=torch.device("cpu"))
         mock_model.load_state_dict.assert_called_once_with(mock_torch_load.return_value)
         mock_model.eval.assert_called_once()
         self.assertEqual(model, mock_model)
 
-    # @patch("level_articles.AutoTokenizer.from_pretrained")
-    # @patch("datasets.Dataset.map")  # Mock Hugging Face Dataset.map
-    # @patch("torch.no_grad")
-    # @patch("torch.argmax")
-    # def test_infer(self, mock_argmax, mock_no_grad, mock_map, mock_tokenizer_from_pretrained):
-    #     mock_model = MagicMock()
+    @patch("level_articles.storage.Client")
+    @patch("pandas.DataFrame.to_json")
+    @patch("os.remove")
+    def test_upload_predictions_to_gcp_json(self, mock_remove, mock_to_json, mock_storage_client):
+        # Create a Hugging Face Dataset
+        dataset = Dataset.from_dict({"Text": ["Sample"], "predictions": ["A1"]})
 
-    #     # Create a Hugging Face Dataset
-    #     mock_dataset = Dataset.from_dict({"Text": ["Sample text"]})
+        # Mock GCP bucket and blob behavior
+        mock_blob = MagicMock()
+        mock_bucket = MagicMock()
+        mock_bucket.blob.return_value = mock_blob
+        mock_storage_client.return_value.bucket.return_value = mock_bucket
 
-    #     # Simulate the output of Dataset.map (tokenized data)
-    #     tokenized_dataset = Dataset.from_dict({
-    #         "input_ids": [[101, 102]],
-    #         "attention_mask": [[1, 1]]
-    #     })
-    #     mock_map.return_value = tokenized_dataset
+        # Call the refactored function
+        upload_predictions_to_gcp_json(dataset, "test_bucket", "labeled.json")
 
-    #     # Mock tokenizer behavior
-    #     mock_tokenizer = MagicMock()
-    #     mock_tokenizer_from_pretrained.return_value = mock_tokenizer
-
-    #     # Mock predictions to return a PyTorch Tensor
-    #     mock_predictions = torch.tensor([2])
-    #     mock_argmax.return_value = mock_predictions
-    #     mock_no_grad.return_value = MagicMock()
-
-    #     # Call the function
-    #     result_dataset = level_articles.infer(mock_model, mock_dataset)
-
-    #     # Assertions
-    #     mock_tokenizer_from_pretrained.assert_called_once_with("microsoft/deberta-v3-small")
-    #     mock_map.assert_called_once_with(  # Verify map was called with the correct arguments
-    #         lambda examples: mock_tokenizer(examples["Text"], truncation=True, padding="max_length", max_length=800),
-    #         batched=True
-    #     )
-    #     mock_argmax.assert_called_once()  # Ensure torch.argmax was called
-    #     self.assertTrue("predictions" in result_dataset.column_names)
-    #     self.assertEqual(result_dataset["predictions"], ["B1"])  # Assuming LABEL_MAPPING[2] is "B1"
-
-
-
-    # @patch("level_articles.storage.Client")
-    # @patch("datasets.Dataset.to_pandas")  # Mock Dataset.to_pandas if used internally
-    # @patch("pandas.DataFrame.to_json")
-    # def test_upload_predictions_to_gcp_json(self, mock_to_json, mock_to_pandas, mock_storage_client):
-    #     # Mock Hugging Face Dataset
-    #     dataset = Dataset.from_dict({"Text": ["Sample"], "predictions": ["A1"]})
-    #     mock_to_pandas.return_value = pd.DataFrame({"Text": ["Sample"], "predictions": ["A1"]})
-
-    #     # Mock GCP bucket and blob behavior
-    #     mock_blob = MagicMock()
-    #     mock_bucket = MagicMock()
-    #     mock_bucket.blob.return_value = mock_blob
-    #     mock_storage_client.return_value.bucket.return_value = mock_bucket
-
-    #     # Call the function
-    #     level_articles.upload_predictions_to_gcp_json(dataset, "test_bucket", "labeled.json")
-
-    #     # Assertions
-    #     mock_storage_client.assert_called_once()  # Check the storage client was created
-    #     mock_bucket.blob.assert_called_once_with("labeled.json")  # Verify blob() was called
-    #     mock_blob.open.assert_called_once_with("w")  # Verify open() was called for writing
-    #     mock_to_json.assert_called_once()  # Ensure DataFrame was converted to JSON
-
-
-
-class TestGetBBCNews(unittest.TestCase):
-
-    @patch("requests.get")
-    @patch("bs4.BeautifulSoup")
-    def test_scrape_articles(self, mock_soup, mock_requests):
-        mock_requests.return_value.text = "<html></html>"
-        mock_soup.return_value = MagicMock()
-
-        # Mock parsing behavior
-        mock_soup.return_value.find.return_value.string = '{"sections": []}'
-        result = mock_soup.return_value.find.return_value
-
-        # Simulate call
-        result = BeautifulSoup(mock_requests.return_value.text, "html.parser")
-        self.assertIsNotNone(result)
-
-
-class TestCLI(unittest.TestCase):
-
-    @patch("subprocess.run")
-    def test_main(self, mock_run):
-        cli.main()
-
-        mock_run.assert_has_calls([
-            call(["python", "get_bbc_news.py"], check=True),
-            call(["python", "upload_articles.py"], check=True),
-            call(["python", "level_articles.py"], check=True),
-        ])
+        # Assertions
+        mock_to_json.assert_called_once_with("temp_predictions.json", orient="records", lines=True)  # Check file write
+        mock_blob.upload_from_filename.assert_called_once_with("temp_predictions.json")  # Verify upload
+        mock_remove.assert_called_once_with("temp_predictions.json")  # Ensure temp file is deleted
 
 
 if __name__ == "__main__":
