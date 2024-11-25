@@ -58,6 +58,11 @@ class TranscriptDataset(Dataset):
     
     def to_hf_dataset(self):
         return Dataset.from_dict({"Transcript": self.texts, "file_path": self.files})
+    
+    def __iter__(self):
+        for filepath, text in zip(self.files, self.texts):
+            yield filepath, text
+
 
 
 
@@ -87,30 +92,38 @@ def load_model(local_model_path, num_labels):
     return model
 
 
-def infer(model, dataset):
-    tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v3-small")
-
-    # Tokenize
-    tokenized_dataset = dataset.map(
-        lambda examples: tokenizer(examples['Transcript'], truncation=True, padding='max_length', max_length=800),
-        batched=True
+def infer(model, tokenizer, text):
+    """
+    Perform inference on a single transcript.
+    
+    Args:
+        model: The pre-trained model.
+        tokenizer: The tokenizer corresponding to the model.
+        text: The transcript text to classify.
+    
+    Returns:
+        prediction: The predicted label index.
+    """
+    # Tokenize the transcript
+    tokenized_input = tokenizer(
+        text,
+        truncation=True,
+        padding="max_length",
+        max_length=800,
+        return_tensors="pt"
     )
 
-    # Convert tokenized dataset to PyTorch tensors
-    input_ids = torch.tensor(tokenized_dataset['input_ids'])
-    attention_mask = torch.tensor(tokenized_dataset['attention_mask'])
+    input_ids = tokenized_input["input_ids"]
+    attention_mask = tokenized_input["attention_mask"]
 
-    # Make predictions
+    # Perform inference
     with torch.no_grad():
         outputs = model(input_ids=input_ids, attention_mask=attention_mask)
         logits = outputs.logits
-        predictions = torch.argmax(logits, dim=-1)
-    
-    # Collect predictions with file paths
-    file_paths = dataset["file_path"]
-    predictions_with_files = list(zip(file_paths, predictions.tolist()))
-    
-    return predictions_with_files
+        prediction = torch.argmax(logits, dim=-1).item()  # Get the predicted label index
+
+    return prediction
+
 
 def update_json_files_with_labels(predictions_with_files):
     # Define the label mapping
@@ -175,14 +188,33 @@ def upload_to_gcp_bucket(bucket_name, local_folder, predictions_with_files):
 
 
 def main():  # pragma: no cover
+    # Step 1: Download transcripts from the GCP bucket
     download_transcripts(BUCKET_NAME, "yt_transcripts")
+    
+    # Step 2: Initialize the dataset
     dataset = TranscriptDataset()
-    hf_dataset = dataset.to_hf_dataset()
+
+    # Step 3: Download model weights
     download_weights(BUCKET_NAME, BLOB_NAME, LOCAL_MODEL_PATH)
+
+    # Step 4: Load the model and tokenizer
     model = load_model(LOCAL_MODEL_PATH, NUM_LABELS)
-    predictions = infer(model, hf_dataset)
-    update_json_files_with_labels(predictions)
-    upload_to_gcp_bucket(BUCKET_NAME, TRANSCRIPT_DIR, predictions)
+    tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v3-small")
+
+    # Step 5: Iterate over each transcript in the dataset
+    for file_path, text in dataset:
+        print(f"Processing file: {file_path}")
+
+        # Perform inference using the refactored `infer` function
+        prediction = infer(model, tokenizer, text)
+
+        # Update the JSON file with the label
+        update_json_files_with_labels([(file_path, prediction)])
+
+        # Upload the updated file to the GCP bucket
+        upload_to_gcp_bucket(BUCKET_NAME, TRANSCRIPT_DIR, [(file_path, prediction)])
+
+    print("Processing completed for all files.")
 
 
 if __name__ == "__main__":
