@@ -2,6 +2,7 @@
 import json
 from google.cloud import storage
 import re
+from collections import defaultdict
 
 
 BUCKET_NAME = "innit_articles_bucket"
@@ -27,8 +28,6 @@ read_json_from_gcp(BUCKET_NAME, NEWS_GCP_FILE_PATH, news_local_file_path)
 print(f"News article file downloaded to {news_local_file_path}")
 
 # %%
-from google.cloud import storage
-
 def download_jsonl_from_gcp(bucket_name, directory_prefix, local_file_path):
     """
     Downloads a JSONL file from a folder starting with "prediction-model" in a GCP bucket.
@@ -87,12 +86,15 @@ with open(sum_local_file_path, 'r', encoding='utf-8') as file:
 # Read news data from local
 data = []
 with open(news_local_file_path, 'r') as f:
-    for line in f:
-        data.append(json.loads(line))
+    try:
+        data = json.load(f)
+    except json.JSONDecodeError:
+        for line in f:
+            data.append(json.loads(line))
 
 # %%
-# Create a new list to hold valid items
-valid_data = []
+# Group valid data by 'prediction'
+grouped_data = defaultdict(list)
 
 for i in range(len(data)):
     text = pred[i]['response']['candidates'][0]['content']['parts'][0]['text']
@@ -101,21 +103,30 @@ for i in range(len(data)):
     summary_match = re.search(r"<sum>\s*(.*?)\s*</sum>", text, re.DOTALL)
     vocab_match = re.search(r"<vocab>\s*(.*?)\s*</vocab>", text, re.DOTALL)
     
-    # Only add items with both <sum> and <vocab> to the valid_data list
+    # Only add items with both <sum> and <vocab> to the grouped_data dictionary
     if summary_match and vocab_match:
         valid_item = data[i].copy()
         valid_item['summary'] = summary_match.group(1).strip()
         valid_item['vocab'] = vocab_match.group(1).strip()
-        valid_data.append(valid_item)
+        
+        # Group items by their 'prediction' value
+        prediction = valid_item.get('predictions', 'unknown')
+        grouped_data[prediction].append(valid_item)
     else:
         print(f"Skipping item {i} due to missing <sum> or <vocab>")
 
 # %%
-# Save valid_data to a local file
-with open(news_local_file_path, "w") as f:
-    json.dump(valid_data, f, indent=4)
+# Save each group to a separate file
+for prediction, items in grouped_data.items():
+    # Create file name based on prediction value
+    file_name = f"{news_local_file_path}_{prediction}.json"
+    
+    # Save grouped items to the file
+    with open(file_name, "w") as f:
+        json.dump(items, f, indent=4)
+    
+    print(f"Data for prediction '{prediction}' saved to {file_name}")
 
-print(f"Valid data saved to {news_local_file_path}")
 # %%
 def upload_to_gcp(bucket_name, destination_blob_name, source_file_name):
     """
@@ -138,9 +149,13 @@ def upload_to_gcp(bucket_name, destination_blob_name, source_file_name):
     blob.upload_from_filename(source_file_name)
     print(f"File uploaded to {destination_blob_name} in bucket {bucket_name}.")
 
-# Specify GCP details
-bucket_name = "innit_articles_bucket"
-destination_blob_name = "bbc_news/valid_data.json"
 
+#%%
 # Call the function to upload
-upload_to_gcp(BUCKET_NAME, destination_blob_name, local_file_path)
+upload_to_gcp(BUCKET_NAME, NEWS_GCP_FILE_PATH, news_local_file_path)
+
+for prediction, items in grouped_data.items():
+    # Create file name based on prediction value
+    local_file_name = f"{news_local_file_path}_{prediction}.json"
+    gcp_file_path = NEWS_GCP_FILE_PATH.split("/")[0] + '/' + local_file_name
+    upload_to_gcp(BUCKET_NAME, gcp_file_path, file_name)
