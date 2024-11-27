@@ -4,6 +4,8 @@ This module contains the jsx code for the pages and components for the frontend.
 
 ## Build Container
 
+Note: before you run this container, head over to the [api-service](../api-service/README.md) folder and follow those instructions first if you have not done so already!
+
 To build the container in "development mode", run:
 
 ```bash

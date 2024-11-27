@@ -5,11 +5,12 @@ import Home from "./pages/Home"
 import DiagnosticTest from "./pages/DiagnosticTest"
 import Media from "./pages/Media"
 import MediaDetail from "./pages/MediaDetail"
+import Footer from "./components/Footer"
 
 function App() {
   return (
     <Router>
-      <div>
+      <div style={{ paddingBottom: "100px" }}>
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -17,6 +18,7 @@ function App() {
           <Route path="/media" element={<Media />} />
           <Route path="/media/:id" element={<MediaDetail />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   )
