@@ -26,5 +26,7 @@ This will start a batch prediction in GCP to get summary and key vocab by level 
 python extract_results_news.py
 ```
 
-This will append two keys 'summary' and 'vocab' to the original news articles json file in GCP.
+This will create level folder and put news of corresponding level as json files into the folders.
+
+TBC: Youtube
 

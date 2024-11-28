@@ -19,6 +19,7 @@ LOCAL_FILE_PATH = "bbc_news_articles_labeled.json"
 OUTPUT_URL = "gs://innit_articles_bucket/bbc_news"
 
 #%%
+# import os
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../../../secrets/text-generator.json"
 
 #%%
@@ -40,14 +41,23 @@ print(f"News article file downloaded to {LOCAL_FILE_PATH}")
 # read data from local
 data = []
 with open(LOCAL_FILE_PATH, 'r') as f:
-    for line in f:
-        data.append(json.loads(line))
+    try:
+        data = json.load(f)
+    except json.JSONDecodeError:
+        for line in f:
+            data.append(json.loads(line))
 
+# %%
+# Include a unique identifier in the input JSONL file
+# Because the predictions from GCP batch prediction may not retain the same order as the original input file
+data_with_ids = [{"id": idx, **content} for idx, content in enumerate(data)]
 
 # %%
 def create_prompt(data):
     content = data["Text"]
+    id = data["id"]
     prompt = (
+        f"ID: {id}\n"
         f"Please summarize the following content in under 100 words, wrapping the summary in <sum> tags. After the summary, extract key vocabulary from the content, categorizing it by CEFR levels (A1, A2, B1, B2, C1), and wrap the vocabulary section in <vocab> tags. Each category should include words and short phrases representative of that level. \n"
         "Present the vocabulary in the following format: \{level\}: comma-separated vocabulary"
         "The vocabulary should be words only and not phrases."
@@ -66,7 +76,7 @@ def create_prompt(data):
     )
     return prompt
 # %%
-prompts = [create_prompt(content) for content in data]
+prompts = [create_prompt(content) for content in data_with_ids]
 
 # %%
 system_instruction=(
