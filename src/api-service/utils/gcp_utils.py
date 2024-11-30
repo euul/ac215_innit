@@ -15,3 +15,26 @@ def get_video_transcripts_from_bucket(bucket_name):
             transcripts.append(transcript)  # Append parsed transcript to list
 
     return transcripts
+
+def create_user_in_bucket(bucket_name, username, user_data):
+    """Creates a new user in the GCP bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(f"users/{username}.json")
+    
+    if blob.exists():
+        raise Exception("User already exists.")
+    
+    blob.upload_from_string(json.dumps(user_data), content_type="application/json")
+
+def get_user_from_bucket(bucket_name, username):
+    """Fetches user data from the GCP bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(f"users/{username}.json")
+    
+    if not blob.exists():
+        return None
+    
+    content = blob.download_as_text()
+    return json.loads(content)

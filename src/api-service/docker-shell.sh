@@ -31,4 +31,7 @@ docker run -d --name api-service \
   -e GCP_BUCKET_NAME="$GCP_BUCKET_NAME" \
   --network innit-network \
   -p 8000:8000 \
+  -p 5001:5001 \
   $IMAGE_NAME
+
+echo "You can view logs using: docker logs -f api-service"
