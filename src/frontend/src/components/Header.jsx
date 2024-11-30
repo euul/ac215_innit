@@ -11,6 +11,7 @@ function Header() {
         <Link to="/">Home</Link>
         <Link to="/diagnostic">Diagnostic Test</Link>
         <Link to="/media">Media</Link>
+        <Link to="/login">Log In</Link>
       </nav>
     </header>
   )
