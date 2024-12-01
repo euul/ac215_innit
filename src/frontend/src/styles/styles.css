@@ -38,6 +38,24 @@ header a:hover {
   color: #09b4c6;
 }
 
+/* Update button style in the header */
+header button {
+  background: transparent; /* Make background transparent */
+  margin: 0 1rem;
+  border: none; /* Remove border */
+  color: #3333ff; /* Match link color */
+  font-size: 1rem; /* Match font size */
+  font-weight: bold; /* Match font weight */
+  text-transform: uppercase; /* Match text transformation */
+  cursor: pointer; /* Change cursor to pointer */
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+header button:hover {
+  color: #09b4c6; /* Match hover color */
+  text-decoration: underline; /* Add underline on hover */
+}
+
 /* Main Page Hero */
 .hero {
   text-align: center;

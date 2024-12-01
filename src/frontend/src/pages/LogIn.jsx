@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { setToken } from "../utils/auth"
 
-function Login() {
+function Login({ handleLogin }) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const navigate = useNavigate()
 
-  const handleLogin = async (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault()
     try {
       const response = await fetch("http://localhost:5001/login", {
@@ -17,7 +18,8 @@ function Login() {
       })
       const data = await response.json()
       if (response.ok) {
-        localStorage.setItem("token", data.access_token) // Store JWT token
+        setToken(data.access_token) // Store JWT token in localStorage
+        handleLogin() // Update the login state in the parent
         navigate("/") // Redirect to homepage or dashboard
       } else {
         setError(data.message || "Login failed")
@@ -31,7 +33,7 @@ function Login() {
     <div style={{ textAlign: "center", marginTop: "2rem" }}>
       <h2>Log In</h2>
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleLoginSubmit}
         style={{ display: "inline-block", marginTop: "1rem" }}
       >
         <div>

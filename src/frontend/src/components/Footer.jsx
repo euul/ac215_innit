@@ -1,8 +1,18 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
+import { getToken } from "../utils/auth" // Assuming getToken is imported from utils/auth
 
 function Footer() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    // Check if the user is logged in when the component is mounted
+    setIsLoggedIn(!!getToken())
+  }, [])
+
   const userLevel = "B2" // Placeholder for user level
   const progress = 75 // Example progress value
+
+  if (!isLoggedIn) return null // If the user is not logged in, return null (hide footer)
 
   return (
     <footer

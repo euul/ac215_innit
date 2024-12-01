@@ -1,17 +1,23 @@
-import React from "react"
 import { Link } from "react-router-dom"
 import "../styles/styles.css"
 import logo from "../images/innit_logo.png"
 
-function Header() {
+const Header = ({ isLoggedIn, handleLogout }) => {
   return (
     <header>
       <img src={logo} alt="Logo" />
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/diagnostic">Diagnostic Test</Link>
-        <Link to="/media">Media</Link>
-        <Link to="/login">Log In</Link>
+        {isLoggedIn && <Link to="/diagnostic">Diagnostic</Link>}
+        {isLoggedIn && <Link to="/media">Media</Link>}
+        {isLoggedIn ? (
+          // Use a Link for the logout functionality, styled like other links
+          <Link to="/" onClick={handleLogout}>
+            Log out
+          </Link>
+        ) : (
+          <Link to="/login">Log in</Link>
+        )}
       </nav>
     </header>
   )
