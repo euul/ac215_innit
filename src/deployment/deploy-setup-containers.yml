@@ -1,0 +1,90 @@
+- name: Configure containers on app server
+  hosts: appserver
+  connection: ssh
+  become: true
+
+  vars:
+    docker_network_name: "app-network"
+
+  tasks:
+    - name: Create secrets directory
+      file:
+        path: "/srv/secrets"
+        state: "directory"
+        mode: 0755
+
+    - name: Copy service account key file
+      copy:
+        src: ../secrets/deployment.json
+        dest: "/srv/secrets/deployment.json"
+        mode: 0644
+
+    - name: Copy data service account key file
+      copy:
+        src: ../secrets/data-service-account.json
+        dest: "/srv/secrets/data-service-account.json"
+        mode: 0644
+
+    - name: Authenticate gcloud using service account
+      shell: "gcloud auth activate-service-account --key-file /srv/secrets/deployment.json"
+
+    - name: Create Docker network
+      docker_network:
+        name: "{{ docker_network_name }}"
+        driver: "bridge"
+        attachable: "yes"
+
+    - name: Copy docker tag file
+      copy:
+        src: .docker-tag
+        dest: /srv/.docker-tag
+        mode: 0644
+
+    - name: Read Docker tag
+      shell: "cat /srv/.docker-tag"
+      register: tag
+
+    - name: Print Docker tag
+      debug:
+        var: tag.stdout
+
+    - name: Create frontend container
+      docker_container:
+        name: "frontend"
+        image: "gcr.io/{{ gcp_project }}/frontend-react:{{ tag.stdout }}"
+        state: started
+        recreate: yes
+        pull: yes
+        restart: yes
+        published_ports:
+          - 3000:3000
+        networks:
+          - name: "{{ docker_network_name }}"
+
+    - name: Create api-service container
+      docker_container:
+        name: "api-service"
+        image: "gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout }}"
+        state: started
+        recreate: yes
+        published_ports:
+          - 9000:9000
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "/srv/secrets/data-service-account.json"
+          GCP_PROJECT: "{{ gcp_project }}"
+          GCS_BUCKET_NAME: "innit_articles_bucket"
+        networks:
+          - name: "{{ docker_network_name }}"
+        volumes:
+          - /srv/secrets:/secrets
+
+    - name: Verify running containers
+      shell: docker ps
+      register: docker_ps_output
+
+    - name: Print running containers
+      debug:
+        msg: "{{ docker_ps_output.stdout }}"
+
+    - name: Clean up unused containers
+      shell: docker system prune -a -f

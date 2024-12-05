@@ -1,0 +1,22 @@
+all:
+  vars:
+    ansible_user: sa_105076426680516768810
+    ansible_ssh_private_key_file: "../secrets/ssh-key-deployment"
+    gcp_service_account_file: "../secrets/deployment.json"
+    gcp_service_account_email: "deployment@innit-437518.iam.gserviceaccount.com"
+    gcp_auth_kind: "serviceaccount"
+    gcp_scopes: "https://www.googleapis.com/auth/cloud-platform"
+    gcp_project: "innit-437518"
+    gcp_region: "us-central1"
+    gcp_zone: "us-central1-a"
+    docker_network_name: "app-network"
+    persistent_disk_name: "innit-disk"
+    persistent_disk_size: 50
+    machine_instance_name: "innit-instance"
+    machine_type: "n1-standard-1"
+    machine_disk_size: 50
+
+  children:
+    appserver:
+      hosts:
+        34.56.7.173:
