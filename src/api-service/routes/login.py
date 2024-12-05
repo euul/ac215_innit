@@ -7,7 +7,7 @@ import os
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "http://172.18.0.2:3000"]}})
 bcrypt = Bcrypt(app)
 app.config["JWT_SECRET_KEY"] = "your-strong-secret-key"  # Replace with a strong secret key
 jwt = JWTManager(app)

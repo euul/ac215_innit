@@ -13,6 +13,10 @@ RUN npm install
 # Copy the rest of the app's source code
 COPY . .
 
+# Add environment variable support for build
+ARG REACT_APP_API_URL  
+ENV REACT_APP_API_URL=$REACT_APP_API_URL  
+
 # Build the app for production
 RUN npm run build
 
@@ -21,6 +25,9 @@ FROM nginx:alpine
 
 # Copy the build folder from the previous stage to the Nginx html directory
 COPY --from=build /app/build /usr/share/nginx/html
+
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 for the Nginx server
 EXPOSE 80

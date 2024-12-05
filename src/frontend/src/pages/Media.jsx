@@ -34,7 +34,7 @@ function Media() {
       console.error("Video ID not found:", video)
       return
     }
-    navigate(`/media/${video.video_id}`, { state: { video } })
+    navigate(`/media/video/${video.video_id}`, { state: { video } })
   }
 
   // Handle click for articles

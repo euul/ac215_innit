@@ -11,12 +11,12 @@ body {
 }
 
 header {
-  background: linear-gradient(90deg, #ffcc00, #ffcc00); /* Retro gradient */
+  background: linear-gradient(90deg, #333333, #333333); /* Retro gradient */
   padding: 1rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 4px solid #09b4c6; /* Neon border */
+  border-bottom: 4px solid #ffcc00; /* Neon border */
 }
 
 header img {
@@ -25,7 +25,7 @@ header img {
 }
 
 header a {
-  color: #3333ff;
+  color: #00ffcc;
   margin: 0 1rem;
   font-size: 1rem;
   font-weight: bold;

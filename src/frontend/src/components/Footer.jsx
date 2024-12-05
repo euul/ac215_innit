@@ -51,7 +51,7 @@ function Footer() {
         backgroundColor: "#333",
         color: "#fff",
         padding: "2rem 2rem",
-        borderTop: "4px solid #00ffcc",
+        borderTop: "4px solid #ffcc00",
         fontFamily: "Press Start 2P",
         zIndex: 1000, // Ensures it's above other elements
       }}
