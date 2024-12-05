@@ -16,12 +16,11 @@ BUCKET_NAME = "innit_articles_bucket"
 MODULE_BLOB_NAME = "yt_transcripts"
 LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1']
 
-# OUTPUT_URL = "gs://innit_articles_bucket/yt_transcripts"
+N_QUESTIONS = 5
 
 #%%
 # import os
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../../../secrets/text-generator.json"
-
 #%%
 # read data from GCP
 # Function to read JSON data from GCP bucket and convert it to DataFrame
@@ -56,34 +55,80 @@ read_json_from_gcp()
 def create_prompt(content, id):
     prompt = (
         f"ID: {id}\n"
-        f"Please summarize the following content in under 100 words, wrapping the summary in <sum> tags. After the summary, extract key vocabulary from the content, categorizing it by CEFR levels (A1, A2, B1, B2, C1), and wrap the vocabulary section in <vocab> tags. Each category should include words and short phrases representative of that level. \n"
-        "Present the vocabulary in the following format: \{level\}: comma-separated vocabulary"
-        "The vocabulary should be words only and not phrases."
-        "For example: \n"
-        '''    
-        <vocab>
-        A1: war, money, people, office  
-        A2: missiles, attacks, support, decision, promise, end, change  
-        B1: administration, policy, involvement, mandate, allies, condemn, escalate, efforts, critical, approach, weapons, conflict  
-        B2: consternation, long-standing, significant, incoming, authorisation, deployment, retribution, magnitude, anticipated, emphasizing  
-        C1: escalation, slow-walked, doctrine, sanctuary
-        </vocab>
-        '''
-        "\n\nHere is the content: \n"
+        f"Please summarize the following content in under 100 words, wrapping the summary in `<sum>` tags. "
+        f"After the summary, extract key vocabulary from the content, categorized by CEFR levels (A1, A2, B1, B2, C1), and wrap the vocabulary section in `<vocab>` tags. "
+        "Each category should include a comma-separated list of words representative of that level, with no phrases or multi-word terms. "
+        "Format the vocabulary as follows:\n"
+        "<vocab>\n"
+        "A1: word1, word2, word3\n"
+        "A2: word1, word2, word3\n"
+        "B1: word1, word2, word3\n"
+        "B2: word1, word2, word3\n"
+        "C1: word1, word2, word3\n"
+        "</vocab>\n"
+        "\nAfter the vocabulary, generate exactly {N_QUESTIONS} questions related to the content, wrapping the questions in `<questions>` tags. "
+        "Each question should include:\n"
+        "- The question text\n"
+        "- Three answer choices (A, B, C)\n"
+        "- The correct answer (e.g., \"A\")\n"
+        "- The CEFR level (A1, A2, B1, B2, C1)\n"
+        "\nFormat the questions as a JSON array following this structure:\n"
+        "<questions>\n"
+        "[\n"
+        "    {\n"
+        '        "question": "Question text?",\n'
+        '        "choices": ["A", "B", "C"],\n'
+        '        "answer": "A",\n'
+        '        "level": "A1"\n'
+        "    },\n"
+        "    {\n"
+        '        "question": "Question text?",\n'
+        '        "choices": ["A", "B", "C"],\n'
+        '        "answer": "B",\n'
+        '        "level": "B1"\n'
+        "    }\n"
+        "]\n"
+        "</questions>\n"
+        "\nHere is the content:\n"
         f"{content}"
     )
     return prompt
 
 # %%
-system_instruction=(
-    "You are a highly skilled language assistant specializing in summarization and CEFR-based vocabulary categorization. When given a content:"
-    "1. Generate a summary in under 100 words, and wrap it in <sum> tags."
-    "2. Extract key vocabulary and categorize it by CEFR levels (A1, A2, B1, B2, C1), wrapping this section in <vocab> tags."
-    "Present the vocabulary in the format: \{level\}: comma-separated vocabulary/phrases."
-    "Ensure each level contains appropriate vocabulary with words representative of that level."
-    "The vocabulary should be words only and not phrases."
-    "Maintain clarity and organization in the output."
+system_instruction = (
+    "You are a highly skilled language assistant specializing in summarization, CEFR-based vocabulary categorization, and question generation. "
+    "When provided with content:\n"
+    "1. Generate a summary in under 100 words, and wrap it in <sum> tags.\n"
+    "2. Extract key vocabulary from the content, categorized by CEFR levels (A1, A2, B1, B2, C1), and wrap this section in <vocab> tags.\n"
+    "   - Present the vocabulary in the format: \{level\}: comma-separated vocabulary.\n"
+    "   - Ensure each level contains appropriate vocabulary with words representative of that level.\n"
+    "   - The vocabulary should consist of single words only (no phrases or multi-word terms).\n"
+    "3. Generate a specified number of questions (e.g., 5) based on the content, wrapping them in <questions> tags.\n"
+    "   - Each question should include:\n"
+    "     - The question text\n"
+    "     - Three answer choices (A, B, C)\n"
+    "     - The correct answer (e.g., \"A\")\n"
+    "     - The CEFR level (A1, A2, B1, B2, C1)\n"
+    "   - Format the questions as a JSON array, following this structure:\n"
+    '     <questions>\n'
+    '     [\n'
+    '         {\n'
+    '             "question": "Sample question?",\n'
+    '             "choices": ["Option A", "Option B", "Option C"],\n'
+    '             "answer": "A",\n'
+    '             "level": "A1"\n'
+    '         },\n'
+    '         {\n'
+    '             "question": "Another sample question?",\n'
+    '             "choices": ["Option A", "Option B", "Option C"],\n'
+    '             "answer": "B",\n'
+    '             "level": "B1"\n'
+    '         }\n'
+    '     ]\n'
+    '     </questions>\n'
+    "Ensure all output is clear, structured, and accurately formatted as requested."
 )
+
 
 #%%
 # create prompts inputs for each level folder
@@ -98,10 +143,11 @@ for level in LEVELS:
         id_counter = 1
 
         for file_name in os.listdir(local_file_path):
-            if file_name.endswith(".json"):  # Check if the file is a JSON file
+            if file_name.endswith(".json") and file_name != "id_mapping.json":  # Check if the file is a JSON file
                 file_path = os.path.join(local_file_path, file_name) 
                 with open(file_path, 'r') as file:
                     data = json.load(file)
+                    # print(data.keys())
                     concatenated_text = ' '.join([entry['text'] for entry in data['transcript']])
                     prompts.append(create_prompt(concatenated_text, id_counter))
                     id_mapping[id_counter] = file_name
@@ -148,7 +194,6 @@ for level in LEVELS:
         blob.upload_from_filename(id_mapping_file)
         print(f"File {id_mapping_file} uploaded to gs://{BUCKET_NAME}/{MODULE_BLOB_NAME}/{level}/id_mapping.json")
 
-
 # %%
 # batch prediction
 for level in LEVELS:
@@ -182,17 +227,3 @@ for level in LEVELS:
         print(f"Error checking or processing level {level}: {e}")
 
 
-
-# %%
-
-# # Take a look at the output
-# file_path = "bbc_news_prediction-model-2024-11-25T15_32_07.034415Z_predictions.jsonl"
-
-# # Read and parse the file
-# pred = []
-# with open(file_path, 'r', encoding='utf-8') as file:
-#     for line in file:
-#         pred.append(json.loads(line))
-
-# print(pred[0]['response']['candidates'][0]['content']['parts'][0]['text'])
-# # %%

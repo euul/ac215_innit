@@ -125,15 +125,17 @@ def update_local_json(mapping_file_path, pred_dict):
             text = pred_dict[id]
             summary_match = re.search(r"<sum>\s*(.*?)\s*</sum>", text, re.DOTALL)
             vocab_match = re.search(r"<vocab>\s*(.*?)\s*</vocab>", text, re.DOTALL)
+            questions_match = re.search(r"<questions>\s*(.*?)\s*</questions>", text, re.DOTALL)
 
             # add summary and vocab to original data
-            if summary_match and vocab_match:
+            if summary_match and vocab_match and questions_match:
                 original_data['id'] = id
                 original_data['summary'] = summary_match.group(1).strip()
                 original_data['vocab'] = vocab_match.group(1).strip()
+                original_data['questions'] = questions_match.group(1).strip()
             else:
                 remove_file = True
-                print(f"Missing <sum> or <vocab> for item {id}")
+                print(f"Missing <sum>, <vocab>, or <questions> for item {id}")
 
             # save the updated data locally
             with open(file_path, 'w') as f:
