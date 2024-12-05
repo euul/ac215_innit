@@ -68,7 +68,7 @@ function MediaDetail() {
       </h2>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <h4 style={{ color: "#ffcc00" }}>Video</h4>
+          <h3 style={{ color: "#ffcc00" }}>Video</h3>
           <Box>
             <MediaPlayer
               videoId={video.video_id}
@@ -77,7 +77,7 @@ function MediaDetail() {
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
-          <h4 style={{ color: "#ffcc00" }}>Transcript</h4>
+          <h3 style={{ color: "#ffcc00" }}>Transcript</h3>
           <div
             ref={transcriptRef}
             style={{ maxHeight: "400px", overflowY: "scroll" }}

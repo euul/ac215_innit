@@ -35,7 +35,15 @@ def register():
 
     # Hash the password and save user data to GCP
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    user_data = {"username": username, "password": hashed_password}
+    # Initialize user metadata
+    user_data = {
+        "username": username,
+        "password": hashed_password,
+        "language_level": "NA",  # Default level
+        "xp": 0,  # Initial XP
+        "articles_read": [],  # Empty list of articles
+        "videos_seen": []  # Empty list of videos
+    }
 
     blob.upload_from_string(json.dumps(user_data), content_type="application/json")
     return jsonify({"message": "User registered successfully"}), 201

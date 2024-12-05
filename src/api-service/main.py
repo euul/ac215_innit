@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from routes.videos import router as videos_router
+from routes.diagnostic import router as diagnostic_router
 from google.cloud import storage
 import os
 import json
@@ -23,6 +24,7 @@ app.add_middleware(
 
 # Include the videos route
 app.include_router(videos_router)
+app.include_router(diagnostic_router)
 
 # Configuration for user authentication
 SECRET_KEY = "your-strong-secret-key"  # Replace with a strong secret key

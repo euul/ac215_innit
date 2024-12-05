@@ -118,12 +118,14 @@ for i, original_data in enumerate(data_with_ids):
         text = reordered_predictions[i]
         summary_match = re.search(r"<sum>\s*(.*?)\s*</sum>", text, re.DOTALL)
         vocab_match = re.search(r"<vocab>\s*(.*?)\s*</vocab>", text, re.DOTALL)
+        question_match = re.search(r"<questions>\s*(.*?)\s*</questions>", text, re.DOTALL)
 
-        if summary_match and vocab_match:
+        if summary_match and vocab_match and question_match:
             original_data['summary'] = summary_match.group(1).strip()
             original_data['vocab'] = vocab_match.group(1).strip()
+            original_data['questions'] = question_match.group(1).strip()
         else:
-            print(f"Missing <sum> or <vocab> for item {i}")
+            print(f"Missing <sum>, <vocab> or <questions> for item {i}")
 
 # %%
 def upload_to_gcp(bucket_name, folder_prefix, file_name, data):
@@ -165,3 +167,4 @@ for item in data_with_ids:
 
     except Exception as e:
         print(f"Failed to upload item with ID {item.get('id')}: {e}")
+
