@@ -1,18 +1,42 @@
 import React, { useState, useEffect } from "react"
-import { getToken } from "../utils/auth" // Assuming getToken is imported from utils/auth
+import { getToken } from "../utils/auth" // Assuming getToken retrieves the JWT token
 
 function Footer() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userData, setUserData] = useState({ language_level: "NA", xp: 0 }) // Default values
 
   useEffect(() => {
     // Check if the user is logged in when the component is mounted
-    setIsLoggedIn(!!getToken())
+    const token = getToken()
+    setIsLoggedIn(!!token)
+
+    if (token) {
+      // Fetch user data using the token
+      fetch("http://localhost:5001/users/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass the token for authentication
+        },
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Failed to fetch user data")
+          return response.json()
+        })
+        .then((data) => {
+          setUserData({
+            language_level: data.language_level || "NA",
+            xp: data.xp || 0,
+          })
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error)
+        })
+    }
   }, [])
 
-  const userLevel = "B2" // Placeholder for user level
-  const progress = 75 // Example progress value
-
   if (!isLoggedIn) return null // If the user is not logged in, return null (hide footer)
+
+  const { language_level, xp } = userData
 
   return (
     <footer
@@ -34,17 +58,26 @@ function Footer() {
     >
       {/* User Level */}
       <div style={{ fontSize: "1.2rem" }}>
-        Level: <span style={{ color: "#00ffcc" }}>{userLevel}</span>
+        Level: <span style={{ color: "#00ffcc" }}>{language_level}</span>
       </div>
 
-      {/* Progress Bar */}
+      {/* XP Progress */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           width: "25%",
+          fontSize: "1.2rem",
         }}
       >
+        <span
+          style={{
+            marginRight: "10px", // Add spacing after "XP:"
+            fontSize: "1.2rem",
+          }}
+        >
+          XP:
+        </span>
         <div
           style={{
             height: "20px",
@@ -59,7 +92,7 @@ function Footer() {
           <div
             style={{
               height: "100%",
-              width: `${progress}%`,
+              width: `${Math.min(xp, 100)}%`, // Ensure XP doesn't exceed 100% visually
               backgroundColor: "#00ffcc",
               transition: "width 0.5s ease",
               clipPath: "polygon(0% 0%, 100% 0%, 95% 100%, 0% 100%)", // Slanted edge
@@ -73,7 +106,7 @@ function Footer() {
             color: "#00ffcc",
           }}
         >
-          {progress}
+          {xp}
         </span>
         <span
           style={{

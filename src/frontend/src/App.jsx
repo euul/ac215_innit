@@ -11,6 +11,7 @@ import Home from "./pages/Home"
 import DiagnosticTest from "./pages/DiagnosticTest"
 import Media from "./pages/Media"
 import MediaDetail from "./pages/MediaDetail"
+import ArticleDetail from "./pages/ArticleDetail"
 import Login from "./pages/LogIn"
 import Register from "./pages/Register"
 
@@ -54,8 +55,14 @@ function App() {
               element={isLoggedIn ? <Media /> : <Navigate to="/login" />}
             />
             <Route
-              path="/media/:id"
+              path="/media/video/:id"
               element={isLoggedIn ? <MediaDetail /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/media/article/:id"
+              element={
+                isLoggedIn ? <ArticleDetail /> : <Navigate to="/login" />
+              }
             />
           </Routes>
         </div>

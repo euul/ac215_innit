@@ -16,6 +16,21 @@ def get_video_transcripts_from_bucket(bucket_name):
 
     return transcripts
 
+def get_articles_from_bucket(bucket_name): 
+    """Fetches articles stored as JSON files in the GCP bucket's bbc news folder."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blobs = bucket.list_blobs(prefix="bbc_news/B2/")  # List files in the yt_transcripts folder
+
+    articles = []
+    for blob in blobs:
+        if blob.name.endswith(".json"):  # Only process JSON files
+            content = blob.download_as_text()  # Download JSON content as a string
+            article = json.loads(content)  # Parse JSON content
+            articles.append(article)  # Append parsed transcript to list
+
+    return articles
+
 def create_user_in_bucket(bucket_name, username, user_data):
     """Creates a new user in the GCP bucket."""
     storage_client = storage.Client()
