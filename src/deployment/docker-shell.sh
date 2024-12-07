@@ -23,7 +23,6 @@ docker run --rm --name $IMAGE_NAME -ti \
 -v "$HOME/.ssh":/home/app/.ssh \
 -v "$BASE_DIR/../api-service-shivas":/api-service-shivas \
 -v "$BASE_DIR/../frontend-shivas":/frontend-shivas \
-# -v "$BASE_DIR/../vector-db":/vector-db \
 -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
 -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
 -e GCP_PROJECT=$GCP_PROJECT \
