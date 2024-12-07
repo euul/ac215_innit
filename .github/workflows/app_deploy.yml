@@ -44,6 +44,6 @@ jobs:
             --mount type=bind,source=$GOOGLE_APPLICATION_CREDENTIALS,target=/secrets/deployment.json \
             --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/deployment.json \
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
-            -e GCP_PROJECT=innit-437518" \
+            -e GCP_PROJECT=innit-437518 \
             -e GCP_ZONE=us-central1-a \
             innit-deployment sh deploy-k8s-update.sh
