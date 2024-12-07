@@ -4,7 +4,7 @@
   gather_facts: false
 
   vars:
-    cluster_name: "innit-cluster"
+    cluster_name: "test-innit-cluster-james"
     machine_type: "n2d-standard-2"
     machine_disk_size: 30
     initial_node_count: 2
@@ -160,8 +160,8 @@
                 run: frontend
             spec: # Describes how the pods should run
               containers: # This Deployment runs a single container named frontend.
-              - image: "gcr.io/{{ gcp_project }}/frontend-react:{{ tag.stdout}}" # tag.stdout: The Docker tag, retrieved from the .docker-tag file earlier in the playbook.
-                imagePullPolicy: IfNotPresent # The container image is pulled only if it is not already present on the node.
+              - image: "gcr.io/{{ gcp_project }}/frontend-shivas:{{ tag.stdout}}" # tag.stdout: The Docker tag, retrieved from the .docker-tag file earlier in the playbook.
+                imagePullPolicy: Always # The container image is pulled only if it is not already present on the node.
                 name: frontend # Sets the container name to frontend.
                 ports:
                 - containerPort: 3000 # Exposes port 3000 inside the container, where the frontend application likely runs. Pods expose port 3000 for the frontend application, which other Kubernetes resources (e.g., a Service or Ingress) can route traffic to.
@@ -193,13 +193,11 @@
                   secret:
                     secretName: gcp-service-key
               containers:
-              - image: gcr.io/{{ gcp_project }}/api-service:{{ tag.stdout}}
-                imagePullPolicy: IfNotPresent
+              - image: gcr.io/{{ gcp_project }}/api-service-shivas:{{ tag.stdout}}
+                imagePullPolicy: Always
                 name: api
                 ports:
-                - containerPort: 8000 # FastAPI
-                  protocol: TCP
-                - containerPort: 5001 # Flask
+                - containerPort: 9000 # Exposes port 9000 inside the container for the API service.
                   protocol: TCP
                 volumeMounts:
                   - name: persistent-vol
@@ -245,14 +243,9 @@
           namespace: "{{cluster_name}}-namespace"
         spec:
           ports:
-          - name: fastapi
-            port: 8000
+          - port: 9000
             protocol: TCP
-            targetPort: 8000
-          - name: flask
-            port: 5001
-            protocol: TCP
-            targetPort: 5001
+            targetPort: 9000
           selector:
             run: api
           type: NodePort
@@ -317,19 +310,12 @@
                     name: frontend
                     port:
                       number: 3000
-              - path: /api/fastapi # Routes traffic sent to /api/ to the api service on port 9000.
+              - path: /api/ # Routes traffic sent to /api/ to the api service on port 9000.
                 pathType: Prefix
                 backend:
                   service:
-                    name: fastapi
+                    name: api
                     port:
-                      number: 8000
-              - path: /api/flask/ # Routes traffic sent to /api/flask/ to the Flask backend.
-                pathType: Prefix
-                backend:
-                  service:
-                    name: flask
-                    port:
-                      number: 5001
+                      number: 9000
     when: cluster_state == "present"
 
