@@ -17,7 +17,7 @@
     community.general.docker_image:
       build:
         path: ../frontend-shivas
-        platform: linux/amd64/v2
+        platform: linux/amd64
       name: gcr.io/{{ innit }}/frontend-shivas:{{ tag.stdout }}
       source: build
 
@@ -32,7 +32,7 @@
     community.general.docker_image:
       build:
         path: ../api-service-shivas
-        platform: linux/amd64/v2
+        platform: linux/amd64
       name: gcr.io/{{ innit }}/api-service-shivas:{{ tag.stdout }}
       source: build
 
