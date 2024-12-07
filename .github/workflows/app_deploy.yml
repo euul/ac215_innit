@@ -33,6 +33,7 @@ jobs:
         run: |-
           cd ${{ github.workspace }}/src/deployment/
           docker build -t innit-deployment -f Dockerfile .
+          
       - name: Run Deploy App
         run: |-
           set -e
@@ -47,4 +48,12 @@ jobs:
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
             -e GCP_PROJECT=innit-437518 \
             -e GCP_ZONE=us-central1-a \
+            innit-deployment sh -c "echo 'Checking mounts and environment...' && \
+                ls -l /workspace && \
+                ls -l /frontend-shivas && \
+                ls -l /api-service-shivas && \
+                cat /secrets/deployment.json && \
+                echo 'Environment: GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS, GCP_PROJECT=$GCP_PROJECT, GCP_ZONE=$GCP_ZONE' && \
+                echo 'Preflight check completed successfully.'"
+
             innit-deployment sh deploy-k8s-update.sh
