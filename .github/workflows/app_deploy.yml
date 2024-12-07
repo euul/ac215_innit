@@ -34,6 +34,11 @@ jobs:
           cd ${{ github.workspace }}/src/deployment/
           docker build -t innit-deployment -f Dockerfile .
           
+      - name: Prepare Secrets
+        run: |-
+          echo '${{ secrets.DEPLOYMENT }}' > ${{ github.workspace }}/deployment.json
+          echo '${{ secrets.DATA_SERVICE_ACCOUNT }}' > ${{ github.workspace }}/data-service-account.json
+
       - name: Run Deploy App
         run: |-
           set -e
@@ -43,7 +48,8 @@ jobs:
             -v ${{ github.workspace }}/src/frontend-shivas:/frontend-shivas \
             -v ${{ github.workspace }}/src/api-service-shivas:/api-service-shivas \
             --volume $GITHUB_WORKSPACE:/workspace \
-            --mount type=bind,source=$GOOGLE_APPLICATION_CREDENTIALS,target=/secrets/deployment.json \
+            --mount type=bind,source=${{ github.workspace }}/deployment.json,target=/secrets/deployment.json,readonly \
+            --mount type=bind,source=${{ github.workspace }}/data-service-account.json,target=/secrets/data-service-account.json,readonly \
             --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/deployment.json \
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
             -e GCP_PROJECT=innit-437518 \
