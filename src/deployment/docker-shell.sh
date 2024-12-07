@@ -21,9 +21,9 @@ docker run --rm --name $IMAGE_NAME -ti \
 -v "$BASE_DIR":/app \
 -v "$SECRETS_DIR":/secrets \
 -v "$HOME/.ssh":/home/app/.ssh \
--v "$BASE_DIR/../api-service":/api-service \
--v "$BASE_DIR/../frontend":/frontend \
--v "$BASE_DIR/../vector-db":/vector-db \
+-v "$BASE_DIR/../api-service-shivas":/api-service-shivas \
+-v "$BASE_DIR/../frontend-shivas":/frontend-shivas \
+# -v "$BASE_DIR/../vector-db":/vector-db \
 -e GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS \
 -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
 -e GCP_PROJECT=$GCP_PROJECT \

@@ -16,30 +16,30 @@
   - name: Build frontend container image
     community.general.docker_image:
       build:
-        path: ../frontend
+        path: ../frontend-shivas
         platform: linux/amd64/v2
-      name: gcr.io/{{ innit }}/frontend-react:{{ tag.stdout }}
+      name: gcr.io/{{ innit }}/frontend-shivas:{{ tag.stdout }}
       source: build
 
   - name: Push frontend image to GCR
     community.general.docker_image:
-      name: gcr.io/{{ innit }}/frontend-react:{{ tag.stdout }}
-      repository: gcr.io/{{ innit }}/frontend-react:{{ tag.stdout }}
+      name: gcr.io/{{ innit }}/frontend-shivas:{{ tag.stdout }}
+      repository: gcr.io/{{ innit }}/frontend-shivas:{{ tag.stdout }}
       push: yes
       source: local
 
-  - name: Build api-service container image
+  - name: Build api-service-shivas container image
     community.general.docker_image:
       build:
-        path: ../api-service
+        path: ../api-service-shivas
         platform: linux/amd64/v2
-      name: gcr.io/{{ innit }}/api-service:{{ tag.stdout }}
+      name: gcr.io/{{ innit }}/api-service-shivas:{{ tag.stdout }}
       source: build
 
-  - name: Push api-service image to GCR
+  - name: Push api-service-shivas image to GCR
     community.general.docker_image:
-      name: gcr.io/{{ innit }}/api-service:{{ tag.stdout }}
-      repository: gcr.io/{{ innit }}/api-service:{{ tag.stdout }}
+      name: gcr.io/{{ innit }}/api-service-shivas:{{ tag.stdout }}
+      repository: gcr.io/{{ innit }}/api-service-shivas:{{ tag.stdout }}
       push: yes
       source: local
 
