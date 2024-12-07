@@ -1,34 +1,55 @@
 .videoPage {
-  margin-top: 3rem;
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
 }
 
 .videoTitle {
-  text-align: center;
-  color: #007bff;
   font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-weight: bold;
+  color: #1e40af; /* Dark blue */
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.videoContent {
+.contentContainer {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
 }
 
-.transcript-container {
+.videoSection,
+.transcriptSection {
+  flex: 1;
+}
+
+.subheading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #374151; /* Neutral dark gray */
+  margin-bottom: 1rem;
+}
+
+.videoContainer {
+  flex: 1.2;
+  max-width: 900px;
+  min-height: 400px;
+}
+
+.transcriptContainer {
+  flex: 1;
   max-height: 400px;
   overflow-y: auto;
-  background-color: #f4f4f4;
+  background-color: #ffffff;
   padding: 1rem;
   border-radius: 8px;
-}
-
-.transcript-entry {
-  padding: 0.5rem;
-}
-
-.transcript-entry.active {
-  background-color: #e0e0e0;
-  font-weight: bold;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

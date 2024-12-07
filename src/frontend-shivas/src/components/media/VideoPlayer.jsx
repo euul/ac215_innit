@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import PropTypes from "prop-types"
+import styles from "./VideoPlayer.module.css" // Import CSS module
 
 // Utility function to clean the video ID
 const cleanVideoId = (id) => id.split("&")[0] // Removes query parameters if present
@@ -74,11 +75,11 @@ export default function VideoPlayer({ videoId, onTimeUpdate }) {
   }, [videoId])
 
   return (
-    <div className="video-container">
+    <div className={styles.videoContainer}>
       {videoId ? (
-        <div ref={playerRef} className="video-player"></div>
+        <div ref={playerRef} className={styles.videoPlayer}></div>
       ) : (
-        <p>No video selected.</p>
+        <p className={styles.noVideo}>No video selected.</p>
       )}
     </div>
   )

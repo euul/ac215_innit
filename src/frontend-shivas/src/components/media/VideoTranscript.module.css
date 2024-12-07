@@ -1,0 +1,26 @@
+.transcriptContainer {
+  max-height: 360px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.transcriptEntry {
+  padding: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #374151; /* Neutral gray */
+  transition: background-color 0.3s ease;
+}
+
+.transcriptEntry.active {
+  background-color: #2563eb; /* Blue highlight */
+  color: #ffffff; /* White text for better contrast */
+  font-weight: bold;
+}
+
+.transcriptEntry:hover {
+  background-color: #f1f5f9; /* Light hover effect */
+}

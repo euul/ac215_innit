@@ -14,7 +14,9 @@ export default function VideoDetailPage({ params }) {
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/videos/${id}`)
       .then((response) => {
-        if (!response.ok) throw new Error("Failed to fetch video")
+        if (!response.ok) {
+          throw new Error("Failed to fetch video")
+        }
         return response.json()
       })
       .then((data) => setVideo(data.video))
@@ -22,18 +24,33 @@ export default function VideoDetailPage({ params }) {
   }, [id])
 
   if (error) {
-    return <div>Error: {error}</div>
+    return <div className={styles.error}>Error: {error}</div>
   }
 
   if (!video) {
-    return <div>Loading...</div>
+    return <div className={styles.loading}>Loading...</div>
   }
 
+  // Convert "hh:mm:ss" to seconds
+  const convertToSeconds = (timeString) => {
+    const parts = timeString.split(":").map(Number)
+    if (parts.length === 3) {
+      const [hours, minutes, seconds] = parts
+      return hours * 3600 + minutes * 60 + seconds
+    } else if (parts.length === 2) {
+      const [minutes, seconds] = parts
+      return minutes * 60 + seconds
+    }
+    return parseFloat(timeString)
+  }
+
+  // Process the transcript to include start time in seconds
   const processedTranscript = video.transcript.map((entry) => ({
     ...entry,
-    startInSeconds: parseFloat(entry.start),
+    startInSeconds: convertToSeconds(entry.start),
   }))
 
+  // Determine the current index of the transcript based on the video time
   const currentIndex = processedTranscript.findIndex(
     (entry, i) =>
       currentTime >= entry.startInSeconds &&
@@ -43,16 +60,31 @@ export default function VideoDetailPage({ params }) {
 
   return (
     <div className={styles.videoPage}>
-      <h2 className={styles.videoTitle}>{video.video_name}</h2>
-      <div className={styles.videoContent}>
-        <VideoPlayer
-          videoId={video.video_id}
-          onTimeUpdate={(time) => setCurrentTime(time)}
-        />
-        <VideoTranscript
-          transcript={processedTranscript}
-          currentIndex={currentIndex}
-        />
+      {/* Video Title */}
+      <h1 className={styles.videoTitle}>{video.video_name}</h1>
+
+      <div className={styles.contentContainer}>
+        {/* Video Section */}
+        <div className={styles.videoSection}>
+          <h2 className={styles.subheading}>Video</h2>
+          <div className={styles.videoContainer}>
+            <VideoPlayer
+              videoId={video.video_id}
+              onTimeUpdate={(time) => setCurrentTime(time)}
+            />
+          </div>
+        </div>
+
+        {/* Transcript Section */}
+        <div className={styles.transcriptSection}>
+          <h2 className={styles.subheading}>Transcript</h2>
+          <div className={styles.transcriptContainer}>
+            <VideoTranscript
+              transcript={processedTranscript}
+              currentIndex={currentIndex}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )
