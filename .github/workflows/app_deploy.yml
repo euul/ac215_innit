@@ -35,7 +35,8 @@ jobs:
           docker build -t innit-deployment -f Dockerfile .
       - name: Run Deploy App
         run: |-
-          docker run --name innit-deployment \
+          set -e
+          docker run --rm --name innit-deployment \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v $HOME/.ssh:/home/app/.ssh \
             -v ${{ github.workspace }}/src/frontend-shivas:/frontend-shivas \
