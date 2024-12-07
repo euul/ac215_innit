@@ -26,9 +26,9 @@ jobs:
           gcloud auth configure-docker # --quiet #authenticate to gcr
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - name: List files in the deployment dir
         run: |
-          ls ${{ github.workspace }}
+          ls ${{ github.workspace }}/src/deployment/
       - name: Build Deployment Container 
         run: |-
           cd ${{ github.workspace }}/src/deployment/
@@ -46,4 +46,4 @@ jobs:
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
             -e GCP_PROJECT=innit-437518 \
             -e GCP_ZONE=us-central1-a \
-            innit-deployment sh -c "echo 'Checking directory structure'; ls -la; echo 'Running deploy script'; sh deploy-k8s-update.sh"
+            sh deploy-k8s-update.sh
