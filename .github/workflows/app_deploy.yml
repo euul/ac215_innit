@@ -48,5 +48,4 @@ jobs:
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
             -e GCP_PROJECT=innit-437518 \
             -e GCP_ZONE=us-central1-a \
-            innit-deployment sh -c "sh /workspace/deploy-k8s-update.sh" > deploy.log 2>&1
-          cat deploy.log
+            innit-deployment sh deploy-k8s-update.sh
