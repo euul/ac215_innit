@@ -32,7 +32,7 @@ jobs:
       - name: Build Deployment Container 
         run: |-
           cd ${{ github.workspace }}/src/deployment/
-          docker build -t innit-437518 -f Dockerfile .
+          docker build -t innit-deployment -f Dockerfile .
       - name: Run Deploy App
         run: |-
           docker run --rm --name innit-deployment \
