@@ -55,5 +55,4 @@ jobs:
                 cat /secrets/deployment.json && \
                 echo 'Environment: GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS, GCP_PROJECT=$GCP_PROJECT, GCP_ZONE=$GCP_ZONE' && \
                 echo 'Preflight check completed successfully.'"
-
             innit-deployment sh deploy-k8s-update.sh
