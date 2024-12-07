@@ -1,78 +1,96 @@
 /* General page styling */
 .diagnosticTest {
-  background-color: #1a1a1a;
-  color: #00ffcc; /* Neon green text */
+  background-color: #f9fafb; /* Light gray background */
+  color: #1f2937; /* Dark text color for readability */
   min-height: 100vh;
   padding: 2rem;
-  font-family: "Press Start 2P", cursive;
+  font-family: "Inter", sans-serif; /* Modern and readable font */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  gap: 2rem;
 }
 
 /* Title styling */
 .title {
-  color: #00ffcc;
-  text-shadow: 2px 2px #000; /* Retro shadow */
+  color: #111827; /* Darker text for the title */
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-weight: 700;
   text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Subtitle or explanatory text */
+.subtitle {
+  color: #6b7280; /* Subtle gray for descriptions */
+  font-size: 1.125rem; /* Slightly larger than body text */
+  text-align: center;
+  margin-bottom: 1.5rem;
+  max-width: 800px;
 }
 
 /* Question card container */
 .questionCard {
-  background-color: #2a2a2a; /* Darker background for questions */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  background-color: #ffffff; /* White card background */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
   padding: 1.5rem;
   margin: 1rem 0;
   width: 100%;
   max-width: 600px;
-  color: #fff;
+  color: #1f2937; /* Dark text for readability */
+  border: 1px solid #e5e7eb; /* Light border for structure */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.questionCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Slight hover elevation */
 }
 
 /* Question text */
 .questionText {
-  font-size: 1.2rem;
+  font-size: 1.125rem; /* Slightly larger text for clarity */
   margin-bottom: 1rem;
-  text-shadow: 1px 1px #000;
+  font-weight: 600; /* Bold question text */
 }
 
 /* Radio button styling */
 .radioButton {
-  color: #fff; /* White circle when unchecked */
+  color: #1f2937; /* Neutral dark color for unchecked state */
 }
 
 .radioButton.Mui-checked {
-  color: #00ffcc; /* Neon green when checked */
+  color: #2563eb; /* Blue when checked */
 }
 
 .radioLabel {
-  color: #fff; /* Label text color */
+  color: #374151; /* Neutral dark for labels */
   margin: 0.5rem 0;
 }
 
 /* Submit button */
 .submitButton {
-  background-color: #00ffcc;
-  color: #000;
-  font-weight: bold;
-  padding: 0.8rem 2rem;
-  border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  text-transform: uppercase;
+  background-color: #2563eb; /* Modern blue */
+  color: #ffffff; /* White text */
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .submitButton:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Elevated shadow */
+  background-color: #1d4ed8; /* Darker blue on hover */
 }
 
 /* Thank you message */
 .thankYou {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  color: #4b5563; /* Muted gray for neutral message */
   text-align: center;
   margin-top: 2rem;
 }

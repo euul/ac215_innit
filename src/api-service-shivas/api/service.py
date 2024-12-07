@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from api.routers import diagnostic
+from api.routers import media
 
 # Setup FastAPI app
 app = FastAPI(title="API Server", description="API Server", version="v1")
@@ -22,3 +23,4 @@ async def get_index():
 
 # Additional routers here
 app.include_router(diagnostic.router)
+app.include_router(media.router)

@@ -1,0 +1,34 @@
+.videoPage {
+  margin-top: 3rem;
+  padding: 1rem;
+}
+
+.videoTitle {
+  text-align: center;
+  color: #007bff;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.videoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.transcript-container {
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #f4f4f4;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.transcript-entry {
+  padding: 0.5rem;
+}
+
+.transcript-entry.active {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}

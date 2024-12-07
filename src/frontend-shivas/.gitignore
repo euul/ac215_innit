@@ -6,3 +6,4 @@ node_modules/
 env.local
 .eslintcache
 scratch.txt
+react-app-nextjs@1.0.0

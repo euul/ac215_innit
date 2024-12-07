@@ -8,8 +8,10 @@
   }
 
   body {
-    @apply antialiased;
-    font-family: var(--font-source-sans-pro);
+    @apply antialiased bg-gray-50 text-gray-900; /* Light gray background, dark text */
+    font-family: var(--font-source-sans-pro); /* Default font for body */
+    margin: 0;
+    padding: 0;
   }
 
   h1,
@@ -18,7 +20,22 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-playfair);
+    font-family: var(--font-playfair); /* Modern serif font for headings */
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  a {
+    @apply text-blue-600 hover:underline; /* Styled links with hover effect */
+  }
+
+  button {
+    @apply bg-blue-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition;
   }
 }
 
@@ -36,9 +53,4 @@
 
 main {
   flex: 1;
-}
-
-body {
-  margin: 0;
-  padding: 0;
 }

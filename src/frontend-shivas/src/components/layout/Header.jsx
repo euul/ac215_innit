@@ -1,38 +1,31 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import {
-  Home,
-  Info,
-  Podcasts,
-  Email,
-  SmartToy,
-  ChatBubbleOutline,
-  Assignment, // Icon for Diagnostic Test
-} from "@mui/icons-material"
+import Image from "next/image"
+import { useState, useEffect } from "react"
+import { Home, Info, Assignment, VideoLibrary } from "@mui/icons-material"
 import styles from "./Header.module.css"
 
 const navItems = [
-  { name: "Home", path: "/", sectionId: "", icon: <Home fontSize="small" /> },
+  { name: "Home", path: "/", icon: <Home fontSize="small" /> },
   {
     name: "About",
-    path: "/",
-    sectionId: "about",
+    path: "/about",
     icon: <Info fontSize="small" />,
   },
   {
-    name: "Diagnostic Test",
+    name: "Diagnostic",
     path: "/diagnostic",
-    sectionId: "",
     icon: <Assignment fontSize="small" />,
+  },
+  {
+    name: "Media",
+    path: "/media",
+    icon: <VideoLibrary fontSize="small" />,
   },
 ]
 
 export default function Header() {
-  const pathname = usePathname()
-  const router = useRouter()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -47,64 +40,38 @@ export default function Header() {
     }
   }, [])
 
-  useEffect(() => {
-    if (window) {
-      if (pathname === "/" && window.location.hash) {
-        const element = document.getElementById(window.location.hash.slice(1))
-        if (element) {
-          setTimeout(() => {
-            element.scrollIntoView({ behavior: "smooth" })
-          }, 100)
-        }
-      }
-    }
-  }, [pathname])
-
-  // Handlers
-  function buildHref(item) {
-    let href = item.path
-    if (pathname === "/" && item.sectionId !== "") {
-      href = `#${item.sectionId}`
-    } else {
-      if (item.path === "/" && item.sectionId !== "") {
-        href = item.path + `#${item.sectionId}`
-      } else {
-        href = item.path
-      }
-    }
-
-    return href
-  }
-
   return (
     <header
       className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-black/90" : "bg-transparent"
+        isScrolled ? "bg-retroYellow shadow-md" : "bg-retroYellow"
       }`}
     >
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-        <Link
-          href="/"
-          className="text-white hover:text-white/90 transition-colors"
-        >
-          <h1 className="text-2xl font-bold font-montserrat">🧀 Formaggio</h1>
+        {/* Logo */}
+        <Link href="/">
+          <div className="flex items-center space-x-3">
+            <Image
+              src="/assets/logo.png"
+              alt="Innit Logo"
+              width={100}
+              height={100}
+            />
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className={styles.navLinks}>
+        <nav className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <Link
               key={item.name}
-              href={buildHref(item)}
-              className={`${styles.navLink} ${
-                pathname === item.path ? styles.active : ""
-              }`}
+              href={item.path}
+              className="flex items-center text-retroText hover:text-retroGreen transition"
             >
-              <span className={styles.icon}>{item.icon}</span>
-              <span className={styles.linkText}>{item.name}</span>
+              <span className="mr-2">{item.icon}</span>
+              {item.name}
             </Link>
           ))}
-        </div>
+        </nav>
 
         {/* Mobile Menu Button */}
         <button
@@ -113,46 +80,39 @@ export default function Header() {
           aria-label="Toggle mobile menu"
         >
           <div
-            className={`w-6 h-0.5 bg-white mb-1.5 transition-all ${
+            className={`w-6 h-0.5 bg-black mb-1.5 transition-all ${
               isMobileMenuOpen ? "rotate-45 translate-y-2" : ""
             }`}
           />
           <div
-            className={`w-6 h-0.5 bg-white mb-1.5 ${
+            className={`w-6 h-0.5 bg-black mb-1.5 ${
               isMobileMenuOpen ? "opacity-0" : ""
             }`}
           />
           <div
-            className={`w-6 h-0.5 bg-white transition-all ${
+            className={`w-6 h-0.5 bg-black transition-all ${
               isMobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
             }`}
           />
         </button>
 
-        {/* Mobile Menu */}
-        <div
-          className={`
-                        fixed md:hidden top-20 left-0 w-full bg-white shadow-lg transform transition-transform duration-300
-                        ${
-                          isMobileMenuOpen
-                            ? "translate-y-0"
-                            : "-translate-y-full"
-                        }
-                    `}
-        >
-          <nav className="flex flex-col p-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.path}
-                className="py-3 text-gray-800 border-b border-gray-200"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-        </div>
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="fixed md:hidden top-20 left-0 w-full bg-retroYellow shadow-lg transform transition-transform duration-300">
+            <nav className="flex flex-col p-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.path}
+                  className="py-3 text-black border-b border-gray-200 hover:text-retroGreen"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   )
