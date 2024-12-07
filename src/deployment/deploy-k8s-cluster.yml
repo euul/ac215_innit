@@ -161,7 +161,7 @@
             spec: # Describes how the pods should run
               containers: # This Deployment runs a single container named frontend.
               - image: "gcr.io/{{ gcp_project }}/frontend-shivas:{{ tag.stdout}}" # tag.stdout: The Docker tag, retrieved from the .docker-tag file earlier in the playbook.
-                imagePullPolicy: Always # The container image is pulled only if it is not already present on the node.
+                imagePullPolicy: IfNotPresent # The container image is pulled only if it is not already present on the node.
                 name: frontend # Sets the container name to frontend.
                 ports:
                 - containerPort: 3000 # Exposes port 3000 inside the container, where the frontend application likely runs. Pods expose port 3000 for the frontend application, which other Kubernetes resources (e.g., a Service or Ingress) can route traffic to.
@@ -194,7 +194,7 @@
                     secretName: gcp-service-key
               containers:
               - image: gcr.io/{{ gcp_project }}/api-service-shivas:{{ tag.stdout}}
-                imagePullPolicy: Always
+                imagePullPolicy: IfNotPresent
                 name: api
                 ports:
                 - containerPort: 9000 # Exposes port 9000 inside the container for the API service.
