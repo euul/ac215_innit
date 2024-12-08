@@ -9,35 +9,41 @@ jobs:
     if: contains(github.event.head_commit.message, '/deploy-app')
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Comment ${{ github.event.head_commit.message }}"
-      - run: echo "Job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "Job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "Branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Comment on Commit Message
+        run: echo "Comment ${{ github.event.head_commit.message }}"
+      
+      - name: Trigger Information
+        run: |
+          echo "Job was automatically triggered by a ${{ github.event_name }} event."
+          echo "Job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "Branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      - name: Check out Repository Code
         uses: actions/checkout@v4
-      - id: 'auth'
+
+      - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: '${{ secrets.DEPLOYMENT }}'
+      
       - name: Configure Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
-      - name: Configure Docker Client
-        run: |-
-          gcloud auth configure-docker # --quiet #authenticate to gcr
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the deployment dir
-        run: |
-          ls ${{ github.workspace }}/src/deployment/
-      - name: Build Deployment Container 
-        run: |-
-          cd ${{ github.workspace }}/src/deployment/
-          docker build -t innit-deployment -f Dockerfile .
-          
+      
+      - name: Configure Docker Client for GCR
+        run: gcloud auth configure-docker --quiet
+      
       - name: Prepare Secrets
-        run: |-
+        run: |
           echo '${{ secrets.DEPLOYMENT }}' > ${{ github.workspace }}/deployment.json
           echo '${{ secrets.DATA_SERVICE_ACCOUNT }}' > ${{ github.workspace }}/data-service-account.json
+
+      - name: List Files in Deployment Directory
+        run: ls ${{ github.workspace }}/src/deployment/
+      
+      - name: Build Deployment Container
+        run: |
+          cd ${{ github.workspace }}/src/deployment/
+          docker build -t innit-deployment -f Dockerfile .
 
       - name: Run Deploy App
         run: |-
@@ -47,7 +53,6 @@ jobs:
             -v $HOME/.ssh:/home/app/.ssh \
             -v ${{ github.workspace }}/src/frontend-shivas:/frontend-shivas \
             -v ${{ github.workspace }}/src/api-service-shivas:/api-service-shivas \
-            --volume $GITHUB_WORKSPACE:/workspace \
             --mount type=bind,source=${{ github.workspace }}/deployment.json,target=/secrets/deployment.json,readonly \
             --mount type=bind,source=${{ github.workspace }}/data-service-account.json,target=/secrets/data-service-account.json,readonly \
             --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/deployment.json \
