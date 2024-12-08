@@ -1,44 +1,23 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+// components/auth/auth.js
+import { signIn } from "next-auth/react"
 
-export const authOptions = {
-  providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (
-          credentials.username === "demo" &&
-          credentials.password === "password"
-        ) {
-          return {
-            id: "1",
-            name: "Demo User",
-            email: "demo@example.com",
-          }
-        }
-        return null
-      },
-    }),
-  ],
-  callbacks: {
-    async session({ session, token }) {
-      if (token) {
-        session.user.sessionId = token.sessionId
+export async function login(username, password) {
+  try {
+    const result = await signIn("credentials", {
+      redirect: false,
+      username,
+      password,
+    })
+
+    if (result.ok) {
+      return { success: true }
+    } else {
+      return {
+        success: false,
+        error: result.error || "Invalid username or password.",
       }
-      return session
-    },
-    async jwt({ token, user }) {
-      if (user && typeof window !== "undefined") {
-        token.sessionId = localStorage.getItem("userSessionId")
-      }
-      return token
-    },
-  },
-  pages: {
-    signIn: "/signin",
-  },
+    }
+  } catch (error) {
+    return { success: false, error: "An unexpected error occurred." }
+  }
 }

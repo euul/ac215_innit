@@ -2,11 +2,14 @@
 
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import ArticleDetailContent from "@/components/media/ArticleDetailContent"
+import ArticleText from "@/components/media/ArticleText"
+import ArticleSummary from "@/components/media/MediaSummary"
+import ArticleKeyWords from "@/components/media/MediaKeyWords"
+import ArticleQA from "@/components/media/MediaQA"
 import styles from "./styles.module.css"
 
 export default function ArticleDetailPage({ params }) {
-  const { id } = params // Get the article ID from the URL
+  const { id } = params
   const [article, setArticle] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -72,7 +75,18 @@ export default function ArticleDetailPage({ params }) {
 
   return (
     <div className={styles.articlePage}>
-      <ArticleDetailContent article={article} />
+      {/* Article Title */}
+      <header className={styles.articleHeader}>
+        <h1 className={styles.articleTitle}>
+          {article.Title || "Untitled Article"}
+        </h1>
+      </header>
+      {/* Article Components */}
+      <ArticleText text={article.Text} />
+      <ArticleKeyWords vocab={article.vocab} />{" "}
+      {/* Moved Key Words above Summary */}
+      <ArticleSummary summary={article.summary} />
+      <ArticleQA questions={article.questions} />
     </div>
   )
 }

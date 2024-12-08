@@ -10,7 +10,9 @@ pytest-cov = "*"
 [packages]
 fastapi = "*"                 
 uvicorn = "*"                 
-google-cloud-storage = "*"          
+google-cloud-storage = "*"
+bcrypt = "*"      
+PyJWT = "*"    
 
 [requires]
 python_version = "3.11" 

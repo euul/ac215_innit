@@ -1,5 +1,97 @@
 .articlePage {
-  background-color: #f9fafb; /* Light gray background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f9fafb;
   min-height: 100vh;
-  padding-top: 2rem;
+}
+
+.max-w-3xl {
+  width: 100%;
+  max-width: 768px; /* Matches Tailwind's max-w-3xl */
+}
+
+.text-left {
+  text-align: left;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bg-gray-100 {
+  background-color: #f3f4f6; /* Matches Tailwind's bg-gray-100 */
+}
+
+.text-gray-700 {
+  color: #374151; /* Matches Tailwind's text-gray-700 */
+}
+
+.text-gray-600 {
+  color: #4b5563; /* Matches Tailwind's text-gray-600 */
+}
+
+.text-gray-800 {
+  color: #1f2937; /* Matches Tailwind's text-gray-800 */
+}
+
+.list-disc {
+  list-style-type: disc;
+}
+
+.pl-8 {
+  padding-left: 2rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.leading-relaxed {
+  line-height: 1.625;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.mt-12 {
+  margin-top: 3rem;
+}
+
+.articlePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.articleHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.articleTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1e3a8a; /* Dark blue */
+  margin-bottom: 1rem;
 }

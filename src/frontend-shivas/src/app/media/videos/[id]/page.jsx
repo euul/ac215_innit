@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from "react"
 import VideoPlayer from "@/components/media/VideoPlayer"
 import VideoTranscript from "@/components/media/VideoTranscript"
+import KeyWords from "@/components/media/MediaKeyWords"
+import Summary from "@/components/media/MediaSummary"
+import QASection from "@/components/media/MediaQA"
 import styles from "./styles.module.css"
 
 export default function VideoDetailPage({ params }) {
@@ -85,6 +88,13 @@ export default function VideoDetailPage({ params }) {
             />
           </div>
         </div>
+      </div>
+
+      {/* Additional Information */}
+      <div className={styles.additionalInfo}>
+        <KeyWords vocab={video.vocab} />
+        <Summary summary={video.summary} />
+        <QASection questions={video.questions} />
       </div>
     </div>
   )

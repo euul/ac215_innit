@@ -3,29 +3,23 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import { signIn, signOut, useSession } from "next-auth/react"
 import { Home, Info, Assignment, VideoLibrary } from "@mui/icons-material"
 import styles from "./Header.module.css"
 
 const navItems = [
   { name: "Home", path: "/", icon: <Home fontSize="small" /> },
-  {
-    name: "About",
-    path: "/about",
-    icon: <Info fontSize="small" />,
-  },
+  { name: "About", path: "/about", icon: <Info fontSize="small" /> },
   {
     name: "Diagnostic",
     path: "/diagnostic",
     icon: <Assignment fontSize="small" />,
   },
-  {
-    name: "Media",
-    path: "/media",
-    icon: <VideoLibrary fontSize="small" />,
-  },
+  { name: "Media", path: "/media", icon: <VideoLibrary fontSize="small" /> },
 ]
 
 export default function Header() {
+  const { data: session, status } = useSession()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -34,11 +28,21 @@ export default function Header() {
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 50)
       }
-
       window.addEventListener("scroll", handleScroll)
       return () => window.removeEventListener("scroll", handleScroll)
     }
   }, [])
+
+  // Render Loading Header
+  if (status === "loading") {
+    return (
+      <header className="fixed w-full top-0 z-50 bg-retroYellow shadow-md">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+          <div>Loading...</div>
+        </div>
+      </header>
+    )
+  }
 
   return (
     <header
@@ -71,6 +75,23 @@ export default function Header() {
               {item.name}
             </Link>
           ))}
+          {session ? (
+            <button
+              onClick={() => signOut()}
+              className="text-retroText hover:text-retroGreen transition"
+              aria-label="Log out"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              className="text-retroText hover:text-retroGreen transition"
+              aria-label="Log in"
+            >
+              Login
+            </Link>
+          )}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -110,6 +131,28 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
+              {session ? (
+                <button
+                  onClick={() => {
+                    signOut()
+                    setIsMobileMenuOpen(false)
+                  }}
+                  className="py-3 text-black border-b border-gray-200 hover:text-retroGreen"
+                  aria-label="Log out"
+                >
+                  Logout
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false)
+                  }}
+                  className="py-3 text-black border-b border-gray-200 hover:text-retroGreen"
+                  aria-label="Log in"
+                >
+                  Login
+                </button>
+              )}
             </nav>
           </div>
         )}

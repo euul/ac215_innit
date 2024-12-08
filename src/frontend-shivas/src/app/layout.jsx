@@ -7,21 +7,16 @@ import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 
 export const metadata = {
-  title: "Formaggio",
-  description: "Discover the world of cheese through AI",
+  title: "innit",
+  description: "Let AI teach you practical language skills",
 }
 
-export default async function RootLayout({ children }) {
-  const session = await getServerSession(authOptions)
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <link
-          href="assets/logo.png"
-          rel="shortcut icon"
-          type="image/x-icon"
-        ></link>
+        <link href="assets/logo.png" rel="shortcut icon" type="image/x-icon" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1"
@@ -32,8 +27,7 @@ export default async function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-screen">
-        <ClientSessionProvider session={session}>
-          <SessionInit />
+        <ClientSessionProvider>
           <Header />
           <main>{children}</main>
           <Footer />
