@@ -1,8 +1,8 @@
-name: Continuous Integration and Continuous Deployment
+name: Continuous Integration and Continuous Deployments
 run-name: ${{ github.actor }} submitted a CI CD Action
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]  
 
 jobs:
   Explore-GitHub-Actions:
