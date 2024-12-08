@@ -33,7 +33,7 @@ RUN curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --d
     echo "deb [signed-by=/etc/apt/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends kubectl helm python3 python3-pip && \
-    pip install openshift ansible docker apache-libcloud
+    pip install openshift ansible docker apache-libcloud pipenv
 
 # Install required Ansible collections
 RUN ansible-galaxy collection install community.general community.kubernetes community.crypto
