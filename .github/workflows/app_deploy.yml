@@ -24,6 +24,14 @@ jobs:
       - name: Configure Docker Client
         run: |-
           gcloud auth configure-docker # --quiet #authenticate to gcr
+      - name: Authenticate and Configure GCP
+        run: |-
+          echo "Authenticating with Google Cloud..."
+          gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+          echo "Setting GCP project..."
+          gcloud config set project $GCP_PROJECT --quiet
+          echo "Configuring Docker with GCR..."
+          gcloud auth configure-docker gcr.io -q
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
       - name: List files in the repository
