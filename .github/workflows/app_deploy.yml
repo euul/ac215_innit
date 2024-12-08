@@ -55,6 +55,6 @@ jobs:
             --mount type=bind,source=${{ github.workspace }}/data-service-account.json,target=/secrets/data-service-account.json \
             --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/deployment.json \
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
-            -e GCP_PROJECT=ac215-project \
+            -e GCP_PROJECT=innit-437518 \
             -e GCP_ZONE=us-central1-a \
             innit-deployment sh deploy-k8s-update.sh
