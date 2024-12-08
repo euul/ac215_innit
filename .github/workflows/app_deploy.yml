@@ -25,9 +25,15 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: '${{ secrets.DEPLOYMENT }}'
+      
+      - name: Prepare Secrets
+        run: |
+          echo '${{ secrets.DEPLOYMENT }}' > ${{ github.workspace }}/deployment.json
+          echo '${{ secrets.DATA_SERVICE_ACCOUNT }}' > ${{ github.workspace }}/data-service-account.json
+  
           
       - name: Set Active Account
-        run: gcloud auth activate-service-account --key-file=/secrets/deployment.json
+        run: gcloud auth activate-service-account --key-file=${{ github.workspace }}/deployment.json
       
       - name: Configure Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
@@ -38,10 +44,6 @@ jobs:
       - name: Debug GCR Auth
         run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
       
-      - name: Prepare Secrets
-        run: |
-          echo '${{ secrets.DEPLOYMENT }}' > ${{ github.workspace }}/deployment.json
-          echo '${{ secrets.DATA_SERVICE_ACCOUNT }}' > ${{ github.workspace }}/data-service-account.json
 
       - name: List Files in Deployment Directory
         run: ls ${{ github.workspace }}/src/deployment/
