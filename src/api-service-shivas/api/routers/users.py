@@ -12,6 +12,10 @@ class RegisterRequest(BaseModel):
     username: str
     password: str
 
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
 @router.post("/register")
 def register_user(request: RegisterRequest):
     """Register a new user."""
@@ -22,7 +26,10 @@ def register_user(request: RegisterRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/login")
-def login_user(username: str, password: str):
+def login_user(request: LoginRequest):
+    """Authenticate user with username and password."""
+    username = request.username
+    password = request.password
     logging.info(f"Login attempt for username: {username}")
     try:
         token = user_manager.authenticate_user(username, password)
