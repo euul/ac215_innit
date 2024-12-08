@@ -14,23 +14,9 @@ const nextConfig = {
                 source: "/api/:path*",
                 destination:
                     process.env.NODE_ENV === "development"
-                        ? "http://rag-system-api-service:9000/:path*"
+                        ? "http://localhost:9000/:path*"
                         : "/api/",
             },
-            // {
-            //     source: "/docs",
-            //     destination:
-            //         process.env.NODE_ENV === "development"
-            //             ? "http://rag-system-api-service:9000/docs"
-            //             : "/api/docs",
-            // },
-            // {
-            //     source: "/openapi.json",
-            //     destination:
-            //         process.env.NODE_ENV === "development"
-            //             ? "http://rag-system-api-service:9000/openapi.json"
-            //             : "/api/openapi.json",
-            // },
         ];
     },
     reactStrictMode: false,
