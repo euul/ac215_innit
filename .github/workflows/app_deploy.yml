@@ -25,12 +25,18 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: '${{ secrets.DEPLOYMENT }}'
+          
+      - name: Set Active Account
+        run: gcloud auth activate-service-account --key-file=/secrets/deployment.json
       
       - name: Configure Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
       
       - name: Configure Docker Client for GCR
         run: gcloud auth configure-docker --quiet
+      
+      - name: Debug GCR Auth
+        run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
       
       - name: Prepare Secrets
         run: |
