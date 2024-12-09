@@ -1,96 +1,31 @@
-/* General page styling */
 .diagnosticTest {
-  background-color: Black; /* Light gray background */
-  color: white; /* Dark text color for readability */
+  background-color: black;
+  color: white;
   min-height: 100vh;
   padding: 2rem;
-  font-family: "Inter", sans-serif; /* Modern and readable font */
+  font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   gap: 2rem;
 }
 
-/* Title styling */
 .title {
-  color: #22c55e; /* Darker text for the title */
+  color: #22c55e;
   font-size: 2.5rem;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 1rem;
-}
-
-/* Subtitle or explanatory text */
-.subtitle {
-  color: #6b7280; /* Subtle gray for descriptions */
-  font-size: 1.125rem; /* Slightly larger than body text */
-  text-align: center;
   margin-bottom: 1.5rem;
-  max-width: 800px;
 }
 
-/* Question card container */
-.questionCard {
-  background-color: #ffffff; /* White card background */
-  border-radius: 12px; /* Rounded corners */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
-  padding: 1.5rem;
-  margin: 1rem 0;
+.questionGrid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  ); /* Responsive two-column layout */
+  gap: 2rem; /* Space between rows and columns */
   width: 100%;
-  max-width: 600px;
-  color: #1f2937; /* Dark text for readability */
-  border: 1px solid #e5e7eb; /* Light border for structure */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.questionCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Slight hover elevation */
-}
-
-/* Question text */
-.questionText {
-  font-size: 1.125rem; /* Slightly larger text for clarity */
-  margin-bottom: 1rem;
-  font-weight: 600; /* Bold question text */
-}
-
-/* Radio button styling */
-.radioButton {
-  color: #ffffff; /* Neutral dark color for unchecked state */
-}
-
-.radioButton.Mui-checked {
-  color: #2563eb; /* Blue when checked */
-}
-
-.radioLabel {
-  color: #ffffff; /* Neutral dark for labels */
-  margin: 0.5rem 0;
-}
-
-/* Submit button */
-.submitButton {
-  background-color: #2563eb; /* Modern blue */
-  color: #ffffff; /* White text */
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.submitButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Elevated shadow */
-  background-color: #1d4ed8; /* Darker blue on hover */
-}
-
-/* Thank you message */
-.thankYou {
-  font-size: 1.25rem;
-  color: #4b5563; /* Muted gray for neutral message */
-  text-align: center;
-  margin-top: 2rem;
+  max-width: 1200px;
+  margin: 0 auto; /* Center the grid */
 }

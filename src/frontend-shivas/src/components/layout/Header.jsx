@@ -9,7 +9,6 @@ import styles from "./Header.module.css"
 
 const navItems = [
   { name: "Home", path: "/", icon: <Home fontSize="small" /> },
-  { name: "About", path: "/about", icon: <Info fontSize="small" /> },
   {
     name: "Diagnostic",
     path: "/diagnostic",
@@ -57,7 +56,7 @@ export default function Header() {
             <Image
               src="/assets/logo.png"
               alt="Innit Logo"
-              width={100}
+              width={125}
               height={100}
             />
           </div>

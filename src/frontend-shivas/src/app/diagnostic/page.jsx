@@ -2,14 +2,13 @@
 
 import React, { useEffect, useState } from "react"
 import QuestionCard from "@/components/diagnostic/QuestionCard"
-import SubmitButton from "@/components/diagnostic/SubmitButton"
 import styles from "./styles.module.css"
-import DataService from "@/services/DataService" // Backend interaction
+import DataService from "@/services/DataService"
 
 export default function DiagnosticTestPage() {
   const [questions, setQuestions] = useState([])
   const [responses, setResponses] = useState({})
-  const [submitted, setSubmitted] = useState(false)
+  const [results, setResults] = useState({})
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -30,35 +29,46 @@ export default function DiagnosticTestPage() {
     }))
   }
 
-  const handleSubmit = async () => {
-    if (Object.keys(responses).length < questions.length) {
-      alert("Please answer all questions before submitting!")
+  const handleSubmit = (index) => {
+    const selectedAnswer = responses[index]
+    if (!selectedAnswer) {
+      setResults((prev) => ({
+        ...prev,
+        [index]: "Please select an answer!",
+      }))
       return
     }
-    setSubmitted(true)
-    console.log("User responses:", responses)
-    // Optionally send responses to the backend
+
+    const correctAnswer = questions[index]?.answer
+    if (selectedAnswer === correctAnswer) {
+      setResults((prev) => ({
+        ...prev,
+        [index]: "Correct!",
+      }))
+    } else {
+      setResults((prev) => ({
+        ...prev,
+        [index]: `Wrong! The correct answer is ${correctAnswer}.`,
+      }))
+    }
   }
 
   return (
     <div className={styles.diagnosticTest}>
       <h2 className={styles.title}>Diagnostic Test</h2>
-      {!submitted ? (
-        <>
-          {questions.map((question, index) => (
-            <QuestionCard
-              key={index}
-              question={question}
-              index={index}
-              selectedAnswer={responses[index]}
-              onAnswerChange={handleAnswerChange}
-            />
-          ))}
-          <SubmitButton onClick={handleSubmit} />
-        </>
-      ) : (
-        <p>Thank you for completing the test!</p>
-      )}
+      <div className={styles.questionGrid}>
+        {questions.map((question, index) => (
+          <QuestionCard
+            key={index}
+            questionData={question}
+            index={index}
+            selectedAnswer={responses[index]}
+            result={results[index]}
+            onAnswerChange={handleAnswerChange}
+            onSubmit={handleSubmit}
+          />
+        ))}
+      </div>
     </div>
   )
 }
