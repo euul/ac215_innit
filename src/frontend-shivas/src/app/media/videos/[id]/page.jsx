@@ -15,7 +15,14 @@ export default function VideoDetailPage({ params }) {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/videos/${id}`)
+    const username = localStorage.getItem("username") // Get username from localStorage
+
+    fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/videos/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Username": username, // Include username in the headers
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch video")
@@ -92,13 +99,13 @@ export default function VideoDetailPage({ params }) {
 
       {/* Additional Information */}
       <div className={styles.additionalInfo}>
-          <div className={styles.leftColumn}>
-            <KeyWords vocab={video.vocab} />
-            <Summary summary={video.summary} />
-          </div>
-          <div className={styles.rightColumn}>
-            <QASection questions={video.questions} />
-          </div>
+        <div className={styles.leftColumn}>
+          <KeyWords vocab={video.vocab} />
+          <Summary summary={video.summary} />
+        </div>
+        <div className={styles.rightColumn}>
+          <QASection questions={video.questions} />
+        </div>
       </div>
     </div>
   )

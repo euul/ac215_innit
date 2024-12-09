@@ -7,16 +7,36 @@ import styles from "./styles.module.css"
 export default function MediaPage() {
   const [articles, setArticles] = useState([])
   const [videos, setVideos] = useState([])
+  const [username, setUsername] = useState(null)
+
+  // Utility function to shuffle and pick a subset
+  const getRandomSubset = (data, count) => {
+    const shuffled = data.sort(() => 0.5 - Math.random()) // Shuffle array
+    return shuffled.slice(0, count) // Return the first 'count' items
+  }
 
   useEffect(() => {
+    // Get the username from localStorage
+    const storedUsername = localStorage.getItem("username")
+    setUsername(storedUsername)
+
+    if (!storedUsername) {
+      console.error("Username not found in localStorage")
+      return
+    }
+
     // Fetch articles
-    fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/articles`)
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API_URL}/articles?username=${storedUsername}`
+    )
       .then((response) => response.json())
       .then((data) => setArticles(data.articles.slice(0, 5)))
       .catch((error) => console.error("Error fetching articles:", error))
 
     // Fetch videos
-    fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/transcripts`)
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API_URL}/transcripts?username=${storedUsername}`
+    )
       .then((response) => response.json())
       .then((data) => setVideos(data.transcripts.slice(0, 5)))
       .catch((error) =>

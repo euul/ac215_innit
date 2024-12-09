@@ -19,7 +19,14 @@ export default function ArticleDetailPage({ params }) {
     if (!id) return
 
     setLoading(true)
-    fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/articles/${id}`)
+    const username = localStorage.getItem("username") // Get username from localStorage
+
+    fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/articles/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Username": username, // Include the username in the request headers
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch article")
@@ -81,10 +88,10 @@ export default function ArticleDetailPage({ params }) {
           {article.Title || "Untitled Article"}
         </h1>
       </header>
-  
+
       {/* Article Text */}
       <ArticleText text={article.Text} />
-  
+
       {/* Additional Information in Two Columns */}
       <div className={styles.additionalInfo}>
         {/* Left Column */}
@@ -92,12 +99,12 @@ export default function ArticleDetailPage({ params }) {
           <ArticleKeyWords vocab={article.vocab} />
           <ArticleSummary summary={article.summary} />
         </div>
-  
+
         {/* Right Column */}
         <div className={styles.rightColumn}>
           <ArticleQA questions={article.questions} />
         </div>
       </div>
     </div>
-  )  
+  )
 }
