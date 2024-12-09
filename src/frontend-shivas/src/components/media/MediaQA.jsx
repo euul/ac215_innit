@@ -1,20 +1,82 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 
-export default function QASection({ questions }) {
+export default function MediaQA({ questions }) {
   const parsedQuestions = JSON.parse(questions || "[]")
+  const [currentXP, setCurrentXP] = useState(0)
+  const username = localStorage.getItem("username") // Get the username from localStorage
+
+  // Fetch the user's current XP when the component mounts
+  useEffect(() => {
+    const fetchCurrentXP = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/get-metadata?username=${username}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          setCurrentXP(data.metadata?.xp || 0)
+        } else {
+          console.error("Failed to fetch current XP:", response.statusText)
+        }
+      } catch (error) {
+        console.error("Error fetching current XP:", error)
+      }
+    }
+
+    fetchCurrentXP()
+  }, [username])
+
+  const handleAnswerSubmit = async (
+    question,
+    selectedAnswer,
+    correctAnswer
+  ) => {
+    if (selectedAnswer === correctAnswer) {
+      // Increment XP by 2
+      const newXP = currentXP + 2
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/update-metadata`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              username,
+              metadata: { xp: newXP }, // Update XP in metadata
+            }),
+          }
+        )
+
+        if (response.ok) {
+          console.log("XP updated successfully!")
+          setCurrentXP(newXP) // Update state to reflect new XP
+        } else {
+          const data = await response.json()
+          console.error("Error updating XP:", data.detail)
+        }
+      } catch (error) {
+        console.error("Error during XP update:", error)
+      }
+    }
+  }
 
   return (
     <section className="w-full max-w-3xl text-left mt-8">
       <h3 className="text-xl text-green-500 mb-4">Test Your Knowledge:</h3>
       {parsedQuestions.map((q, index) => (
-        <QuestionCard key={index} questionData={q} />
+        <QuestionCard
+          key={index}
+          questionData={q}
+          onAnswerSubmit={handleAnswerSubmit}
+        />
       ))}
     </section>
   )
 }
 
-function QuestionCard({ questionData }) {
+function QuestionCard({ questionData, onAnswerSubmit }) {
   const { question, choices, answer } = questionData
   const [selected, setSelected] = useState(null)
   const [result, setResult] = useState("")
@@ -30,6 +92,8 @@ function QuestionCard({ questionData }) {
     } else {
       setResult(`Wrong! The correct answer is ${answer}.`)
     }
+
+    onAnswerSubmit(question, selected, answer) // Trigger XP update if correct
   }
 
   return (
@@ -56,12 +120,12 @@ function QuestionCard({ questionData }) {
       >
         Submit
       </button>
-      {result && <p className="mt-2 text-gray-700">{result}</p>}
+      {result && <p className="mt-2 retroYellow">{result}</p>}
     </div>
   )
 }
 
-QASection.propTypes = {
+MediaQA.propTypes = {
   questions: PropTypes.string,
 }
 
@@ -71,4 +135,5 @@ QuestionCard.propTypes = {
     choices: PropTypes.arrayOf(PropTypes.string).isRequired,
     answer: PropTypes.string.isRequired,
   }),
+  onAnswerSubmit: PropTypes.func.isRequired,
 }

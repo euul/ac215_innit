@@ -118,7 +118,7 @@ export default function DiagnosticTestPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             username,
-            metadata: { level: userLevel },
+            metadata: { level: userLevel, xp: 0 },
           }),
         }
       )
