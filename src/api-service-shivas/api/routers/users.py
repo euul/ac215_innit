@@ -20,6 +20,11 @@ class MetadataUpdateRequest(BaseModel):
     username: str
     metadata: dict
 
+class MetadataResponse(BaseModel):
+    username: str
+    metadata: dict
+
+
 @router.post("/register")
 def register_user(request: RegisterRequest):
     """Register a new user."""
@@ -51,3 +56,13 @@ def update_metadata(request: MetadataUpdateRequest):
         return {"message": "Metadata updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.get("/get-metadata", response_model=MetadataResponse)
+def get_metadata(username: str):
+    """Fetch user metadata."""
+    try:
+        metadata = user_manager.get_metadata(username)
+        return {"username": username, "metadata": metadata}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))

@@ -97,5 +97,22 @@ class UserManager:
             blob.upload_from_string(json.dumps(user_data), content_type="application/json")
         except Exception as e:
             raise Exception(f"Error updating metadata for '{username}': {str(e)}")
+        
+    def get_metadata(self, username: str) -> dict:
+        """
+        Retrieve the metadata for a user.
+        
+        Args:
+            username (str): The username of the user.
+        
+        Returns:
+            dict: The metadata for the user or an empty dictionary if not found.
+        """
+        blob = self._get_user_blob(username)
+        if not blob.exists():
+            raise Exception(f"User '{username}' not found")
+
+        user_data = json.loads(blob.download_as_text())
+        return user_data.get("metadata", {})
 
 

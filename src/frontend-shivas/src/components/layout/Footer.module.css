@@ -9,7 +9,7 @@
   background-color: #000; /* Retro black background */
   padding: 20px;
   border-top: 4px solid #ffcc00;
-  font-family: 'Press Start 2P', monospace;
+  font-family: "Press Start 2P", monospace;
   z-index: 1000;
 }
 
@@ -20,6 +20,22 @@
 
 .levelValue {
   color: #00ffcc;
+}
+
+.easy {
+  color: #00ffcc; /* Green for Easy */
+}
+
+.intermediate {
+  color: #00ffcc; /* Blue for Intermediate */
+}
+
+.advanced {
+  color: #00ffcc; /* Orange for Advanced */
+}
+
+.na {
+  color: #00ffcc; /* Gray for NA */
 }
 
 .xpBarContainer {

@@ -1,7 +1,7 @@
 export default function Hero() {
   return (
-    <section className="h-screen flex flex-col items-center justify-center text-center bg-black">
-      <div className="container mx-auto px-4">
+    <section className="h-screen flex flex-col items-center justify-center text-center bg-black overflow-hidden">
+      <div className="container">
         <h1 className="text-5xl md:text-7xl font-retro text-green-500 mb-6 text-shadow-green">
           Welcome to Innit
         </h1>
@@ -10,5 +10,5 @@ export default function Hero() {
         </p>
       </div>
     </section>
-  );
+  )
 }
