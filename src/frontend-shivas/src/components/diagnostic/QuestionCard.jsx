@@ -8,9 +8,18 @@ export default function QuestionCard({
   selectedAnswer,
   result,
   onAnswerChange,
-  onSubmit,
 }) {
+  if (!questionData) {
+    return <div className={styles.error}>Question data is missing!</div>
+  }
+
   const { question, choices } = questionData
+
+  const handleAnswerSelect = (value) => {
+    if (!selectedAnswer) {
+      onAnswerChange(index, value)
+    }
+  }
 
   return (
     <div className={styles.questionCard}>
@@ -26,16 +35,14 @@ export default function QuestionCard({
                 checked={
                   selectedAnswer === String.fromCharCode(65 + choiceIndex)
                 }
-                onChange={(e) => onAnswerChange(index, e.target.value)}
+                onChange={(e) => handleAnswerSelect(e.target.value)}
+                disabled={!!selectedAnswer} // Disable input after selection
               />
               <span>{choice}</span>
             </label>
           </li>
         ))}
       </ul>
-      <button onClick={() => onSubmit(index)} className={styles.submitButton}>
-        Submit
-      </button>
       {result && (
         <p
           className={`${styles.resultText} ${
@@ -59,5 +66,4 @@ QuestionCard.propTypes = {
   selectedAnswer: PropTypes.string,
   result: PropTypes.string,
   onAnswerChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 }

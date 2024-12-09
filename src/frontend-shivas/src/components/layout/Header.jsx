@@ -3,8 +3,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
-import { signIn, signOut, useSession } from "next-auth/react"
-import { Home, Info, Assignment, VideoLibrary } from "@mui/icons-material"
+import { signOut, useSession } from "next-auth/react"
+import { Home, Assignment, VideoLibrary, Person } from "@mui/icons-material"
 import styles from "./Header.module.css"
 
 const navItems = [
@@ -32,7 +32,6 @@ export default function Header() {
     }
   }, [])
 
-  // Render Loading Header
   if (status === "loading") {
     return (
       <header className="fixed w-full top-0 z-50 bg-retroYellow shadow-md">
@@ -52,7 +51,7 @@ export default function Header() {
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link href="/">
-          <div className="flex items-center spaScreenshot from 2024-12-08 18-08-05ce-x-3">
+          <div className="flex items-center space-x-3">
             <Image
               src="/assets/logo.png"
               alt="Innit Logo"
@@ -85,9 +84,12 @@ export default function Header() {
           ) : (
             <Link
               href="/login"
-              className="text-retroGreen hover:text-retroGreen transition"
+              className="flex items-center text-retroGreen hover:text-retroGreen transition"
               aria-label="Log in"
             >
+              <span className="mr-2">
+                <Person fontSize="small" />
+              </span>
               Login
             </Link>
           )}
@@ -142,15 +144,16 @@ export default function Header() {
                   Logout
                 </button>
               ) : (
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className="py-3 text-black border-b border-gray-200 hover:text-retroGreen"
-                  aria-label="Log in"
+                <Link
+                  href="/login"
+                  className="py-3 text-black border-b border-gray-200 hover:text-retroGreen flex items-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
+                  <span className="mr-2">
+                    <Login fontSize="small" />
+                  </span>
                   Login
-                </button>
+                </Link>
               )}
             </nav>
           </div>

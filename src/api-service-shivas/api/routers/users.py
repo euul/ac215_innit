@@ -16,6 +16,10 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
+class MetadataUpdateRequest(BaseModel):
+    username: str
+    metadata: dict
+
 @router.post("/register")
 def register_user(request: RegisterRequest):
     """Register a new user."""
@@ -38,3 +42,12 @@ def login_user(request: LoginRequest):
     except Exception as e:
         logging.error(f"Authentication failed for '{username}': {str(e)}")
         raise HTTPException(status_code=401, detail="Invalid credentials")
+
+@router.patch("/update-metadata")
+def update_metadata(request: MetadataUpdateRequest):
+    """Update user metadata."""
+    try:
+        user_manager.update_metadata(request.username, request.metadata)
+        return {"message": "Metadata updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

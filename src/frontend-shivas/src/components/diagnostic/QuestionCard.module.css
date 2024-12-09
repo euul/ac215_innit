@@ -28,6 +28,7 @@
   margin-bottom: 0.75rem;
 }
 
+/* Custom radio button styling */
 .choiceLabel {
   display: flex;
   align-items: center;
@@ -35,10 +36,27 @@
   cursor: pointer;
 }
 
+.choiceLabel input[type="radio"] {
+  appearance: none; /* Remove default browser styling */
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid white; /* Neutral dark border */
+  border-radius: 50%; /* Make it circular */
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.choiceLabel input[type="radio"]:checked {
+  border-color: #2563eb; /* Blue border when selected */
+  background-color: #2563eb; /* Blue fill when selected */
+}
+
+/* Spacing between radio button and label text */
 .choiceLabel span {
   font-size: 1rem;
   font-family: "Press Start 2P", monospace;
-  color: white;
+  color: #ffffff; /* White text color */
 }
 
 .submitButton {

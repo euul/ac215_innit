@@ -85,3 +85,17 @@ class UserManager:
             print(f"Authentication error for '{username}': {str(e)}")
             raise Exception("Authentication failed")
 
+    def update_metadata(self, username: str, metadata: dict):
+        blob = self._get_user_blob(username)
+        if not blob.exists():
+            raise Exception(f"User '{username}' not found")
+
+        user_data = json.loads(blob.download_as_text())
+        user_data["metadata"].update(metadata)  # Merge new metadata
+
+        try:
+            blob.upload_from_string(json.dumps(user_data), content_type="application/json")
+        except Exception as e:
+            raise Exception(f"Error updating metadata for '{username}': {str(e)}")
+
+
