@@ -92,9 +92,13 @@ export default function VideoDetailPage({ params }) {
 
       {/* Additional Information */}
       <div className={styles.additionalInfo}>
-        <KeyWords vocab={video.vocab} />
-        <Summary summary={video.summary} />
-        <QASection questions={video.questions} />
+          <div className={styles.leftColumn}>
+            <KeyWords vocab={video.vocab} />
+            <Summary summary={video.summary} />
+          </div>
+          <div className={styles.rightColumn}>
+            <QASection questions={video.questions} />
+          </div>
       </div>
     </div>
   )

@@ -61,3 +61,23 @@
   font-family: Georgia, serif; /* Georgia font */
   font-size: 24px; /* Font size 16px */
 }
+
+.additionalInfo {
+  display: flex;
+  gap: 20px; /* Space between columns */
+  margin-top: 20px;
+}
+
+/* Left Column */
+.leftColumn {
+  flex: 1.25; /* Take up equal space */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between items in the column */
+}
+
+/* Right Column */
+.rightColumn {
+  flex: 1; /* Take up equal space */
+}
+

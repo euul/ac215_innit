@@ -81,12 +81,23 @@ export default function ArticleDetailPage({ params }) {
           {article.Title || "Untitled Article"}
         </h1>
       </header>
-      {/* Article Components */}
+  
+      {/* Article Text */}
       <ArticleText text={article.Text} />
-      <ArticleKeyWords vocab={article.vocab} />{" "}
-      {/* Moved Key Words above Summary */}
-      <ArticleSummary summary={article.summary} />
-      <ArticleQA questions={article.questions} />
+  
+      {/* Additional Information in Two Columns */}
+      <div className={styles.additionalInfo}>
+        {/* Left Column */}
+        <div className={styles.leftColumn}>
+          <ArticleKeyWords vocab={article.vocab} />
+          <ArticleSummary summary={article.summary} />
+        </div>
+  
+        {/* Right Column */}
+        <div className={styles.rightColumn}>
+          <ArticleQA questions={article.questions} />
+        </div>
+      </div>
     </div>
-  )
+  )  
 }

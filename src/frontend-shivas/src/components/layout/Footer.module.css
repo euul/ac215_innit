@@ -1,14 +1,62 @@
 .footer {
-  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #000; /* Retro black background */
-  padding: 20px 0;
-  text-align: center;
-  font-family: 'Press Start 2P', monospace; /* Retro pixelated font */
+  padding: 20px;
+  border-top: 4px solid #ffcc00;
+  font-family: 'Press Start 2P', monospace;
+  z-index: 1000;
 }
 
-.footer p {
-  color: #00ff00; /* Neon green text */
-  margin: 0;
-  font-size: 12px; /* Slightly smaller font for retro feel */
-  text-shadow: 0 0 8px #00ff00; /* Neon glow effect */
+.level {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.levelValue {
+  color: #00ffcc;
+}
+
+.xpBarContainer {
+  display: flex;
+  align-items: center;
+  width: 25%;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.xpLabel {
+  margin-right: 10px;
+}
+
+.xpBar {
+  height: 20px;
+  width: 100%;
+  background-color: #555;
+  border: 2px solid #000;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.xpProgress {
+  height: 100%;
+  background-color: #00ffcc;
+  transition: width 0.5s ease;
+  clip-path: polygon(0% 0%, 100% 0%, 95% 100%, 0% 100%); /* Slanted edge */
+}
+
+.xpValue {
+  margin-left: 10px;
+  color: #00ffcc;
+}
+
+.xpMax {
+  margin-left: 10px;
+  color: #ffcc00;
 }
