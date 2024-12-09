@@ -126,7 +126,7 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.path}
-                  className="py-3 text-black border-b border-gray-200 hover:text-retroGreen"
+                  className="py-3 text-white border-b border-gray-200 hover:text-retroGreen"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.name}
@@ -138,7 +138,7 @@ export default function Header() {
                     signOut()
                     setIsMobileMenuOpen(false)
                   }}
-                  className="py-3 text-black border-b border-gray-200 hover:text-retroGreen"
+                  className="py-3 text-white border-b border-gray-200 hover:text-retroGreen"
                   aria-label="Log out"
                 >
                   Logout
@@ -146,11 +146,11 @@ export default function Header() {
               ) : (
                 <Link
                   href="/login"
-                  className="py-3 text-black border-b border-gray-200 hover:text-retroGreen flex items-center"
+                  className="py-3 text-white border-b border-gray-200 hover:text-retroGreen flex items-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <span className="mr-2">
-                    <Login fontSize="small" />
+                    <Person fontSize="small" />
                   </span>
                   Login
                 </Link>
