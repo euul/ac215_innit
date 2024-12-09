@@ -4,14 +4,14 @@
   align-items: center;
   gap: 2rem;
   padding: 2rem;
-  background-color: #f9fafb;
+  background-color: #000000;
   min-height: 100vh;
 }
 
 .videoTitle {
   font-size: 2rem;
   font-weight: bold;
-  color: #1e40af; /* Dark blue */
+  color: #00FF00; /* Dark blue */
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -33,7 +33,7 @@
 .subheading {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #374151; /* Neutral dark gray */
+  color: #FACC15; /* Neutral dark gray */
   margin-bottom: 1rem;
 }
 
@@ -41,15 +41,23 @@
   flex: 1.2;
   max-width: 900px;
   min-height: 400px;
+  background-color: #FACC15;
+  padding: 0.1rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 }
 
 .transcriptContainer {
   flex: 1;
   max-height: 400px;
   overflow-y: auto;
-  background-color: #ffffff;
-  padding: 1rem;
+  background-color: #FACC15;
+  padding: 0.3rem;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #FFFFFF; /* White text color */
+  font-family: Georgia, serif; /* Georgia font */
+  font-size: 24px; /* Font size 16px */
 }

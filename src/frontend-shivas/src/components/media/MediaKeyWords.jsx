@@ -6,8 +6,8 @@ export default function KeyWords({ vocab }) {
 
   return (
     <section className="w-full max-w-3xl text-left mt-8">
-      <h3 className="text-xl text-gray-800 mb-4">Key Words:</h3>
-      <ul className="list-disc pl-8 text-gray-600">
+      <h3 className="text-xl text-green-500 mb-4">Key Words:</h3>
+      <ul className="list-disc pl-8 text-gray-100">
         {vocab.split("\n").map((word, index) => (
           <li key={index} className="mb-2">
             {word}

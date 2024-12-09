@@ -6,7 +6,7 @@ export default function QASection({ questions }) {
 
   return (
     <section className="w-full max-w-3xl text-left mt-8">
-      <h3 className="text-xl text-gray-800 mb-4">Test Your Knowledge:</h3>
+      <h3 className="text-xl text-green-500 mb-4">Test Your Knowledge:</h3>
       {parsedQuestions.map((q, index) => (
         <QuestionCard key={index} questionData={q} />
       ))}
@@ -33,8 +33,8 @@ function QuestionCard({ questionData }) {
   }
 
   return (
-    <div className="mb-6 p-4 bg-gray-100 rounded-lg shadow-md">
-      <h4 className="text-lg text-gray-800">{question}</h4>
+    <div className="mb-6 p-4 bg-gray-700 rounded-lg shadow-md">
+      <h4 className="text-lg text-gray-100">{question}</h4>
       <ul className="list-none mt-2">
         {choices.map((choice, idx) => (
           <li key={idx}>

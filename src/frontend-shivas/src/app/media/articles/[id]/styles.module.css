@@ -45,7 +45,7 @@
   color: #1f2937; /* Matches Tailwind's text-gray-800 */
 }
 
-.text-green-500 {
+.text-green {
   color: #00FF00; /* Matches Tailwind's text-gray-800 */
 }
 
@@ -77,6 +77,8 @@
 .mt-12 {
   margin-top: 3rem;
 }
+
+
 
 .articleHeader {
   text-align: center;
