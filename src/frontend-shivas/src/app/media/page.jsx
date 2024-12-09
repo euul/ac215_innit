@@ -27,10 +27,10 @@ export default function MediaPage() {
   return (
     <div className={styles.mediaPage}>
       <div className="container mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
+        <h2 className="text-3xl font-bold text-green-500 text-center mb-6">
           Media
         </h2>
-        <p className="text-lg text-gray-600 text-center mb-8">
+        <p className="text-lg text-yellow-500 text-center mb-8">
           Browse and select a video or article to explore.
         </p>
 

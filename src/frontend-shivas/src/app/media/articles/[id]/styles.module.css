@@ -4,7 +4,7 @@
   align-items: center;
   gap: 2rem;
   padding: 2rem;
-  background-color: #f9fafb;
+  background-color: black;
   min-height: 100vh;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .bg-gray-100 {
-  background-color: #f3f4f6; /* Matches Tailwind's bg-gray-100 */
+  background-color: black; /* Matches Tailwind's bg-gray-100 */
 }
 
 .text-gray-700 {
@@ -43,6 +43,10 @@
 
 .text-gray-800 {
   color: #1f2937; /* Matches Tailwind's text-gray-800 */
+}
+
+.text-green-500 {
+  color: #00FF00; /* Matches Tailwind's text-gray-800 */
 }
 
 .list-disc {
@@ -74,16 +78,6 @@
   margin-top: 3rem;
 }
 
-.articlePage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding: 2rem;
-  background-color: #f9fafb;
-  min-height: 100vh;
-}
-
 .articleHeader {
   text-align: center;
   margin-bottom: 2rem;
@@ -92,6 +86,6 @@
 .articleTitle {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #1e3a8a; /* Dark blue */
+  color: #00FF00;
   margin-bottom: 1rem;
 }

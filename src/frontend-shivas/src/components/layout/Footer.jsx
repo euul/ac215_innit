@@ -13,7 +13,7 @@ export default function Footer() {
     return (
       <footer className={styles.footer}>
         <p>
-          Copyright © {new Date().getFullYear()} formaggio.me - All Rights
+          Copyright © {new Date().getFullYear()} innit - All Rights
           Reserved.
         </p>
       </footer>

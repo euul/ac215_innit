@@ -18,14 +18,14 @@ export default function MediaCard({ item, type }) {
   return (
     <div
       onClick={handleClick}
-      className={`cursor-pointer rounded-lg shadow-md transform transition-transform hover:scale-105 ${
+      className={`cursor-pointer rounded-lg shadow-md transform transition-transform hover:scale-105 border border-green-600 ${
         type === "article"
-          ? "bg-gradient-to-r from-orange-500 to-yellow-400"
-          : "bg-gradient-to-r from-blue-500 to-teal-300"
+          ? "bg-gradient-to-r from-black-600 to-black-600"
+          : "bg-gradient-to-r from-black-600 to-black-600"
       }`}
     >
       <div className="p-4 text-white">
-        <h3 className="text-lg font-semibold">
+        <h3 className="text-lg font-semibold text-white">
           {type === "article" ? item.Title : item.video_name}
         </h3>
       </div>

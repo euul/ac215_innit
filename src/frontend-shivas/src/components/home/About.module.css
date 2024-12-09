@@ -1,30 +1,32 @@
-/* src/app/about/About.module.css */
 .about {
   padding: 80px 20px;
   max-width: 1000px;
   margin: 0 auto;
+  background-color: #000; /* Retro black background */
+  color: #00ff00; /* Neon green text for retro feel */
+  font-family: 'Press Start 2P', monospace; /* Retro pixelated font */
 }
 
 .title {
   text-align: center;
   margin-bottom: 40px;
-  font-family: "Playfair Display", serif;
-  font-size: 36px;
-  color: #333;
+  font-family: 'Press Start 2P', monospace; /* Pixelated font for title */
+  font-size: 28px; /* Adjusted size for retro style */
+  color: #ffff00; /* Bright yellow for headings */
 }
 
 .underline {
   width: 100px;
-  height: 1px;
-  background-color: #ccc;
+  height: 2px;
+  background-color: #ff00ff; /* Retro neon pink underline */
   margin: 0 auto 40px;
 }
 
 .content {
   text-align: center;
-  font-family: "Source Sans Pro", sans-serif;
-  line-height: 1.6;
-  color: #666;
+  font-family: 'Press Start 2P', monospace; /* Keep the retro font */
+  line-height: 1.8;
+  color: #00ff00; /* Neon green for content text */
 }
 
 .content p {
@@ -32,12 +34,12 @@
 }
 
 .content strong {
-  color: #333;
-  font-weight: 600;
+  color: #ffff00; /* Highlighted text in yellow */
+  font-weight: bold; /* Retro styling often uses bold text */
 }
 
 .content a {
-  color: inherit;
+  color: #0000ff; /* Neon pink links */
   text-decoration: underline;
   transition: opacity 0.2s ease;
 }
@@ -48,21 +50,23 @@
 
 .contactButton {
   display: inline-block;
-  background-color: #6f6f6f;
+  background-color: #0000ff; /* Bright retro blue */
   color: white !important;
   padding: 15px 40px;
-  border-radius: 4px;
+  border-radius: 0; /* No rounded corners for retro style */
   text-decoration: none !important;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 14px;
   letter-spacing: 1px;
   margin-top: 20px;
-  transition: background-color 0.2s ease;
+  transition: transform 0.2s ease; /* Slight hover scale effect */
+  border: 2px solid #ff00ff; /* Neon pink border */
 }
 
 .contactButton:hover {
-  background-color: #555555;
-  opacity: 1 !important;
+  background-color: #000; /* Background to black on hover */
+  color: #00ff00; /* Green text on hover */
+  transform: scale(1.05); /* Retro hover effect */
 }
 
 /* Responsive adjustments */
@@ -72,10 +76,10 @@
   }
 
   .title {
-    font-size: 28px;
+    font-size: 24px; /* Smaller font size for mobile */
   }
 
   .content {
-    font-size: 16px;
+    font-size: 12px; /* Adjusted font size for mobile */
   }
 }

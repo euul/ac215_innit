@@ -3,9 +3,10 @@
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.9); /* Retro black background */
   z-index: 1000;
   height: 67px;
+  font-family: 'Press Start 2P', monospace; /* Retro pixelated font */
 }
 
 .nav {
@@ -22,15 +23,17 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: white;
+  color: #00ff00; /* Neon green logo */
   text-decoration: none;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 0 0 8px #00ff00; /* Neon glow effect */
 }
 
 .logoIcon {
   width: 24px;
   height: 24px;
+  filter: drop-shadow(0 0 4px #00ff00); /* Neon glow for logo icon */
 }
 
 .navLinks {
@@ -42,19 +45,23 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: white;
+  color: #ffff00; /* Neon yellow links */
   text-decoration: none;
-  font-size: 14px;
-  transition: opacity 0.2s ease;
+  font-size: 12px; /* Smaller font for retro look */
+  text-shadow: 0 0 6px #ffff00; /* Neon glow for links */
   opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .navLink:hover {
   opacity: 1;
+  transform: scale(1.1); /* Slight zoom on hover */
 }
 
 .navLink.active {
   opacity: 1;
+  color: #ff00ff; /* Neon pink for active links */
+  text-shadow: 0 0 8px #ff00ff; /* Neon pink glow for active links */
 }
 
 .icon {
@@ -75,7 +82,7 @@
   display: block;
   width: 25px;
   height: 2px;
-  background: white;
+  background: #00ff00; /* Neon green for menu bars */
   margin: 5px 0;
   transition: all 0.3s ease;
 }
@@ -109,7 +116,7 @@
   top: 67px;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.95); /* Retro black background */
   padding: 20px;
 }
 
@@ -119,5 +126,12 @@
 
 .mobileMenu .navLink {
   padding: 15px 0;
-  font-size: 16px;
+  font-size: 14px; /* Slightly larger font for mobile links */
+  color: #00ff00; /* Neon green for mobile links */
+  text-shadow: 0 0 6px #00ff00; /* Neon glow effect */
+  transition: transform 0.2s ease;
+}
+
+.mobileMenu .navLink:hover {
+  transform: scale(1.1); /* Slight zoom on hover */
 }

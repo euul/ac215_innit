@@ -1,7 +1,7 @@
 /* General page styling */
 .diagnosticTest {
-  background-color: #f9fafb; /* Light gray background */
-  color: #1f2937; /* Dark text color for readability */
+  background-color: Black; /* Light gray background */
+  color: white; /* Dark text color for readability */
   min-height: 100vh;
   padding: 2rem;
   font-family: "Inter", sans-serif; /* Modern and readable font */
@@ -14,7 +14,7 @@
 
 /* Title styling */
 .title {
-  color: #111827; /* Darker text for the title */
+  color: #22c55e; /* Darker text for the title */
   font-size: 2.5rem;
   font-weight: 700;
   text-align: center;
@@ -58,7 +58,7 @@
 
 /* Radio button styling */
 .radioButton {
-  color: #1f2937; /* Neutral dark color for unchecked state */
+  color: #ffffff; /* Neutral dark color for unchecked state */
 }
 
 .radioButton.Mui-checked {
@@ -66,7 +66,7 @@
 }
 
 .radioLabel {
-  color: #374151; /* Neutral dark for labels */
+  color: #ffffff; /* Neutral dark for labels */
   margin: 0.5rem 0;
 }
 

@@ -53,7 +53,7 @@ export default function Header() {
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link href="/">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center spaScreenshot from 2024-12-08 18-08-05ce-x-3">
             <Image
               src="/assets/logo.png"
               alt="Innit Logo"
@@ -69,7 +69,7 @@ export default function Header() {
             <Link
               key={item.name}
               href={item.path}
-              className="flex items-center text-retroText hover:text-retroGreen transition"
+              className="flex items-center text-retroGreen hover:text-retroGreen transition"
             >
               <span className="mr-2">{item.icon}</span>
               {item.name}
@@ -78,7 +78,7 @@ export default function Header() {
           {session ? (
             <button
               onClick={() => signOut()}
-              className="text-retroText hover:text-retroGreen transition"
+              className="text-retroGreen hover:text-retroGreen transition"
               aria-label="Log out"
             >
               Logout
@@ -86,7 +86,7 @@ export default function Header() {
           ) : (
             <Link
               href="/login"
-              className="text-retroText hover:text-retroGreen transition"
+              className="text-retroGreen hover:text-retroGreen transition"
               aria-label="Log in"
             >
               Login

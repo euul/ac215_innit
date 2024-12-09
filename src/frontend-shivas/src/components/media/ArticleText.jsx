@@ -7,11 +7,12 @@ export default function ArticleText({ text }) {
   }
 
   return (
-    <section className="max-h-96 overflow-y-auto w-full max-w-3xl p-6 bg-gray-100 rounded-lg shadow-md mb-8">
+    <section className="max-h-96 overflow-y-auto w-full max-w-5xl p-6 bg-gray-700 rounded-lg shadow-md mb-8">
       {text.split("\n").map((paragraph, index) => (
         <p
           key={index}
-          className="mb-6 text-gray-700 text-lg leading-relaxed text-justify"
+          style={{ fontFamily: 'Georgia, serif' , fontSize: '24px' }}
+          className="mb-6 text-white text-lg leading-relaxed text-justify"
         >
           {paragraph}
         </p>
