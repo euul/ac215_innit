@@ -12,8 +12,8 @@ BLOB_NAME = 'distill_bert_a1_weights.pth'
 LOCAL_MODEL_PATH = './distill_bert_a1_weights.pth'
 NUM_LABELS = 5
 
-ARTICLE_DIR = 'bbc_news_articles.json'
-ARTICLE_LABELED_DIR = 'bbc_news_articles_labeled.json'
+ARTICLE_DIR = 'bbc_news/bbc_news_articles.json'
+ARTICLE_LABELED_DIR = 'bbc_news/bbc_news_articles_labeled.json'
 
 LABEL_MAPPING = {
     0: "A1",
@@ -81,7 +81,7 @@ def load_model(local_model_path, num_labels):
 
 # Modify the dataset and map the predictions
 def infer(model, dataset):
-    tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v3-small")
+    tokenizer = AutoTokenizer.from_pretrained("deberta-v3-small")
 
     # Tokenize the dataset
     tokenized_dataset = dataset.map(

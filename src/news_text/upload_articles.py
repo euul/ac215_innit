@@ -1,5 +1,6 @@
 import pandas as pd
 from google.cloud import storage
+import os
 
 # Convert DataFrame to JSON and save locally
 def save_df_to_json(df, json_file_path):
@@ -10,6 +11,8 @@ def save_df_to_json(df, json_file_path):
         df (pd.DataFrame): The DataFrame to save.
         json_file_path (str): Path to save the JSON file.
     """
+    os.makedirs(os.path.dirname(json_file_path), exist_ok=True)
+
     df.to_json(json_file_path, orient='records', lines=True)
     print(f"DataFrame saved as JSON to {json_file_path}")
 
@@ -35,14 +38,14 @@ def upload_json_to_gcp(bucket_name, destination_blob_name, json_file_path):
 
 def main(): # pragma: no cover
     # Example DataFrame
-    df = pd.read_csv('bbc_news_articles.csv')
+    df = pd.read_csv('bbc_news/bbc_news_articles.csv')
     # Remove null values (if any)
     df = df.dropna()
 
     # Define paths and bucket details
-    json_file_path = "bbc_news_articles.json"
+    json_file_path = "bbc_news/bbc_news_articles.json"
     bucket_name = 'innit_articles_bucket'
-    destination_blob_name = "bbc_news_articles.json"
+    destination_blob_name = "bbc_news/bbc_news_articles.json"
 
     # Save DataFrame as JSON
     save_df_to_json(df, json_file_path)

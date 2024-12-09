@@ -1,8 +1,9 @@
+# pipdeptree
 tiktoken
 sentencepiece
 pandas
 google-cloud-storage
-torch
+torch==2.2.2
 transformers
 datasets
 beautifulsoup4

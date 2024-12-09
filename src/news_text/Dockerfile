@@ -1,5 +1,5 @@
 # Use the official Debian-hosted Python image
-FROM euxl/datapipeline:base-v1.1.0
+FROM python:3.11-slim-buster
 
 # Tell pipenv where the shell is. 
 # This allows us to use "pipenv shell" as a container entry point.

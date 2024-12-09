@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import json
 import time
+import os
 
 
 def fetch_page(url, headers):
@@ -39,7 +40,7 @@ def scrape_article(article_url, headers):
         return None
 
 
-def save_to_csv(titles, hrefs, metadatas, texts, filename='bbc_news_articles.csv'):
+def save_to_csv(titles, hrefs, metadatas, texts, filepath='bbc_news/bbc_news_articles.csv'):
     """Save scraped data to a CSV file."""
     data = {
         'Title': titles,
@@ -47,9 +48,10 @@ def save_to_csv(titles, hrefs, metadatas, texts, filename='bbc_news_articles.csv
         'Metadata': metadatas,
         'Text': texts
     }
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
     df = pd.DataFrame(data).dropna()
-    df.to_csv(filename, index=False, mode='a', header=not pd.io.common.file_exists(filename))
-    print(f"Saved {len(titles)} articles to {filename}")
+    df.to_csv(filepath, index=False, mode='a', header=not pd.io.common.file_exists(filepath))
+    print(f"Saved {len(titles)} articles to {filepath}")
 
 
 def scrape_bbc_news(url, headers):
