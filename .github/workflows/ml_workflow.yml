@@ -1,0 +1,64 @@
+name: ML Workflow
+on:
+  push:
+    branches: ["milestone4"]
+
+jobs:
+  build-and-run-news-text:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Authenticate and Configure GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
+
+      - name: Create secret files
+        run: |
+          echo '${{ secrets.TEXT_GENERATOR }}' > text_generator.json
+          echo '${{ secrets.DATA_SERVICE_ACCOUNT }}' > data-service-account.json
+
+      - name: Build news_text container
+        run: |-
+          docker build -t news_text -f ./news_text/Dockerfile .
+
+      - name: Run news_text scripts
+        run: |-
+          docker run --rm \
+            -v $PWD:/workspace \
+            -v $PWD/text_generator.json:/secrets/text_generator.json \
+            -v $PWD/data-service-account.json:/secrets/data-service-account.json \
+            news_text python /workspace/news_text/get_bbc_news.py
+          docker run --rm \
+            -v $PWD:/workspace \
+            news_text python /workspace/news_text/upload_articles.py
+          docker run --rm \
+            -v $PWD:/workspace \
+            news_text python /workspace/news_text/level_articles.py
+
+  build-and-run-summary-vocab:
+    needs: build-and-run-news-text
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Authenticate and Configure GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
+
+      - name: Build summary_vocab container
+        run: |-
+          docker build -t summary_vocab -f ./summary_vocab/Dockerfile .
+
+      - name: Run summary_vocab scripts
+        run: |-
+          docker run --rm \
+            -v $PWD:/workspace \
+            summary_vocab python /workspace/summary_vocab/summary_vocab_news.py
+          docker run --rm \
+            -v $PWD:/workspace \
+            summary_vocab python /workspace/summary_vocab/extract_results_news.py
