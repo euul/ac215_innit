@@ -1,61 +1,48 @@
-#%%
+import json
 import vertexai
+from google.cloud import storage
 from vertexai.preview.generative_models import GenerativeModel, ChatSession, GenerationConfig
 from vertexai.batch_prediction import BatchPredictionJob
-import json
-from google.cloud import storage
-# import os
+import time
 
 # Configuration
 TEMPERATURE = 0.5
 PROJECT_ID = "innit-437518"
 REGION = 'us-central1'
 MODEL_ID = 'gemini-1.5-pro-002'
-
 BUCKET_NAME = "innit_articles_bucket"
 INPUT_FILE_PATH = "bbc_news/bbc_news_articles_labeled.json"
 LOCAL_FILE_PATH = "bbc_news_articles_labeled.json"
-
 OUTPUT_URL = "gs://innit_articles_bucket/bbc_news"
-
 N_QUESTIONS = 5
 
-#%%
-# import os
-# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "../../../secrets/text-generator.json"
-
-#%%
-# read data from GCP
-# Function to read JSON data from GCP bucket and convert it to DataFrame
+# GCP File Handling
 def read_json_from_gcp(bucket_name, input_file_path, local_file_path):
-    # Initialize the GCP client
+    """Read JSON data from GCP bucket and save to local file."""
     storage_client = storage.Client()
-    # Get the bucket
     bucket = storage_client.bucket(bucket_name)
-    # Get the blob (file)
     blob = bucket.blob(input_file_path)
-   # Download the file to the local system
     blob.download_to_filename(local_file_path)
+    print(f"News article file downloaded to {local_file_path}")
 
-read_json_from_gcp(BUCKET_NAME, INPUT_FILE_PATH, LOCAL_FILE_PATH)
-print(f"News article file downloaded to {LOCAL_FILE_PATH}")
-#%%
-# read data from local
-data = []
-with open(LOCAL_FILE_PATH, 'r') as f:
-    try:
-        data = json.load(f)
-    except json.JSONDecodeError:
-        for line in f:
-            data.append(json.loads(line))
+def load_local_data(local_file_path):
+    """Load JSON data from local file."""
+    data = []
+    with open(local_file_path, 'r') as f:
+        try:
+            for line in f:
+                data.append(json.loads(line))
+        except json.JSONDecodeError:
+            data = json.load(f)
+    return data
 
-# %%
-# Include a unique identifier in the input JSONL file
-# Because the predictions from GCP batch prediction may not retain the same order as the original input file
-data_with_ids = [{"id": idx, **content} for idx, content in enumerate(data)]
+# Data Processing
+def add_unique_ids_to_data(data):
+    """Add unique ID to each item in the data."""
+    return [{"id": idx, **content} for idx, content in enumerate(data)]
 
-# %%
 def create_prompt(data):
+    """Generate the prompt for the model based on the article content."""
     content = data["Text"]
     id = data["id"]
     prompt = (
@@ -99,17 +86,17 @@ def create_prompt(data):
     )
     return prompt
 
-# %%
-prompts = [create_prompt(content) for content in data_with_ids]
+def generate_prompts(data_with_ids):
+    """Generate prompts for each article in the dataset."""
+    return [create_prompt(content) for content in data_with_ids]
 
-
-# %%
+# System Instructions
 system_instruction = (
     "You are a highly skilled language assistant specializing in summarization, CEFR-based vocabulary categorization, and question generation. "
     "When provided with content:\n"
     "1. Generate a summary in under 100 words, and wrap it in <sum> tags.\n"
     "2. Extract key vocabulary from the content, categorized by CEFR levels (A1, A2, B1, B2, C1), and wrap this section in <vocab> tags.\n"
-    "   - Present the vocabulary in the format: \{level\}: comma-separated vocabulary.\n"
+    "   - Present the vocabulary in the format: {level}: comma-separated vocabulary.\n"
     "   - Ensure each level contains appropriate vocabulary with words representative of that level.\n"
     "   - The vocabulary should consist of single words only (no phrases or multi-word terms).\n"
     "3. Generate a specified number of questions (e.g., 5) based on the content, wrapping them in <questions> tags.\n"
@@ -138,83 +125,86 @@ system_instruction = (
     "Ensure all output is clear, structured, and accurately formatted as requested."
 )
 
-# %%
-# Create the JSON structure
-
-output_file = "news_inputs.jsonl"
-with open(output_file, "w") as f:
-    for prompt in prompts:
-        json.dump({
-            "request": {
-                "contents": [
-                    {
-                        "role": "user",
-                        "parts": [
-                            {"text": prompt}
-                        ]
-                    }
-                ],
-                "system_instruction": {
-                    "parts": [
+# File Handling
+def save_prompts_to_jsonl(prompts, output_file="news_inputs.jsonl"):
+    """Save prompts to a JSONL file."""
+    with open(output_file, "w") as f:
+        for prompt in prompts:
+            json.dump({
+                "request": {
+                    "contents": [
                         {
-                            "text": system_instruction
+                            "role": "user",
+                            "parts": [{"text": prompt}]
                         }
-                    ]
-                },
-                "generationConfig": {
-                    "temperature": TEMPERATURE
+                    ],
+                    "system_instruction": {
+                        "parts": [{"text": system_instruction}]
+                    },
+                    "generationConfig": {
+                        "temperature": TEMPERATURE
+                    }
                 }
-            }
-        }, f)
-        f.write("\n")
+            }, f)
+            f.write("\n")
+    print(f"Prompts saved to {output_file}")
 
-#%%
-# upload to GCP
-def upload_to_gcp_bucket(bucket_name, destination_blob_path, source_file_path):
-    # Initialize the GCP client
+def upload_to_gcp(bucket_name, destination_blob_path, source_file_path):
+    """Upload a file to a GCP bucket."""
     storage_client = storage.Client()
-
-    # Get the bucket
     bucket = storage_client.get_bucket(bucket_name)
-
-    # Create a new blob (object) in the bucket
     blob = bucket.blob(destination_blob_path)
     blob.upload_from_filename(source_file_path)
-
     print(f"File {source_file_path} uploaded to gs://{bucket_name}/{destination_blob_path}")
 
-upload_to_gcp_bucket(BUCKET_NAME, 'bbc_news/news_inputs.jsonl', 'news_inputs.jsonl')
+# Batch Prediction
+def submit_batch_prediction(input_data, output_url):
+    """Submit a batch prediction job."""
+    vertexai.init(project=PROJECT_ID, location=REGION)
+    model = GenerativeModel(model_name=MODEL_ID)
+    job = BatchPredictionJob.submit(
+        source_model=MODEL_ID, input_dataset=input_data, output_uri_prefix=output_url
+    )
+    return job
 
+# Main Execution Flow
+def main():  # pragma: no cover
+    # Read data from GCP and load locally
+    read_json_from_gcp(BUCKET_NAME, INPUT_FILE_PATH, LOCAL_FILE_PATH)
+    data = load_local_data(LOCAL_FILE_PATH)
 
-# %%
-INPUT_DATA = "gs://innit_articles_bucket/bbc_news/news_inputs.jsonl"
+    print(data)
+    # Add unique IDs and generate prompts
+    data_with_ids = add_unique_ids_to_data(data)
+    # print(data_with_ids[0])
 
-# %%
-# Initialize Vertex AI client
-vertexai.init(project=PROJECT_ID, location=REGION)
+    prompts = generate_prompts(data_with_ids)
 
-model = GenerativeModel(model_name=MODEL_ID)
+    # Save prompts to JSONL and upload to GCP
+    save_prompts_to_jsonl(prompts)
+    print("Prompts saved to JSONL file")
+    upload_to_gcp(BUCKET_NAME, 'bbc_news/news_inputs.jsonl', 'news_inputs.jsonl')
 
-# %%
-job = BatchPredictionJob.submit(
-    source_model=MODEL_ID, input_dataset=INPUT_DATA, output_uri_prefix=OUTPUT_URL
-)
-# # %%
-# print(f"Job resource name: {job.resource_name}")
-# print(f"Model resource name: {job.model_name}")
-# print(f"Job state: {job.state.name}")
+    # Submit batch prediction
+    input_data = "gs://innit_articles_bucket/bbc_news/news_inputs.jsonl"
+    job = submit_batch_prediction(input_data, OUTPUT_URL)
+    print(f"Batch prediction job submitted: {job.resource_name}")
 
+    # Check job status
+    print(f"Job resource name: {job.resource_name}")
+    print(f"Model resource name with the job: {job.model_name}")
+    print(f"Job state: {job.state.name}")
 
-# %%
+    # Refresh the job until complete
+    while not job.has_ended:
+        time.sleep(10)
+        job.refresh()
 
-# # Take a look at the output
-# file_path = "bbc_news_prediction-model-2024-11-25T15_32_07.034415Z_predictions.jsonl"
+    # Check if the job succeeds
+    if job.has_succeeded:
+        print("Job succeeded!")
+    else:
+        print(f"Job failed: {job.error}")
 
-# # Read and parse the file
-# pred = []
-# with open(file_path, 'r', encoding='utf-8') as file:
-#     for line in file:
-#         pred.append(json.loads(line))
-
-# print(pred[0]['response']['candidates'][0]['content']['parts'][0]['text'])
-# # %%
+if __name__ == "__main__":
+    main() # pragma: no cover

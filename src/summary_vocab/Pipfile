@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 google-cloud-aiplatform = "*"
 google-cloud-storage = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 

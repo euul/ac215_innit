@@ -4,7 +4,7 @@ from vertexai.preview.generative_models import GenerativeModel, ChatSession, Gen
 from vertexai.batch_prediction import BatchPredictionJob
 import json
 from google.cloud import storage
-# import os
+import os
 
 # Configuration
 TEMPERATURE = 0.5
@@ -24,8 +24,6 @@ N_QUESTIONS = 5
 #%%
 # read data from GCP
 # Function to read JSON data from GCP bucket and convert it to DataFrame
-import os
-from google.cloud import storage
 
 def read_json_from_gcp():
     # Initialize the GCP client
@@ -49,7 +47,7 @@ def read_json_from_gcp():
 
         print(f"Files downloaded to {prefix}")
 
-read_json_from_gcp()
+
 
 # %%
 def create_prompt(content, id):
@@ -94,136 +92,143 @@ def create_prompt(content, id):
     )
     return prompt
 
-# %%
-system_instruction = (
-    "You are a highly skilled language assistant specializing in summarization, CEFR-based vocabulary categorization, and question generation. "
-    "When provided with content:\n"
-    "1. Generate a summary in under 100 words, and wrap it in <sum> tags.\n"
-    "2. Extract key vocabulary from the content, categorized by CEFR levels (A1, A2, B1, B2, C1), and wrap this section in <vocab> tags.\n"
-    "   - Present the vocabulary in the format: \{level\}: comma-separated vocabulary.\n"
-    "   - Ensure each level contains appropriate vocabulary with words representative of that level.\n"
-    "   - The vocabulary should consist of single words only (no phrases or multi-word terms).\n"
-    "3. Generate a specified number of questions (e.g., 5) based on the content, wrapping them in <questions> tags.\n"
-    "   - Each question should include:\n"
-    "     - The question text\n"
-    "     - Three answer choices (A, B, C)\n"
-    "     - The correct answer (e.g., \"A\")\n"
-    "     - The CEFR level (A1, A2, B1, B2, C1)\n"
-    "   - Format the questions as a JSON array, following this structure:\n"
-    '     <questions>\n'
-    '     [\n'
-    '         {\n'
-    '             "question": "Sample question?",\n'
-    '             "choices": ["Option A", "Option B", "Option C"],\n'
-    '             "answer": "A",\n'
-    '             "level": "A1"\n'
-    '         },\n'
-    '         {\n'
-    '             "question": "Another sample question?",\n'
-    '             "choices": ["Option A", "Option B", "Option C"],\n'
-    '             "answer": "B",\n'
-    '             "level": "B1"\n'
-    '         }\n'
-    '     ]\n'
-    '     </questions>\n'
-    "Ensure all output is clear, structured, and accurately formatted as requested."
-)
+
+
+def main(): # pragma: no cover
+
+    read_json_from_gcp()# %%
+    system_instruction = (
+        "You are a highly skilled language assistant specializing in summarization, CEFR-based vocabulary categorization, and question generation. "
+        "When provided with content:\n"
+        "1. Generate a summary in under 100 words, and wrap it in <sum> tags.\n"
+        "2. Extract key vocabulary from the content, categorized by CEFR levels (A1, A2, B1, B2, C1), and wrap this section in <vocab> tags.\n"
+        "   - Present the vocabulary in the format: \{level\}: comma-separated vocabulary.\n"
+        "   - Ensure each level contains appropriate vocabulary with words representative of that level.\n"
+        "   - The vocabulary should consist of single words only (no phrases or multi-word terms).\n"
+        "3. Generate a specified number of questions (e.g., 5) based on the content, wrapping them in <questions> tags.\n"
+        "   - Each question should include:\n"
+        "     - The question text\n"
+        "     - Three answer choices (A, B, C)\n"
+        "     - The correct answer (e.g., \"A\")\n"
+        "     - The CEFR level (A1, A2, B1, B2, C1)\n"
+        "   - Format the questions as a JSON array, following this structure:\n"
+        '     <questions>\n'
+        '     [\n'
+        '         {\n'
+        '             "question": "Sample question?",\n'
+        '             "choices": ["Option A", "Option B", "Option C"],\n'
+        '             "answer": "A",\n'
+        '             "level": "A1"\n'
+        '         },\n'
+        '         {\n'
+        '             "question": "Another sample question?",\n'
+        '             "choices": ["Option A", "Option B", "Option C"],\n'
+        '             "answer": "B",\n'
+        '             "level": "B1"\n'
+        '         }\n'
+        '     ]\n'
+        '     </questions>\n'
+        "Ensure all output is clear, structured, and accurately formatted as requested."
+    )
 
 
 #%%
 # create prompts inputs for each level folder
-for level in LEVELS:
-    local_file_path = f'yt_transcripts/{level}'
-    output_file = f"yt_transcripts/{level}/inputs.jsonl"
-    id_mapping_file = f"yt_transcripts/{level}/id_mapping.json"
+    for level in LEVELS:
+        local_file_path = f'yt_transcripts/{level}'
+        output_file = f"yt_transcripts/{level}/inputs.jsonl"
+        id_mapping_file = f"yt_transcripts/{level}/id_mapping.json"
 
-    if os.path.exists(local_file_path):
-        prompts = []
-        id_mapping = {}
-        id_counter = 1
+        if os.path.exists(local_file_path):
+            prompts = []
+            id_mapping = {}
+            id_counter = 1
 
-        for file_name in os.listdir(local_file_path):
-            if file_name.endswith(".json") and file_name != "id_mapping.json":  # Check if the file is a JSON file
-                file_path = os.path.join(local_file_path, file_name) 
-                with open(file_path, 'r') as file:
-                    data = json.load(file)
-                    # print(data.keys())
-                    concatenated_text = ' '.join([entry['text'] for entry in data['transcript']])
-                    prompts.append(create_prompt(concatenated_text, id_counter))
-                    id_mapping[id_counter] = file_name
-                    id_counter += 1
-        
-        with open(output_file, "w") as f:
-            for prompt in prompts:
-                json.dump({
-                    "request": {
-                        "contents": [
-                            {
-                                "role": "user",
-                                "parts": [
-                                    {"text": prompt}
-                                ]
-                            }
-                        ],
-                        "system_instruction": {
-                            "parts": [
+            for file_name in os.listdir(local_file_path):
+                if file_name.endswith(".json") and file_name != "id_mapping.json":  # Check if the file is a JSON file
+                    file_path = os.path.join(local_file_path, file_name) 
+                    with open(file_path, 'r') as file:
+                        data = json.load(file)
+                        # print(data.keys())
+                        concatenated_text = ' '.join([entry['text'] for entry in data['transcript']])
+                        prompts.append(create_prompt(concatenated_text, id_counter))
+                        id_mapping[id_counter] = file_name
+                        id_counter += 1
+            
+            with open(output_file, "w") as f:
+                for prompt in prompts:
+                    json.dump({
+                        "request": {
+                            "contents": [
                                 {
-                                    "text": system_instruction
+                                    "role": "user",
+                                    "parts": [
+                                        {"text": prompt}
+                                    ]
                                 }
-                            ]
-                        },
-                        "generationConfig": {
-                            "temperature": TEMPERATURE
+                            ],
+                            "system_instruction": {
+                                "parts": [
+                                    {
+                                        "text": system_instruction
+                                    }
+                                ]
+                            },
+                            "generationConfig": {
+                                "temperature": TEMPERATURE
+                            }
                         }
-                    }
-                }, f)
-                f.write("\n")
+                    }, f)
+                    f.write("\n")
 
-        # Save ID to file name mapping
-        with open(id_mapping_file, "w") as mapping_file:
-            json.dump(id_mapping, mapping_file, indent=4)
-        print(f"ID mapping file created for {level}")
+            # Save ID to file name mapping
+            with open(id_mapping_file, "w") as mapping_file:
+                json.dump(id_mapping, mapping_file, indent=4)
+            print(f"ID mapping file created for {level}")
 
-        # upload to GCP
-        storage_client = storage.Client()
-        bucket = storage_client.bucket(BUCKET_NAME)
-        blob = bucket.blob(f"{MODULE_BLOB_NAME}/{level}/inputs.jsonl")
-        blob.upload_from_filename(output_file)
-        print(f"File {output_file} uploaded to gs://{BUCKET_NAME}/{MODULE_BLOB_NAME}/{level}/inputs.jsonl")
-        blob = bucket.blob(f"{MODULE_BLOB_NAME}/{level}/id_mapping.json")
-        blob.upload_from_filename(id_mapping_file)
-        print(f"File {id_mapping_file} uploaded to gs://{BUCKET_NAME}/{MODULE_BLOB_NAME}/{level}/id_mapping.json")
+            # upload to GCP
+            storage_client = storage.Client()
+            bucket = storage_client.bucket(BUCKET_NAME)
+            blob = bucket.blob(f"{MODULE_BLOB_NAME}/{level}/inputs.jsonl")
+            blob.upload_from_filename(output_file)
+            print(f"File {output_file} uploaded to gs://{BUCKET_NAME}/{MODULE_BLOB_NAME}/{level}/inputs.jsonl")
+            blob = bucket.blob(f"{MODULE_BLOB_NAME}/{level}/id_mapping.json")
+            blob.upload_from_filename(id_mapping_file)
+            print(f"File {id_mapping_file} uploaded to gs://{BUCKET_NAME}/{MODULE_BLOB_NAME}/{level}/id_mapping.json")
 
-# %%
-# batch prediction
-for level in LEVELS:
-    INPUT_DATA = f"gs://innit_articles_bucket/{MODULE_BLOB_NAME}/{level}/inputs.jsonl"
-    OUTPUT_URL = f"gs://innit_articles_bucket/{MODULE_BLOB_NAME}/{level}"
+    # %%
+    # batch prediction
+    for level in LEVELS:
+        INPUT_DATA = f"gs://innit_articles_bucket/{MODULE_BLOB_NAME}/{level}/inputs.jsonl"
+        OUTPUT_URL = f"gs://innit_articles_bucket/{MODULE_BLOB_NAME}/{level}"
 
-    # Check if the input JSON file exists in GCS
-    input_blob_path = f"{MODULE_BLOB_NAME}/{level}/inputs.jsonl"
+        # Check if the input JSON file exists in GCS
+        input_blob_path = f"{MODULE_BLOB_NAME}/{level}/inputs.jsonl"
 
-    try:
-        bucket = storage_client.bucket(BUCKET_NAME)
-        blob = bucket.blob(input_blob_path)
-        if blob.exists():
-            # Initialize Vertex AI client
-            vertexai.init(project=PROJECT_ID, location=REGION)
+        try:
+            bucket = storage_client.bucket(BUCKET_NAME)
+            blob = bucket.blob(input_blob_path)
+            if blob.exists():
+                # Initialize Vertex AI client
+                vertexai.init(project=PROJECT_ID, location=REGION)
 
-            model = GenerativeModel(model_name=MODEL_ID)
+                model = GenerativeModel(model_name=MODEL_ID)
 
-            # Submit the batch prediction job
-            job = BatchPredictionJob.submit(
-                source_model=MODEL_ID, input_dataset=INPUT_DATA, output_uri_prefix=OUTPUT_URL
-            )
+                # Submit the batch prediction job
+                job = BatchPredictionJob.submit(
+                    source_model=MODEL_ID, input_dataset=INPUT_DATA, output_uri_prefix=OUTPUT_URL
+                )
 
-            print(f"Batch prediction job submitted for level {level}")
-            print(f"Job resource name: {job.resource_name}")
-            print(f"Model resource name: {job.model_name}")
-            print(f"Job state: {job.state.name}")
-        else:
-            print(f"No input file found for level {level}. Skipping batch prediction.")
-    except Exception as e:
-        print(f"Error checking or processing level {level}: {e}")
+                print(f"Batch prediction job submitted for level {level}")
+                print(f"Job resource name: {job.resource_name}")
+                print(f"Model resource name: {job.model_name}")
+                print(f"Job state: {job.state.name}")
+            else:
+                print(f"No input file found for level {level}. Skipping batch prediction.")
+        except Exception as e:
+            print(f"Error checking or processing level {level}: {e}")
+
+if __name__ == "__main__":
+    main() # pragma: no cover
 
 

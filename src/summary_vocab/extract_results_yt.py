@@ -187,19 +187,24 @@ def upload_and_sync_selected_folders(bucket_name, local_base_folder, folders_to_
 
 
 # %%
-read_json_from_gcp()
 
-for level in LEVELS:
-    directory_prefix = f"{MODULE_BLOB_NAME}/{level}"
-    local_file_path = f"{MODULE_BLOB_NAME}/{level}/summary_vocab.jsonl"
-    mapping_file_path = f"{MODULE_BLOB_NAME}/{level}/id_mapping.json"
+def main(): # pragma: no cover
+    read_json_from_gcp()
 
-    download_jsonl_from_gcp(BUCKET_NAME, directory_prefix, local_file_path)
-    # Check if both paths are valid
-    if os.path.exists(local_file_path) and os.path.exists(mapping_file_path):
-        pred_dict = read_predictions_from_jsonl(local_file_path)
-        update_local_json(mapping_file_path, pred_dict)
-    else:
-        print(f"Skipping level '{level}': Missing file(s).")
+    for level in LEVELS:
+        directory_prefix = f"{MODULE_BLOB_NAME}/{level}"
+        local_file_path = f"{MODULE_BLOB_NAME}/{level}/summary_vocab.jsonl"
+        mapping_file_path = f"{MODULE_BLOB_NAME}/{level}/id_mapping.json"
 
-upload_and_sync_selected_folders(BUCKET_NAME, MODULE_BLOB_NAME, LEVELS, MODULE_BLOB_NAME)
+        download_jsonl_from_gcp(BUCKET_NAME, directory_prefix, local_file_path)
+        # Check if both paths are valid
+        if os.path.exists(local_file_path) and os.path.exists(mapping_file_path):
+            pred_dict = read_predictions_from_jsonl(local_file_path)
+            update_local_json(mapping_file_path, pred_dict)
+        else:
+            print(f"Skipping level '{level}': Missing file(s).")
+
+    upload_and_sync_selected_folders(BUCKET_NAME, MODULE_BLOB_NAME, LEVELS, MODULE_BLOB_NAME)
+
+if __name__ == "__main__":
+    main() # pragma: no cover
