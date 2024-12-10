@@ -5,9 +5,14 @@ from google.cloud import storage
 
 class MediaManager:
     def __init__(self, bucket_name: str):
-        """Initialize the MediaManager with the GCP bucket name."""
         self.bucket_name = bucket_name
-        self.storage_client = storage.Client()
+        self._storage_client = None  # Delay client initialization
+
+    @property
+    def storage_client(self):
+        if not self._storage_client:
+            self._storage_client = storage.Client()  # Initialize lazily
+        return self._storage_client
 
     def _fetch_json_files_from_gcp(self, folder_prefix: str) -> List[Dict]:
         """Fetch and parse JSON files from a specific folder in the GCP bucket."""

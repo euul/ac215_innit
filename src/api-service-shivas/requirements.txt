@@ -1,0 +1,9 @@
+google-cloud-storage
+fastapi
+starlette
+bcrypt
+pydantic
+pyjwt
+httpx
+pytest
+pytest-cov
