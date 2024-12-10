@@ -326,3 +326,38 @@ jobs:
 
       - name: Tear down diagnostic_test container
         run: docker-compose -f src/docker-compose.yml down diagnostic_test
+
+  # model Tests
+  models:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start models container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d models
+
+      - name: Run integration tests inside models container
+        run: |
+          docker exec src_models_1 pipenv run pytest /app/tests/integration_tests/test_models.py
+
+      - name: models coverage report for models
+        run: |
+          docker exec src_models_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_models.py
+          docker exec src_models_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_models_1:/app/htmlcov ./htmlcov_models
+
+      - name: Upload models coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: models-coverage-report
+          path: ./htmlcov_models
+
+      - name: Tear down models container
+        run: docker-compose -f src/docker-compose.yml down models
