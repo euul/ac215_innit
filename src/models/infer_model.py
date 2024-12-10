@@ -86,7 +86,7 @@ def infer(model, test_dataset):
     
     return predictions
 
-if __name__ == "__main__":
+def main():
     # Step 1: Download weights
     download_weights(BUCKET_NAME, BLOB_NAME, LOCAL_MODEL_PATH)
 
@@ -100,3 +100,6 @@ if __name__ == "__main__":
     predictions = infer(model, test_dataset)
 
     print("Predictions:", predictions)
+
+if __name__ == "__main__":
+    main()
