@@ -88,9 +88,9 @@ jobs:
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
             -e GCP_PROJECT=innit-437518 \
             -e GCP_ZONE=us-central1-a \
-          
-          summary_vocab bash -c "
-            pipenv run python summary_vocab_news.py &&
-            pipenv run python extract_results_news.py
-          "
+            summary_vocab bash -c "
+              pipenv run python summary_vocab_news.py &&
+              pipenv run python extract_results_news.py
+            "
+
 
