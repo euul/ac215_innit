@@ -3,7 +3,7 @@ from google.cloud import storage
 import os
 
 # Convert DataFrame to JSON and save locally
-def save_df_to_json(df, json_file_path):
+def save_df_to_json(df, json_file_path): # pragma: no cover
     """
     Save a DataFrame to a JSON file.
     
@@ -17,7 +17,7 @@ def save_df_to_json(df, json_file_path):
     print(f"DataFrame saved as JSON to {json_file_path}")
 
 # Upload JSON file to GCP
-def upload_json_to_gcp(bucket_name, destination_blob_name, json_file_path):
+def upload_json_to_gcp(bucket_name, destination_blob_name, json_file_path): # pragma: no cover
     """
     Upload a JSON file to a GCP bucket.
     

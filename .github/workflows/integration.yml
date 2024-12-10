@@ -183,3 +183,111 @@ jobs:
 
       - name: Tear down news_text container
         run: docker-compose -f src/docker-compose.yml down news_text
+
+
+  # Summary Vocab Tests
+  summary_vocab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start summary_vocab container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d summary_vocab
+
+      - name: Run integration tests inside summary_vocab container
+        run: |
+          docker exec src_summary_vocab_1 pipenv run pytest /app/tests/integration_tests/test_summary_vocab.py
+
+      - name: Generate coverage report for summary_vocab
+        run: |
+          docker exec src_summary_vocab_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_summary_vocab.py
+          docker exec src_summary_vocab_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_summary_vocab_1:/app/htmlcov ./htmlcov_summary_vocab
+
+      - name: Upload summary_vocab coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: summary_vocab-coverage-report
+          path: ./htmlcov_summary_vocab
+
+      - name: Tear down summary_vocab container
+        run: docker-compose -f src/docker-compose.yml down summary_vocab
+
+
+  # Generate Tests
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start generate container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d generate
+
+      - name: Run integration tests inside generate container
+        run: |
+          docker exec src_generate_1 pipenv run pytest /app/tests/integration_tests/test_generate.py
+
+      - name: Generate coverage report for generate
+        run: |
+          docker exec src_generate_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_generate.py
+          docker exec src_generate_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_generate_1:/app/htmlcov ./htmlcov_generate
+
+      - name: Upload generate coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: generate-coverage-report
+          path: ./htmlcov_generate
+
+      - name: Tear down generate container
+        run: docker-compose -f src/docker-compose.yml down generate
+
+
+  # api_service_shivas Tests
+  api_service_shivas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start api_service_shivas container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d api_service_shivas
+
+      - name: Run integration tests inside api_service_shivas container
+        run: |
+          docker exec src_api_service_shivas_1 pipenv run pytest /app/tests/integration_tests/test_api_service_shivas.py
+
+      - name: api_service_shivas coverage report for api_service_shivas
+        run: |
+          docker exec src_api_service_shivas_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_api_service_shivas.py
+          docker exec src_api_service_shivas_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_api_service_shivas_1:/app/htmlcov ./htmlcov_api_service_shivas
+
+      - name: Upload api_service_shivas coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: api_service_shivas-coverage-report
+          path: ./htmlcov_api_service_shivas
+
+      - name: Tear down api_service_shivas container
+        run: docker-compose -f src/docker-compose.yml down api_service_shivas

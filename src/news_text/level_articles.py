@@ -1,5 +1,3 @@
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1" # disable GPU for testing
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from datasets import Dataset
