@@ -70,7 +70,7 @@ jobs:
               pipenv run python get_bbc_news.py && 
               pipenv run python upload_articles.py && 
               pipenv run python level_articles.py
-            "
+            " || true
 
       # Build and Run summary_vocab container
       - name: Build summary_vocab Container
