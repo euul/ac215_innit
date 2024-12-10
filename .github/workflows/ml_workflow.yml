@@ -37,9 +37,9 @@ jobs:
             -v $PWD/text_generator.json:/secrets/text_generator.json \
             -v $PWD/data-service-account.json:/secrets/data-service-account.json \
             news_text bash -c "
-              python get_bbc_news.py && 
-              python upload_articles.py && 
-              python level_articles.py
+              pipenv run python get_bbc_news.py && 
+              pipenv run python upload_articles.py && 
+              pipenv run python level_articles.py
             "
 
       # Build and Run summary_vocab container
@@ -51,7 +51,7 @@ jobs:
       - name: Run summary_vocab Container
         run: |
           docker run --rm summary_vocab bash -c "
-            python summary_vocab_news.py &&
-            python extract_results_news.py
+            pipenv run python summary_vocab_news.py &&
+            pipenv run python extract_results_news.py
           "
-          
+
