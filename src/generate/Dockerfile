@@ -40,36 +40,4 @@ RUN pipenv sync
 ADD --chown=app:app . /app
 
 # Entry point to run the Python script in the pipenv environment
-ENTRYPOINT ["pipenv", "run", "python", "cli.py"]
-# Use the official Debian-hosted Python image
-# FROM python:3.11-slim-buster
-
-# # Environment variables
-# ENV PYTHONUNBUFFERED=1
-
-# # Install system dependencies
-# RUN apt-get update && \
-#     apt-get upgrade -y && \
-#     apt-get install -y --no-install-recommends build-essential bash ffmpeg && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/*
-
-# # Install pip and pipenv
-# RUN pip install --no-cache-dir --upgrade pip && \
-#     pip install pipenv
-
-# # Verify pipenv installation
-# RUN pipenv --version
-
-# # Set working directory
-# WORKDIR /app
-
-# # Copy Pipfile and install dependencies
-# COPY Pipfile Pipfile.lock /app/
-# RUN pipenv install --deploy --ignore-pipfile --system
-
-# # Copy application code
-# COPY . /app
-
-# # Set entrypoint to run the Python script directly
-# ENTRYPOINT ["python", "cli.py.py"]
+# ENTRYPOINT ["pipenv", "run", "python", "cli.py"]

@@ -9,6 +9,8 @@ google-auth = "*"
 datasets = "*"
 aiohttp = "*"
 asyncio = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 

@@ -34,7 +34,10 @@ def download_dataset_folder(bucket_name, blob_prefix, local_dataset_dir):
         print(f"{local_folder_path} already exists. Skipping download.")
 
 
-# Check if the training dataset exists locally, if not download it from GCP
-download_dataset_folder(BUCKET_NAME, TRAIN_BLOB_PREFIX, LOCAL_DATASET_DIR)
+def main(): # pragma: no cover
+    # Check if the training dataset exists locally, if not download it from GCP
+    download_dataset_folder(BUCKET_NAME, TRAIN_BLOB_PREFIX, LOCAL_DATASET_DIR)
+    print("Successfully downloaded the training dataset")
 
-print("Successfully downloaded the training dataset")
+if __name__ == "__main__":
+    main() # pragma: no cover
