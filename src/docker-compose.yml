@@ -77,3 +77,65 @@ services:
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     command: tail -f /dev/null
+
+  summary_vocab:
+    build:
+      context: ./summary_vocab
+      dockerfile: Dockerfile
+    image: summary_vocab
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_summary_vocab
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+  generate:
+    build:
+      context: ./generate
+      dockerfile: Dockerfile
+    image: generate
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_generate
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+
+  api_service_shivas:
+    build:
+      context: ./api_service_shivas
+      dockerfile: Dockerfile
+    image: api_service_shivas
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_api_service_shivas
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+
+  diagnostic_test:
+    build:
+      context: ./diagnostic_test
+      dockerfile: Dockerfile
+    image: diagnostic_test
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_diagnostic_test
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
