@@ -291,3 +291,38 @@ jobs:
 
       - name: Tear down api_service_shivas container
         run: docker-compose -f src/docker-compose.yml down api_service_shivas
+
+  # diagnostic_test Tests
+  diagnostic_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start diagnostic_test container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d diagnostic_test
+
+      - name: Run integration tests inside diagnostic_test container
+        run: |
+          docker exec src_diagnostic_test_1 pipenv run pytest /app/tests/integration_tests/test_diagnostic_test.py
+
+      - name: diagnostic_test coverage report for diagnostic_test
+        run: |
+          docker exec src_diagnostic_test_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_diagnostic_test.py
+          docker exec src_diagnostic_test_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_diagnostic_test_1:/app/htmlcov ./htmlcov_diagnostic_test
+
+      - name: Upload diagnostic_test coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: diagnostic_test-coverage-report
+          path: ./htmlcov_diagnostic_test
+
+      - name: Tear down diagnostic_test container
+        run: docker-compose -f src/docker-compose.yml down diagnostic_test
