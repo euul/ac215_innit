@@ -11,6 +11,7 @@ on:
 jobs:
   # Webscraping Tests
   webscraping:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -46,6 +47,7 @@ jobs:
 
   # Question Bank Tests
   question_bank:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -81,6 +83,7 @@ jobs:
 
   # YouTube Transcribe Tests
   youtube_transcribe:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -116,6 +119,7 @@ jobs:
 
   # Datapipeline Tests
   datapipeline:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -151,6 +155,7 @@ jobs:
 
   # News text Tests
   news_text:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -187,6 +192,7 @@ jobs:
 
   # Summary Vocab Tests
   summary_vocab:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -223,6 +229,7 @@ jobs:
 
   # Generate Tests
   generate:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -259,6 +266,7 @@ jobs:
 
   # api-service-shivas Tests
   api-service-shivas:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -294,6 +302,7 @@ jobs:
 
   # diagnostic_test Tests
   diagnostic_test:
+    if: contains(github.event.head_commit.message, '[/CI-test]')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository

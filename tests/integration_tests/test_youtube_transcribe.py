@@ -5,6 +5,13 @@ import os
 import json
 import shutil
 from google.cloud import storage
+
+# Add the directory containing preprocess and dataloader to the Python path
+import sys
+# Ensure /app is in the Python path
+sys.path.insert(0, '/app')
+
+
 from get_transcript import (
     get_transcript,
     clean_timestamps,
