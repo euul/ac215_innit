@@ -42,7 +42,14 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+      # Create data-service-account.json
+      - name: Create data-service-account.json
+        run: echo '${{ secrets.DATA_SERVICE_ACCOUNT }}' > ${{ github.workspace }}/data-service-account.json
 
+      # Create text-generator.json
+      - name: Create text-generator.json
+        run: echo '${{ secrets.TEXT_GENERATOR }}' > ${{ github.workspace }}/text-generator.json
+        
       # Build and Run news_text container
       - name: Build news_text Container
         run: |-
