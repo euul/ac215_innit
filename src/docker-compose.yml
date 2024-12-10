@@ -109,17 +109,17 @@ services:
     command: tail -f /dev/null
 
 
-  api_service_shivas:
+  api-service-shivas:
     build:
-      context: ./api_service_shivas
+      context: ./api-service-shivas
       dockerfile: Dockerfile
-    image: api_service_shivas
+    image: api-service-shivas
     environment:
       DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
       TEXT_GENERATOR: ${TEXT_GENERATOR}
     volumes:
       - ../tests:/app/tests:ro # Mount the tests directory into the container
-      - ./htmlcov:/app/htmlcov_api_service_shivas
+      - ./htmlcov:/app/htmlcov_api-service-shivas
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     command: tail -f /dev/null

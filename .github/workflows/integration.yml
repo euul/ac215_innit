@@ -257,8 +257,8 @@ jobs:
         run: docker-compose -f src/docker-compose.yml down generate
 
 
-  # api_service_shivas Tests
-  api_service_shivas:
+  # api-service-shivas Tests
+  api-service-shivas:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -269,28 +269,28 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Build and start api_service_shivas container
+      - name: Build and start api-service-shivas container
         run: |
-          docker-compose -f src/docker-compose.yml up -d api_service_shivas
+          docker-compose -f src/docker-compose.yml up -d api-service-shivas
 
-      - name: Run integration tests inside api_service_shivas container
+      - name: Run integration tests inside api-service-shivas container
         run: |
-          docker exec src_api_service_shivas_1 pipenv run pytest /app/tests/integration_tests/test_api_service_shivas.py
+          docker exec src_api-service-shivas_1 pipenv run pytest /app/tests/integration_tests/test_api-service-shivas.py
 
-      - name: api_service_shivas coverage report for api_service_shivas
+      - name: api-service-shivas coverage report for api-service-shivas
         run: |
-          docker exec src_api_service_shivas_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_api_service_shivas.py
-          docker exec src_api_service_shivas_1 pipenv run coverage html --rcfile=/app/.coveragerc
-          docker cp src_api_service_shivas_1:/app/htmlcov ./htmlcov_api_service_shivas
+          docker exec src_api-service-shivas_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_api-service-shivas.py
+          docker exec src_api-service-shivas_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_api-service-shivas_1:/app/htmlcov ./htmlcov_api-service-shivas
 
-      - name: Upload api_service_shivas coverage report
+      - name: Upload api-service-shivas coverage report
         uses: actions/upload-artifact@v3
         with:
-          name: api_service_shivas-coverage-report
-          path: ./htmlcov_api_service_shivas
+          name: api-service-shivas-coverage-report
+          path: ./htmlcov_api-service-shivas
 
-      - name: Tear down api_service_shivas container
-        run: docker-compose -f src/docker-compose.yml down api_service_shivas
+      - name: Tear down api-service-shivas container
+        run: docker-compose -f src/docker-compose.yml down api-service-shivas
 
   # diagnostic_test Tests
   diagnostic_test:
