@@ -49,7 +49,7 @@ jobs:
       # Create text-generator.json
       - name: Create text-generator.json
         run: echo '${{ secrets.TEXT_GENERATOR }}' > ${{ github.workspace }}/text-generator.json
-        
+
       # Build and Run news_text container
       - name: Build news_text Container
         run: |-
@@ -62,7 +62,7 @@ jobs:
             --volume $GITHUB_WORKSPACE:/workspace \
             --mount type=bind,source=$GOOGLE_APPLICATION_CREDENTIALS,target=/secrets/text-generator.json \
             --mount type=bind,source=${{ github.workspace }}/data-service-account.json,target=/secrets/data-service-account.json \
-            --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/deployment.json \
+            --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/text-generator.json \
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
             -e GCP_PROJECT=innit-437518 \
             -e GCP_ZONE=us-central1-a \
@@ -84,7 +84,7 @@ jobs:
             --volume $GITHUB_WORKSPACE:/workspace \
             --mount type=bind,source=$GOOGLE_APPLICATION_CREDENTIALS,target=/secrets/text-generator.json \
             --mount type=bind,source=${{ github.workspace }}/data-service-account.json,target=/secrets/data-service-account.json \
-            --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/deployment.json \
+            --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/text-generator.json \
             -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
             -e GCP_PROJECT=innit-437518 \
             -e GCP_ZONE=us-central1-a \
