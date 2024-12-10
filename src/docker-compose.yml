@@ -139,3 +139,20 @@ services:
       - ../.coveragerc:/app/.coveragerc:ro
     working_dir: /app
     command: tail -f /dev/null
+
+
+  models:
+    build:
+      context: ./models
+      dockerfile: Dockerfile
+    image: models
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_models
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+

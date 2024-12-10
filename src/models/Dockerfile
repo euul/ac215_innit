@@ -1,5 +1,5 @@
 # Use the pre-built Docker image as the base
-FROM euxl/datapipeline:latest
+FROM euxl/datapipeline:base-v1.1.0
 # FROM python:3.11-slim-buster
 
 # Tell pipenv where the shell is.

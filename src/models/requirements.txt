@@ -2,5 +2,4 @@ transformers
 wandb
 protobuf
 sentencepiece
-pytest
-pytest-cov
+accelerate
