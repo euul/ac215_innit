@@ -1,1 +1,3 @@
 google-cloud-storage
+pytest
+pytest-cov

@@ -21,9 +21,9 @@ ADD Pipfile Pipfile.lock /app/
 RUN pipenv sync
 
 ADD . /app
-# Entry point
-ENTRYPOINT ["/bin/bash"]
+# # Entry point
+# ENTRYPOINT ["/bin/bash"]
 
-# # Get into the pipenv shell
-CMD ["-c", "pipenv shell"]
+# # # Get into the pipenv shell
+# CMD ["-c", "pipenv shell"]
 

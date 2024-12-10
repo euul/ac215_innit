@@ -38,7 +38,7 @@ def upload_to_gcp(client, data, destination_blob_name):
     print(f"File uploaded to gs://{BUCKET_NAME}/{destination_blob_name}")
 
 # Main function
-def main():
+def main(): # pragma: no cover
     client = get_gcp_client()
     combined_test = []
 
@@ -62,4 +62,4 @@ def main():
 
 # Entry point
 if __name__ == "__main__":
-    main()
+    main() # pragma: no cover
