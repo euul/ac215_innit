@@ -27,8 +27,10 @@ jobs:
 
       # Build and Run news_text container
       - name: Build news_text Container
-        run: |
-          docker build -t news_text -f src/news_text/Dockerfile .
+        run: |-
+          cd ${{ github.workspace }}/src/news_text/
+          docker build -t news_text -f Dockerfile .
+
       - name: Run news_text Container
         run: |
           docker run --rm \
@@ -42,8 +44,10 @@ jobs:
 
       # Build and Run summary_vocab container
       - name: Build summary_vocab Container
-        run: |
-          docker build -t summary_vocab -f src/summary_vocab/Dockerfile .
+        run: |-
+          cd ${{ github.workspace }}/src/summary_vocab/
+          docker build -t summary_vocab -f Dockerfile .
+
       - name: Run summary_vocab Container
         run: |
           docker run --rm summary_vocab bash -c "
