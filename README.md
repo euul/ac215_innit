@@ -10,7 +10,6 @@ You can confirm that our Github Actions (including the ML workflow and App Deplo
 
 ![ML Workflow](https://github.com/euul/ac215_innit//actions/workflows/ml_workflow.yml/badge.svg?branch=main)
 
-
 #### Project Milestone 5 Organization
 
 ```
@@ -81,7 +80,7 @@ The following documents contain an overview of each container, its components an
 7. [news_text](./src/news_text/readme.md)
 8. [question_bank](./src/question_bank/readme.md)
 9. [diagnostic_test](./src/diagnostic_test/Readme.md)
-10. [summarize_vocab](.src/summarize_vocab/Readme.md)
+10. [summarize_vocab](./src/summarize_vocab/Readme.md)
 11. [api-service](./src/api-service-shivas/README.md)
 12. [frontend](./src/frontend-shivas/README.md)
 13. [deployment](./src/deployment/README.md)
@@ -96,7 +95,7 @@ There are three Github workflows that assist with CI/CD of our language learning
 
 3. **Automated Labeling/Updates of App Database (ML Workflow)**: This workflow will focus on updating our production build to reflect changes/updates in media from the internet. Put simply, the following will be run when this workflow is triggered:
 
-a) Scrape new  articles and videos (from our selected sources) every week.
+a) Scrape new articles and videos (from our selected sources) every week.
 
 b) Use the model to perform the inference step and label these new examples with English difficulty level.
 

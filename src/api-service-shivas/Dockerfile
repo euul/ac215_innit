@@ -44,4 +44,4 @@ RUN pipenv sync
 ADD --chown=app:app . /app
 
 # Set the entry point to the custom script
-# ENTRYPOINT ["/bin/bash", "./docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "./docker-entrypoint.sh"]
