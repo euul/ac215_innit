@@ -85,16 +85,19 @@ def upload_to_gcs(bucket_name, source_dir, destination_dir):
             blob.upload_from_filename(source_file_path)
             print(f"File {source_file_path} uploaded to {blob_name}.")
 
+def main(): # pragma: no cover
+    # Ensure the local directory exists
+    os.makedirs(LOCAL_DATASET_DIR, exist_ok=True)
+    # Count elements in each file, save locally, and print results
+    for file_path in file_paths:
+        count = count_elements_and_save_locally(BUCKET_NAME, file_path, LOCAL_DATASET_DIR)
+        if count is not None:
+            print(f"{file_path}: {count} elements")
+    # Create dataframe and dataset, save to disk and upload to GCS
+    df = create_dataframe()
+    dataset = make_dataset(df)
+    dataset.save_to_disk('train_dataset_generated')
+    upload_to_gcs(BUCKET_NAME, 'train_dataset_generated', 'train_dataset_generated')
 
-# Ensure the local directory exists
-os.makedirs(LOCAL_DATASET_DIR, exist_ok=True)
-# Count elements in each file, save locally, and print results
-for file_path in file_paths:
-    count = count_elements_and_save_locally(BUCKET_NAME, file_path, LOCAL_DATASET_DIR)
-    if count is not None:
-        print(f"{file_path}: {count} elements")
-# Create dataframe and dataset, save to disk and upload to GCS
-df = create_dataframe()
-dataset = make_dataset(df)
-dataset.save_to_disk('train_dataset_generated')
-upload_to_gcs(BUCKET_NAME, 'train_dataset_generated', 'train_dataset_generated')
+if __name__ == "__main__":
+    main()

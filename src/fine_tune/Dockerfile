@@ -1,5 +1,5 @@
 # Use the pre-built Docker image as the base
-FROM euxl/datapipeline:latest
+FROM euxl/datapipeline:base-v1.1.0
 # FROM python:3.11-slim-buster
 
 # Tell pipenv where the shell is.
@@ -23,8 +23,8 @@ ADD Pipfile Pipfile.lock /app/
 RUN pipenv sync
 
 ADD . /app
-# Entry point
-ENTRYPOINT ["/bin/bash"]
+# # Entry point
+# ENTRYPOINT ["/bin/bash"]
 
-# Get into the pipenv shell
-CMD ["-c", "pipenv shell"]
+# # Get into the pipenv shell
+# CMD ["-c", "pipenv shell"]

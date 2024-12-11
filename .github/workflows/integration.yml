@@ -361,3 +361,39 @@ jobs:
 
       - name: Tear down models container
         run: docker-compose -f src/docker-compose.yml down models
+
+  # fine_tune Tests
+  fine_tune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start fine_tune container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d fine_tune
+
+      - name: Run integration tests inside fine_tune container
+        run: |
+          docker exec src_fine_tune_1 pipenv run pytest /app/tests/integration_tests/test_fine_tune.py
+
+      - name: fine_tune coverage report for fine_tune
+        run: |
+          docker exec src_fine_tune_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_fine_tune.py
+          docker exec src_fine_tune_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_fine_tune_1:/app/htmlcov ./htmlcov_fine_tune
+
+      - name: Upload fine_tune coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: fine_tune-coverage-report
+          path: ./htmlcov_fine_tune
+
+      - name: Tear down fine_tune container
+        run: docker-compose -f src/docker-compose.yml down fine_tune
+

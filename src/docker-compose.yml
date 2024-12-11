@@ -156,3 +156,18 @@ services:
     working_dir: /app
     command: tail -f /dev/null
 
+
+  fine_tune:
+    build:
+      context: ./fine_tune
+      dockerfile: Dockerfile
+    image: fine_tune
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_fine_tune
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
