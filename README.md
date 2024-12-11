@@ -38,9 +38,9 @@ You can confirm that our Github Actions (including the ML workflow and App Deplo
     ├── youtube_transcribe
     ├── news_text
     ├── diagnostic_test
-    ├── summarize_vocab
-    ├── api-service
-    ├── frontend
+    ├── summary_vocab
+    ├── api-service-shivas
+    ├── frontend-shivas
     └── deployment
     └── docker-compose.yml
 └── .github/workflows
@@ -80,9 +80,9 @@ The following documents contain an overview of each container, its components an
 7. [news_text](./src/news_text/readme.md)
 8. [question_bank](./src/question_bank/readme.md)
 9. [diagnostic_test](./src/diagnostic_test/Readme.md)
-10. [summarize_vocab](./src/summarize_vocab/Readme.md)
-11. [api-service](./src/api-service-shivas/README.md)
-12. [frontend](./src/frontend-shivas/README.md)
+10. [summary_vocab](./src/summary_vocab/Readme.md)
+11. [api-service-shivas](./src/api-service-shivas/README.md)
+12. [frontend-shivas](./src/frontend-shivas/README.md)
 13. [deployment](./src/deployment/README.md)
 
 **Github Actions for Continuous Integration and Deployment**
@@ -90,8 +90,6 @@ There are three Github workflows that assist with CI/CD of our language learning
 
 1. **Code Building, Linting and Automated Testing**: The workflow will run unit tests across each container to ensure code quality and coverage. This workflow will run after each push, regardless of the trigger. This is intentionally done to ensure that all changes to the codebase align with proper linting and validation.
 2. **Kubernetes and Ansible Playbooks for Automated App Deployment**: This workflow will run an Ansible playbook to build and push the images related to app deployment (frontend and api-service) and then **update** an already existing Kubernetes cluster (containing the deployed app) with the changes to the frontend and backend portions of the app. This workflow is designed with the intention of already having the app deployed and running on a Google Cloud Cluster. In other words, this is how we would update our app dynamically if we were bring our app live and connected for users. To run this workflow, add `"/deploy-app"` to your comment message to trigger this action.
-
-**To see verify this action works: please look at commit hash `3845bf4`.**
 
 3. **Automated Labeling/Updates of App Database (ML Workflow)**: This workflow will focus on updating our production build to reflect changes/updates in media from the internet. Put simply, the following will be run when this workflow is triggered:
 
@@ -104,7 +102,5 @@ c) Call Gemini (with the appropriate prompts) to generate the key vocabulary, su
 d) Add these labeled examples to the GCP bucket.
 
 We would ideally run this workflow after a specific time interval to ensure that our app's database remains updated. If we were to continue running our production build, ideally, we would like to run this label/update workflow every week. To run this workflow, add `"/refresh_news"` to your comment message to trigger this action.
-
-**To see verify this action works: please look at commit hash `d6821aa`.**
 
 ---
