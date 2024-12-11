@@ -2,7 +2,14 @@
 
 Welcome to Team Save the Penguin's Milestone 5! Remember to close your instances on GCP or you will kill more penguins! 🐧
 
+You can confirm that our Github Actions (including the ML workflow and App Deployment) work from the badges below. Otherwise, feel free to check out the Actions tab on the repo for more details.
+
 ![Integration Tests](https://github.com/euul/ac215_innit//actions/workflows/integration.yml/badge.svg?branch=main)
+
+![App Deploy](https://github.com/euul/ac215_innit//actions/workflows/app_deploy.yml/badge.svg?branch=main)
+
+![ML Workflow](https://github.com/euul/ac215_innit//actions/workflows/ml_workflow.yml/badge.svg?branch=main)
+
 
 #### Project Milestone 5 Organization
 
@@ -73,8 +80,8 @@ The following documents contain an overview of each container, its components an
 6. [youtube_transcribe](./src/youtube_transcribe//README.md)
 7. [news_text](./src/news_text/readme.md)
 8. [question_bank](./src/question_bank/readme.md)
-9. [diagnostic_test](./src/diagnostic_test/README.md)
-10. [summarize_vocab](.src/summarize_vocab/README.md)
+9. [diagnostic_test](./src/diagnostic_test/Readme.md)
+10. [summarize_vocab](.src/summarize_vocab/Readme.md)
 11. [api-service](./src/api-service-shivas/README.md)
 12. [frontend](./src/frontend-shivas/README.md)
 13. [deployment](./src/deployment/README.md)
