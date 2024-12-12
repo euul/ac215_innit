@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+tiktoken = "*"
+sentencepiece = "*"
+pandas = "*"
+google-cloud-storage = "*"
+torch = "==2.2.2"
+transformers = "*"
+datasets = "*"
+beautifulsoup4 = "*"
+requests = "*"
+pytest = "*"
+pytest-cov = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

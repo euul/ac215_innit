@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased bg-black text-green-400; /* Retro black background with green text */
+    font-family: "Press Start 2P", monospace; /* Pixelated font */
+    margin: 0;
+    padding: 0;
+    padding-top: 70px;
+    margin-bottom: 70px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Press Start 2P", monospace; /* Retro font for headings */
+    margin-top: 0;
+    margin-bottom: 1rem;
+    @apply text-yellow-400; /* Retro yellow headings */
+  }
+
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    @apply text-green-400; /* Match body text color */
+  }
+
+  a {
+    @apply text-pink-400 hover:text-pink-500; /* Bright retro pink links */
+    font-family: "Press Start 2P", monospace; /* Retro font */
+  }
+
+  button {
+    @apply bg-blue-700 text-white font-bold py-2 px-4 rounded-none shadow-none hover:bg-blue-600 transition-transform transform scale-105;
+    border: 2px solid #fff; /* Retro button border */
+    font-family: "Press Start 2P", monospace; /* Retro font */
+  }
+
+  img {
+    image-rendering: pixelated; /* Pixelated effect for images */
+  }
+}
+
+/* Animation styles */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blinking-text {
+  animation: blink 1s infinite;
+  font-family: "Press Start 2P", monospace;
+  @apply text-green-400;
+}
+
+/* Components */
+@layer components {
+  .mobile-link {
+    @apply py-3 text-pink-400 border-b border-pink-200 last:border-b-0;
+    font-family: "Press Start 2P", monospace;
+  }
+}
+
+/* Layout styles */
+.layout-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: repeating-linear-gradient(
+    45deg,
+    #222,
+    #222 10px,
+    #333 10px,
+    #333 20px
+  ); /* Retro diagonal stripe background */
+}
+
+main {
+  flex: 1;
+  @apply bg-gray-800 text-green-300 p-5;
+}

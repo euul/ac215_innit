@@ -1,0 +1,9 @@
+all:
+    vars:
+      gcp_service_account_file: "/secrets/deployment.json"
+      gcp_service_account_email: "deployment@innit-437518.iam.gserviceaccount.com"
+      gcp_auth_kind: "serviceaccount"
+      gcp_scopes: "https://www.googleapis.com/auth/cloud-platform"
+      gcp_project: "innit-437518"
+      gcp_region: "us-east1"
+      gcp_zone: "us-east1-c"

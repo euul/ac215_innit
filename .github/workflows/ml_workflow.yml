@@ -1,0 +1,98 @@
+name: ML Workflow
+run-name: ${{ github.actor }} submitted a CI CD Action
+
+on:
+  push:
+    branches: 
+      - "milestone4"
+      - "main"
+
+jobs:
+  ml-workflow:
+    if: contains(github.event.head_commit.message, '/refresh_news')
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Comment ${{ github.event.head_commit.message }}"
+      - run: echo "Job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "Job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "Branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Authenticate with GCP
+      - id: 'auth'
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}'
+      - name: Configure Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      - name: Configure Docker Client
+        run: |-
+          gcloud auth configure-docker # --quiet #authenticate to gcr
+      - name: Authenticate and Configure GCP
+        run: |-
+          echo "Authenticating with Google Cloud..."
+          gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+          echo "Setting GCP project..."
+          gcloud config set project $GCP_PROJECT --quiet
+          echo "Configuring Docker with GCR..."
+          gcloud auth configure-docker gcr.io -q
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      # Create data-service-account.json
+      - name: Create data-service-account.json
+        run: echo '${{ secrets.DATA_SERVICE_ACCOUNT }}' > ${{ github.workspace }}/data-service-account.json
+
+      # Create text-generator.json
+      - name: Create text-generator.json
+        run: echo '${{ secrets.TEXT_GENERATOR }}' > ${{ github.workspace }}/text-generator.json
+
+      # Build and Run news_text container
+      - name: Build news_text Container
+        run: |-
+          cd ${{ github.workspace }}/src/news_text/
+          docker build -t news_text -f Dockerfile .
+
+      - name: Run news_text Container
+        run: |
+          docker run --rm --name news_text \
+            --volume $GITHUB_WORKSPACE:/workspace \
+            --mount type=bind,source=$GOOGLE_APPLICATION_CREDENTIALS,target=/secrets/text-generator.json \
+            --mount type=bind,source=${{ github.workspace }}/data-service-account.json,target=/secrets/data-service-account.json \
+            --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/text-generator.json \
+            -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
+            -e GCP_PROJECT=innit-437518 \
+            -e GCP_ZONE=us-central1-a \
+            news_text bash -c "
+              pipenv run python get_bbc_news.py && 
+              pipenv run python upload_articles.py && 
+              pipenv run python level_articles.py
+            " || true
+
+      # Build and Run summary_vocab container
+      - name: Build summary_vocab Container
+        run: |-
+          cd ${{ github.workspace }}/src/summary_vocab/
+          docker build -t summary_vocab -f Dockerfile .
+
+      - name: Run summary_vocab Container
+        run: |
+          docker run --rm --name summary_vocab \
+            --volume $GITHUB_WORKSPACE:/workspace \
+            --mount type=bind,source=$GOOGLE_APPLICATION_CREDENTIALS,target=/secrets/text-generator.json \
+            --mount type=bind,source=${{ github.workspace }}/data-service-account.json,target=/secrets/data-service-account.json \
+            --env GOOGLE_APPLICATION_CREDENTIALS=/secrets/text-generator.json \
+            -e USE_GKE_GCLOUD_AUTH_PLUGIN=True \
+            -e GCP_PROJECT=innit-437518 \
+            -e GCP_ZONE=us-central1-a \
+            summary_vocab bash -c "
+              pipenv run python summary_vocab_news.py &&
+              pipenv run python extract_results_news.py
+            "
+
+

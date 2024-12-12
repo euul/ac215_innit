@@ -1,0 +1,92 @@
+.questionCard {
+  background-color: #374151;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  color: #e5e7eb; /* Adjusted for better readability on a dark background */
+  border: 1px solid #475569;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.questionCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.questionText {
+  font-size: 1.25rem; /* Slightly larger for clarity */
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.choicesList {
+  list-style: none;
+  padding: 0;
+}
+
+.choiceItem {
+  margin-bottom: 0.75rem;
+}
+
+/* Custom radio button styling */
+.choiceLabel {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.choiceLabel input[type="radio"] {
+  appearance: none; /* Remove default browser styling */
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid white; /* Neutral dark border */
+  border-radius: 50%; /* Make it circular */
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.choiceLabel input[type="radio"]:checked {
+  border-color: #2563eb; /* Blue border when selected */
+  background-color: #2563eb; /* Blue fill when selected */
+}
+
+/* Spacing between radio button and label text */
+.choiceLabel span {
+  font-size: 1rem;
+  font-family: "Press Start 2P", monospace;
+  color: #ffffff; /* White text color */
+}
+
+.submitButton {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #2563eb;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.submitButton:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.resultText {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: "Press Start 2P", monospace;
+}
+
+.correct {
+  color: #22c55e; /* Green for correct answers */
+}
+
+.incorrect {
+  color: #ef4444; /* Red for incorrect answers */
+}

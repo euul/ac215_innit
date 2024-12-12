@@ -1,0 +1,9 @@
+node_modules/
+.next/
+
+# misc
+.DS_Store
+env.local
+.eslintcache
+scratch.txt
+react-app-nextjs@1.0.0

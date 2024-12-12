@@ -1,0 +1,399 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - milestone4
+  pull_request:
+    branches:
+      - milestone4
+
+jobs:
+  # Webscraping Tests
+  webscraping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start webscraping container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d webscraping
+
+      - name: Run integration tests inside webscraping container
+        run: |
+          docker exec src_webscraping_1 pipenv run pytest /app/tests/integration_tests/test_webscraping.py
+
+      - name: Generate coverage report for webscraping
+        run: |
+          docker exec src_webscraping_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_webscraping.py
+          docker exec src_webscraping_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_webscraping_1:/app/htmlcov ./htmlcov_webscraping
+
+      - name: Upload webscraping coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: webscraping-coverage-report
+          path: ./htmlcov_webscraping
+
+      - name: Tear down webscraping container
+        run: docker-compose -f src/docker-compose.yml down webscraping
+
+  # Question Bank Tests
+  question_bank:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start question_bank container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d question_bank
+
+      - name: Run integration tests inside question_bank container
+        run: |
+          docker exec src_question_bank_1 pipenv run pytest /app/tests/integration_tests/test_question_bank.py
+
+      - name: Generate coverage report for question_bank
+        run: |
+          docker exec src_question_bank_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_question_bank.py
+          docker exec src_question_bank_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_question_bank_1:/app/htmlcov ./htmlcov_question_bank
+
+      - name: Upload question_bank coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: question-bank-coverage-report
+          path: ./htmlcov_question_bank
+
+      - name: Tear down question_bank container
+        run: docker-compose -f src/docker-compose.yml down question_bank
+
+  # YouTube Transcribe Tests
+  youtube_transcribe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start youtube_transcribe container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d youtube_transcribe
+
+      - name: Run integration tests inside youtube_transcribe container
+        run: |
+          docker exec src_youtube_transcribe_1 pipenv run pytest /app/tests/integration_tests/test_youtube_transcribe.py
+
+      - name: Generate coverage report for youtube_transcribe
+        run: |
+          docker exec src_youtube_transcribe_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_youtube_transcribe.py
+          docker exec src_youtube_transcribe_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_youtube_transcribe_1:/app/htmlcov ./htmlcov_youtube_transcribe
+
+      - name: Upload youtube_transcribe coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: youtube-transcribe-coverage-report
+          path: ./htmlcov_youtube_transcribe
+
+      - name: Tear down youtube_transcribe container
+        run: docker-compose -f src/docker-compose.yml down youtube_transcribe
+
+  # Datapipeline Tests
+  datapipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start datapipeline container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d datapipeline
+
+      - name: Run integration tests inside datapipeline container
+        run: |
+          docker exec src_datapipeline_1 pipenv run pytest /app/tests/integration_tests/test_datapipeline.py
+
+      - name: Generate coverage report for datapipeline
+        run: |
+          docker exec src_datapipeline_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_datapipeline.py
+          docker exec src_datapipeline_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_datapipeline_1:/app/htmlcov ./htmlcov_datapipeline
+
+      - name: Upload datapipeline coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: datapipeline-coverage-report
+          path: ./htmlcov_datapipeline
+
+      - name: Tear down datapipeline container
+        run: docker-compose -f src/docker-compose.yml down datapipeline
+
+  # News text Tests
+  news_text:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start news_text container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d news_text
+
+      - name: Run integration tests inside news_text container
+        run: |
+          docker exec src_news_text_1 pipenv run pytest /app/tests/integration_tests/test_news_text.py
+
+      - name: Generate coverage report for news_text
+        run: |
+          docker exec src_news_text_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_news_text.py
+          docker exec src_news_text_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_news_text_1:/app/htmlcov ./htmlcov_news_text
+
+      - name: Upload news_text coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: news_text-coverage-report
+          path: ./htmlcov_news_text
+
+      - name: Tear down news_text container
+        run: docker-compose -f src/docker-compose.yml down news_text
+
+
+  # Summary Vocab Tests
+  summary_vocab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start summary_vocab container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d summary_vocab
+
+      - name: Run integration tests inside summary_vocab container
+        run: |
+          docker exec src_summary_vocab_1 pipenv run pytest /app/tests/integration_tests/test_summary_vocab.py
+
+      - name: Generate coverage report for summary_vocab
+        run: |
+          docker exec src_summary_vocab_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_summary_vocab.py
+          docker exec src_summary_vocab_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_summary_vocab_1:/app/htmlcov ./htmlcov_summary_vocab
+
+      - name: Upload summary_vocab coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: summary_vocab-coverage-report
+          path: ./htmlcov_summary_vocab
+
+      - name: Tear down summary_vocab container
+        run: docker-compose -f src/docker-compose.yml down summary_vocab
+
+
+  # Generate Tests
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start generate container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d generate
+
+      - name: Run integration tests inside generate container
+        run: |
+          docker exec src_generate_1 pipenv run pytest /app/tests/integration_tests/test_generate.py
+
+      - name: Generate coverage report for generate
+        run: |
+          docker exec src_generate_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_generate.py
+          docker exec src_generate_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_generate_1:/app/htmlcov ./htmlcov_generate
+
+      - name: Upload generate coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: generate-coverage-report
+          path: ./htmlcov_generate
+
+      - name: Tear down generate container
+        run: docker-compose -f src/docker-compose.yml down generate
+
+
+  # api-service-shivas Tests
+  api-service-shivas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start api-service-shivas container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d api-service-shivas
+
+      - name: Run integration tests inside api-service-shivas container
+        run: |
+          docker exec src_api-service-shivas_1 pipenv run pytest /app/tests/integration_tests/test_api-service-shivas.py
+
+      - name: api-service-shivas coverage report for api-service-shivas
+        run: |
+          docker exec src_api-service-shivas_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_api-service-shivas.py
+          docker exec src_api-service-shivas_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_api-service-shivas_1:/app/htmlcov ./htmlcov_api-service-shivas
+
+      - name: Upload api-service-shivas coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-service-shivas-coverage-report
+          path: ./htmlcov_api-service-shivas
+
+      - name: Tear down api-service-shivas container
+        run: docker-compose -f src/docker-compose.yml down api-service-shivas
+
+  # diagnostic_test Tests
+  diagnostic_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start diagnostic_test container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d diagnostic_test
+
+      - name: Run integration tests inside diagnostic_test container
+        run: |
+          docker exec src_diagnostic_test_1 pipenv run pytest /app/tests/integration_tests/test_diagnostic_test.py
+
+      - name: diagnostic_test coverage report for diagnostic_test
+        run: |
+          docker exec src_diagnostic_test_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_diagnostic_test.py
+          docker exec src_diagnostic_test_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_diagnostic_test_1:/app/htmlcov ./htmlcov_diagnostic_test
+
+      - name: Upload diagnostic_test coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: diagnostic_test-coverage-report
+          path: ./htmlcov_diagnostic_test
+
+      - name: Tear down diagnostic_test container
+        run: docker-compose -f src/docker-compose.yml down diagnostic_test
+
+  # model Tests
+  models:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start models container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d models
+
+      - name: Run integration tests inside models container
+        run: |
+          docker exec src_models_1 pipenv run pytest /app/tests/integration_tests/test_models.py
+
+      - name: models coverage report for models
+        run: |
+          docker exec src_models_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_models.py
+          docker exec src_models_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_models_1:/app/htmlcov ./htmlcov_models
+
+      - name: Upload models coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: models-coverage-report
+          path: ./htmlcov_models
+
+      - name: Tear down models container
+        run: docker-compose -f src/docker-compose.yml down models
+
+  # fine_tune Tests
+  fine_tune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build and start fine_tune container
+        run: |
+          docker-compose -f src/docker-compose.yml up -d fine_tune
+
+      - name: Run integration tests inside fine_tune container
+        run: |
+          docker exec src_fine_tune_1 pipenv run pytest /app/tests/integration_tests/test_fine_tune.py
+
+      - name: fine_tune coverage report for fine_tune
+        run: |
+          docker exec src_fine_tune_1 pipenv run coverage run --rcfile=/app/.coveragerc -m pytest /app/tests/integration_tests/test_fine_tune.py
+          docker exec src_fine_tune_1 pipenv run coverage html --rcfile=/app/.coveragerc
+          docker cp src_fine_tune_1:/app/htmlcov ./htmlcov_fine_tune
+
+      - name: Upload fine_tune coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: fine_tune-coverage-report
+          path: ./htmlcov_fine_tune
+
+      - name: Tear down fine_tune container
+        run: docker-compose -f src/docker-compose.yml down fine_tune
+

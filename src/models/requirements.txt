@@ -1,0 +1,5 @@
+transformers
+wandb
+protobuf
+sentencepiece
+accelerate

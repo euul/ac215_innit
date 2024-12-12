@@ -1,0 +1,50 @@
+---
+- name: "Build docker images and push them to GCR"
+  hosts: localhost
+  gather_facts: false
+  vars:
+    innit: innit-437518 # Replace with your GCP project ID
+  tasks:
+  - name: "Get timestamp for docker tag"
+    shell: "(date +%Y%m%d%H%M%S)"
+    register: tag
+
+  - name: Print tag
+    debug:
+      var: tag.stdout
+
+  - name: Build frontend container image
+    community.general.docker_image:
+      build:
+        path: ../frontend-shivas
+        platform: linux/amd64
+      name: gcr.io/{{ innit }}/frontend-shivas:{{ tag.stdout }}
+      source: build
+
+  - name: Push frontend image to GCR
+    community.general.docker_image:
+      name: gcr.io/{{ innit }}/frontend-shivas:{{ tag.stdout }}
+      repository: gcr.io/{{ innit }}/frontend-shivas:{{ tag.stdout }}
+      push: yes
+      source: local
+
+  - name: Build api-service-shivas container image
+    community.general.docker_image:
+      build:
+        path: ../api-service-shivas
+        platform: linux/amd64
+      name: gcr.io/{{ innit }}/api-service-shivas:{{ tag.stdout }}
+      source: build
+
+  - name: Push api-service-shivas image to GCR
+    community.general.docker_image:
+      name: gcr.io/{{ innit }}/api-service-shivas:{{ tag.stdout }}
+      repository: gcr.io/{{ innit }}/api-service-shivas:{{ tag.stdout }}
+      push: yes
+      source: local
+
+  - name: "Save docker tag"
+    shell: echo {{ tag.stdout }} > .docker-tag
+
+  - name: "Remove all unused containers"
+    shell: docker system prune -a -f

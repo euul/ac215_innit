@@ -1,0 +1,23 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+
+[packages]
+fastapi = "*"                 
+uvicorn = "*"                 
+google-cloud-storage = "*"
+bcrypt = "*"      
+starlette = "*"
+pydantic = "*"
+pyjwt = "*"
+pytest = "*"
+pytest-cov = "*"
+httpx = "*"
+
+[requires]
+python_version = "3.11"

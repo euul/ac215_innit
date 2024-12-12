@@ -1,0 +1,1202 @@
+[
+    {
+        "question": "Where _____ from? I'm from Russia.",
+        "choices": [
+            "you are",
+            "you",
+            "are you"
+        ],
+        "answer": "C",
+        "level": "A1"
+    },
+    {
+        "question": "We have _____ house in Moscow.",
+        "choices": [
+            "any",
+            "a",
+            "an"
+        ],
+        "answer": "B",
+        "level": "A1"
+    },
+    {
+        "question": "I have two _____ , a boy and a girl.",
+        "choices": [
+            "sons",
+            "daughters",
+            "children"
+        ],
+        "answer": "C",
+        "level": "A1"
+    },
+    {
+        "question": "I work in a _____ . I'm a doctor.",
+        "choices": [
+            "hospital",
+            "hotel",
+            "supermarket"
+        ],
+        "answer": "A",
+        "level": "A1"
+    },
+    {
+        "question": "This is my brother. _____ name's Paul.",
+        "choices": [
+            "Her",
+            "His",
+            "He's"
+        ],
+        "answer": "B",
+        "level": "A1"
+    },
+    {
+        "question": "_____ five people in my family.",
+        "choices": [
+            "They are",
+            "There is",
+            "There are"
+        ],
+        "answer": "C",
+        "level": "A1"
+    },
+    {
+        "question": "I get up _____ 7 o'clock in the morning.",
+        "choices": [
+            "for",
+            "at",
+            "in"
+        ],
+        "answer": "B",
+        "level": "A1"
+    },
+    {
+        "question": "I like apples, but I _____ bananas.",
+        "choices": [
+            "don't like",
+            "like",
+            "do like"
+        ],
+        "answer": "A",
+        "level": "A1"
+    },
+    {
+        "question": "Excuse me, _____ speak French?",
+        "choices": [
+            "do you",
+            "you do",
+            "you"
+        ],
+        "answer": "A",
+        "level": "A1"
+    },
+    {
+        "question": "How much are _____ shoes?",
+        "choices": [
+            "this",
+            "these",
+            "that"
+        ],
+        "answer": "B",
+        "level": "A1"
+    },
+    {
+        "question": "Where are my glasses? They're _____ the table.",
+        "choices": [
+            "at",
+            "on",
+            "in"
+        ],
+        "answer": "B",
+        "level": "A1"
+    },
+    {
+        "question": "My sister _____ tennis very well.",
+        "choices": [
+            "plays",
+            "play",
+            "playing"
+        ],
+        "answer": "A",
+        "level": "A1"
+    },
+    {
+        "question": "I usually go to work _____ train.",
+        "choices": [
+            "on",
+            "with",
+            "by"
+        ],
+        "answer": "C",
+        "level": "A1"
+    },
+    {
+        "question": "I don't see my parents very often _____ they live in South Africa.",
+        "choices": [
+            "so",
+            "but",
+            "because"
+        ],
+        "answer": "C",
+        "level": "A1"
+    },
+    {
+        "question": "Rosie stayed _____ home yesterday afternoon.",
+        "choices": [
+            "in",
+            "at",
+            "to"
+        ],
+        "answer": "B",
+        "level": "A1"
+    },
+    {
+        "question": "Last night I _____ to the cinema.",
+        "choices": [
+            "went",
+            "did go",
+            "was"
+        ],
+        "answer": "A",
+        "level": "A1"
+    },
+    {
+        "question": "The _____ is quite expensive but the food there is excellent.",
+        "choices": [
+            "film",
+            "restaurant",
+            "book"
+        ],
+        "answer": "B",
+        "level": "A1"
+    },
+    {
+        "question": "Do you want to listen to music or _____ TV?",
+        "choices": [
+            "see",
+            "look",
+            "watch"
+        ],
+        "answer": "C",
+        "level": "A1"
+    },
+    {
+        "question": "_____ were you at the weekend? I was in Scotland.",
+        "choices": [
+            "When",
+            "Where",
+            "What"
+        ],
+        "answer": "B",
+        "level": "A1"
+    },
+    {
+        "question": "_____ you have a good time at the party? Yes, it was fun.",
+        "choices": [
+            "Did",
+            "Were",
+            "Had"
+        ],
+        "answer": "A",
+        "level": "A1"
+    },
+    {
+        "question": "Are you _____ English teacher?",
+        "choices": [
+            "Maria",
+            "Marias'",
+            "Maria's"
+        ],
+        "answer": "C",
+        "level": "A2"
+    },
+    {
+        "question": "Bob will meet _____ at the airport.",
+        "choices": [
+            "us",
+            "we",
+            "our"
+        ],
+        "answer": "A",
+        "level": "A2"
+    },
+    {
+        "question": "I'm going to a concert tonight. _____ you like to come?",
+        "choices": [
+            "Do",
+            "Are",
+            "Would"
+        ],
+        "answer": "C",
+        "level": "A2"
+    },
+    {
+        "question": "_____ use your dictionary? Sure. Here you are.",
+        "choices": [
+            "Could I",
+            "Could you",
+            "Do I"
+        ],
+        "answer": "A",
+        "level": "A2"
+    },
+    {
+        "question": "I like this apartment but the _____ is too expensive for me.",
+        "choices": [
+            "money",
+            "rent",
+            "cost"
+        ],
+        "answer": "B",
+        "level": "A2"
+    },
+    {
+        "question": "Excuse me, how do I _____ to the bus station?",
+        "choices": [
+            "come",
+            "get",
+            "arrive"
+        ],
+        "answer": "B",
+        "level": "A2"
+    },
+    {
+        "question": "Do you sell stamps? Yes, we do. How _____ do you want?",
+        "choices": [
+            "any",
+            "many",
+            "much"
+        ],
+        "answer": "B",
+        "level": "A2"
+    },
+    {
+        "question": "Sorry I'm so late. That's _____ .",
+        "choices": [
+            "OK",
+            "great",
+            "right"
+        ],
+        "answer": "A",
+        "level": "A2"
+    },
+    {
+        "question": "I'd like _____ milk in my coffee, please.",
+        "choices": [
+            "some",
+            "any",
+            "a"
+        ],
+        "answer": "A",
+        "level": "A2"
+    },
+    {
+        "question": "_____ a bus stop near my flat.",
+        "choices": [
+            "It's",
+            "Here's",
+            "There's"
+        ],
+        "answer": "C",
+        "level": "A2"
+    },
+    {
+        "question": "Is this a good time to talk? Sorry, no. I _____ dinner.",
+        "choices": [
+            "cook",
+            "am cooking",
+            "cooking"
+        ],
+        "answer": "B",
+        "level": "A2"
+    },
+    {
+        "question": "I think cycling is more dangerous _____ driving.",
+        "choices": [
+            "as",
+            "like",
+            "than"
+        ],
+        "answer": "C",
+        "level": "A2"
+    },
+    {
+        "question": "We _____ going to the theatre next Saturday.",
+        "choices": [
+            "will",
+            "do",
+            "are"
+        ],
+        "answer": "C",
+        "level": "A2"
+    },
+    {
+        "question": "_____ meet for coffee some time soon.",
+        "choices": [
+            "Let's",
+            "Do you",
+            "Shall they"
+        ],
+        "answer": "A",
+        "level": "A2"
+    },
+    {
+        "question": "Kamal has got a holiday home near _____ sea.",
+        "choices": [
+            "a",
+            "the",
+            "some"
+        ],
+        "answer": "B",
+        "level": "A2"
+    },
+    {
+        "question": "If you've got a headache, you _____ go home.",
+        "choices": [
+            "should",
+            "did",
+            "had"
+        ],
+        "answer": "A",
+        "level": "A2"
+    },
+    {
+        "question": "_____ ever been to New York?",
+        "choices": [
+            "Have you",
+            "Are you",
+            "Did you"
+        ],
+        "answer": "A",
+        "level": "A2"
+    },
+    {
+        "question": "I only get about five hours' sleep a night. That's not _____ .",
+        "choices": [
+            "enough",
+            "lot",
+            "too much"
+        ],
+        "answer": "A",
+        "level": "A2"
+    },
+    {
+        "question": "Did Amina finish the report? No. She _____ it tomorrow.",
+        "choices": [
+            "finishes",
+            "is going to finish",
+            "finished"
+        ],
+        "answer": "B",
+        "level": "A2"
+    },
+    {
+        "question": "Paula _____ loves working with children.",
+        "choices": [
+            "very",
+            "really",
+            "much"
+        ],
+        "answer": "B",
+        "level": "A2"
+    },
+    {
+        "question": "Is Ottawa the capital of Canada? I think _____ .",
+        "choices": [
+            "is",
+            "yes",
+            "so D right"
+        ],
+        "answer": "C",
+        "level": "B1"
+    },
+    {
+        "question": "We never _____ a television when I was a child.",
+        "choices": [
+            "have had",
+            "hadn't",
+            "had D didn't have"
+        ],
+        "answer": "C",
+        "level": "B1"
+    },
+    {
+        "question": "We paid the restaurant bill _____ credit card.",
+        "choices": [
+            "to",
+            "with",
+            "on D by"
+        ],
+        "answer": "D",
+        "level": "B1"
+    },
+    {
+        "question": "The last time I _____ Joanna was in Paris.",
+        "choices": [
+            "have seen",
+            "saw",
+            "see D was seeing"
+        ],
+        "answer": "B",
+        "level": "B1"
+    },
+    {
+        "question": "If you _____ money from a friend, you should always pay it back promptly.",
+        "choices": [
+            "borrow",
+            "earn",
+            "spend D lend"
+        ],
+        "answer": "A",
+        "level": "B1"
+    },
+    {
+        "question": "Can I make myself a cup of coffee? Of course. You _____ to ask.",
+        "choices": [
+            "haven't",
+            "mustn't",
+            "needn't D don't have"
+        ],
+        "answer": "D",
+        "level": "B1"
+    },
+    {
+        "question": "I _____ a lot of sport in my free time.",
+        "choices": [
+            "do",
+            "practise",
+            "make D exercise"
+        ],
+        "answer": "A",
+        "level": "B1"
+    },
+    {
+        "question": "_____ anywhere interesting recently?",
+        "choices": [
+            "Do you go",
+            "Have you been",
+            "Are you going D Will you go"
+        ],
+        "answer": "B",
+        "level": "B1"
+    },
+    {
+        "question": "It's Walter's birthday on Friday. He _____ be 30, I think.",
+        "choices": [
+            "should",
+            "can",
+            "will D shall"
+        ],
+        "answer": "C",
+        "level": "B1"
+    },
+    {
+        "question": "Learning the piano isn't as difficult _____ learning the violin.",
+        "choices": [
+            "like",
+            "so",
+            "than D as"
+        ],
+        "answer": "D",
+        "level": "B1"
+    },
+    {
+        "question": "If the weather _____ bad tomorrow, we can go to a museum.",
+        "choices": [
+            "will be",
+            "was",
+            "is D would be"
+        ],
+        "answer": "C",
+        "level": "B1"
+    },
+    {
+        "question": "About a billion cans of Coca-Cola _____ drunk around the world every day.",
+        "choices": [
+            "is",
+            "are",
+            "was D were"
+        ],
+        "answer": "B",
+        "level": "B1"
+    },
+    {
+        "question": "My mum's not very well. Oh, _____ .",
+        "choices": [
+            "it doesn't matter",
+            "I do apologise",
+            "sorry to hear that D not bad, thanks"
+        ],
+        "answer": "C",
+        "level": "B1"
+    },
+    {
+        "question": "Hans isn't here. He _____ to see his grandmother. He'll be back tomorrow.",
+        "choices": [
+            "has gone",
+            "had been",
+            "has been D had gone"
+        ],
+        "answer": "A",
+        "level": "B1"
+    },
+    {
+        "question": "Would you mind changing my appointment? _____ time on Friday is fine.",
+        "choices": [
+            "Next",
+            "All the",
+            "Every D Any"
+        ],
+        "answer": "D",
+        "level": "B1"
+    },
+    {
+        "question": "When I was a child, I _____ climb the wall and jump into our neighbours' garden.",
+        "choices": [
+            "would",
+            "did",
+            "have D used"
+        ],
+        "answer": "A",
+        "level": "B1"
+    },
+    {
+        "question": "Have you finished _____ the wall yet?",
+        "choices": [
+            "paint",
+            "to paint",
+            "painting D painted"
+        ],
+        "answer": "C",
+        "level": "B1"
+    },
+    {
+        "question": "Can you help me? I've tried _____ hotel in the city and can't find a room.",
+        "choices": [
+            "many",
+            "any",
+            "every D all"
+        ],
+        "answer": "C",
+        "level": "B1"
+    },
+    {
+        "question": "Lena used to find work boring _____ she became a nurse.",
+        "choices": [
+            "unless",
+            "until",
+            "if D since"
+        ],
+        "answer": "B",
+        "level": "B1"
+    },
+    {
+        "question": "If I _____ closer to my office, I could walk to work.",
+        "choices": [
+            "lived",
+            "would live",
+            "had lived D live"
+        ],
+        "answer": "A",
+        "level": "B1"
+    },
+    {
+        "question": "I _____ outside the cinema when suddenly a police car arrived.",
+        "choices": [
+            "stood",
+            "was standing",
+            "have stood D am standing"
+        ],
+        "answer": "B",
+        "level": "B2"
+    },
+    {
+        "question": "Shall we go to The Riceboat for dinner? It _____ be fully booked. They're sometimes busy on a Monday.",
+        "choices": [
+            "will",
+            "may",
+            "can D must"
+        ],
+        "answer": "B",
+        "level": "B2"
+    },
+    {
+        "question": "We've _____ come back from a trip to India.... It was amazing.",
+        "choices": [
+            "already",
+            "yet",
+            "just D only"
+        ],
+        "answer": "C",
+        "level": "B2"
+    },
+    {
+        "question": "I've got to be at work in five minutes. Don't worry, I _____ you a lift if you want.",
+        "choices": [
+            "give",
+            "am giving",
+            "'ll give D 'm going to give"
+        ],
+        "answer": "C",
+        "level": "B2"
+    },
+    {
+        "question": "My doctor advised me _____ more exercise.",
+        "choices": [
+            "take",
+            "taking",
+            "having taken D to take"
+        ],
+        "answer": "D",
+        "level": "B2"
+    },
+    {
+        "question": "I couldn't _____ up with the noise in the city, so we moved to the countryside.",
+        "choices": [
+            "put",
+            "live",
+            "set D take"
+        ],
+        "answer": "A",
+        "level": "B2"
+    },
+    {
+        "question": "There's no name on this dictionary. It _____ be mine then. Mine's got my name on the front.",
+        "choices": [
+            "might not",
+            "mustn't",
+            "won't D can't"
+        ],
+        "answer": "D",
+        "level": "B2"
+    },
+    {
+        "question": "Julia _____ married since she was 20.",
+        "choices": [
+            "is",
+            "was",
+            "has been D is being"
+        ],
+        "answer": "C",
+        "level": "B2"
+    },
+    {
+        "question": "Don't worry if I _____ late tonight. I'm going to the gym after work.",
+        "choices": [
+            "am",
+            "will be",
+            "would be D was"
+        ],
+        "answer": "A",
+        "level": "B2"
+    },
+    {
+        "question": "I've got a terrible headache, and it won't go away. Have you tried _____ some aspirin?",
+        "choices": [
+            "to take",
+            "take",
+            "took D taking"
+        ],
+        "answer": "D",
+        "level": "B2"
+    },
+    {
+        "question": "Boxing is a sport _____ requires a lot of speed and fitness.",
+        "choices": [
+            "it",
+            "that",
+            "what D where"
+        ],
+        "answer": "B",
+        "level": "B2"
+    },
+    {
+        "question": "Jon _____ working on this project for a couple of months so he hasn't made much progress yet.",
+        "choices": [
+            "is only",
+            "has only been",
+            "was only D had only been"
+        ],
+        "answer": "B",
+        "level": "B2"
+    },
+    {
+        "question": "I was wondering _____ I could ask you some questions. Sure, go ahead.",
+        "choices": [
+            "what",
+            "if",
+            "that D how"
+        ],
+        "answer": "B",
+        "level": "B2"
+    },
+    {
+        "question": "What clothes should I pack for a trip to Boston? Well, it depends _____ the time of year that you go.",
+        "choices": [
+            "on",
+            "with",
+            "up D to"
+        ],
+        "answer": "A",
+        "level": "B2"
+    },
+    {
+        "question": "I've finished this salad and I'm still hungry. I _____ ordered something more filling.",
+        "choices": [
+            "must have",
+            "would have",
+            "should have D may have"
+        ],
+        "answer": "C",
+        "level": "B2"
+    },
+    {
+        "question": "Do you ever ask your neighbours to do favours _____ you?",
+        "choices": [
+            "for",
+            "to",
+            "with D about"
+        ],
+        "answer": "A",
+        "level": "B2"
+    },
+    {
+        "question": "Some married couples seem to get more _____ over time.",
+        "choices": [
+            "alike",
+            "same",
+            "like D equal"
+        ],
+        "answer": "A",
+        "level": "B2"
+    },
+    {
+        "question": "I don't know how much this card costs. The price label's _____ off.",
+        "choices": [
+            "gone",
+            "taken",
+            "done D come"
+        ],
+        "answer": "D",
+        "level": "B2"
+    },
+    {
+        "question": "Ben got the job because he _____ a very good impression at his interview.",
+        "choices": [
+            "made",
+            "did",
+            "put D took"
+        ],
+        "answer": "A",
+        "level": "B2"
+    },
+    {
+        "question": "Salsa music always _____ me of my trip to Cuba.",
+        "choices": [
+            "remembers",
+            "realises",
+            "recognises D reminds"
+        ],
+        "answer": "D",
+        "level": "B2"
+    },
+    {
+        "question": "I _____ to be picking Tom up at the station but I've lost my keys.",
+        "choices": [
+            "am supposed",
+            "am requested",
+            "am intended D am obliged"
+        ],
+        "answer": "A",
+        "level": "C1"
+    },
+    {
+        "question": "How about going to Colours nightclub? There's no _____ I'm going there. It's awful!",
+        "choices": [
+            "hope",
+            "way",
+            "time D opportunity"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "By the age of 18, I _____ not to go to university.",
+        "choices": [
+            "had decided",
+            "decided",
+            "have decided D was deciding"
+        ],
+        "answer": "A",
+        "level": "C1"
+    },
+    {
+        "question": "I'm afraid your car _____ repaired before next week.",
+        "choices": [
+            "hasn't been",
+            "wasn't",
+            "wouldn't be D can't be"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "The amount of organically grown food on sale has _____ enormously in recent years.",
+        "choices": [
+            "raised",
+            "lifted",
+            "increased D built"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "Can you believe it? A woman has been _____ for hacking into the computer of her online virtual husband.",
+        "choices": [
+            "accused",
+            "suspended",
+            "arrested D suspected"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "You may borrow my laptop _____ you promise to look after it.",
+        "choices": [
+            "unless",
+            "in case",
+            "as long as D although"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "It's a huge painting. It _____ taken ages to complete.",
+        "choices": [
+            "must have",
+            "can't have",
+            "should have D won't have"
+        ],
+        "answer": "A",
+        "level": "C1"
+    },
+    {
+        "question": "Pierre tends to put _____ dealing with problems, rather than dealing with them immediately.",
+        "choices": [
+            "down",
+            "off",
+            "over D away"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "If the taxi hadn't stopped for us, we _____ standing in the rain.",
+        "choices": [
+            "were still",
+            "would still be",
+            "are still D will still be"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "My mother's Italian, so _____ the language has been quite easy for me.",
+        "choices": [
+            "to learn",
+            "learn",
+            "having learned D learning"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "_____ I had the talent, I still wouldn't want to be a movie star.",
+        "choices": [
+            "In case",
+            "Even if",
+            "Provided that D However much"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "The factory workers threatened _____ on strike if they didn't get a pay rise.",
+        "choices": [
+            "going",
+            "to go",
+            "that they go D to have gone"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "I was about to go to sleep when it _____ to me where the missing keys might be.",
+        "choices": [
+            "remembered",
+            "happened",
+            "appeared D occurred"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "There's going to be a new department at work. They've asked me to _____ it up.",
+        "choices": [
+            "take",
+            "set",
+            "put D bring"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "If the film is a _____ success, the director will get most of the credit.",
+        "choices": [
+            "big",
+            "high",
+            "large D good"
+        ],
+        "answer": "A",
+        "level": "C1"
+    },
+    {
+        "question": "By the end of today's seminar I will _____ to each of you individually.",
+        "choices": [
+            "speak",
+            "have spoken",
+            "be speaking D have been speaking"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "This is a photo of my little sister _____ ice cream on the beach.",
+        "choices": [
+            "eat",
+            "eating",
+            "was eating D having eaten"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "Our students take their responsibilities very _____ .",
+        "choices": [
+            "considerably",
+            "thoroughly",
+            "seriously D strongly"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "Pia was _____ delighted with the birthday present.",
+        "choices": [
+            "very",
+            "completely",
+            "fairly D absolutely"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "People were amazed that the burglary took place in _____ daylight.",
+        "choices": [
+            "wide",
+            "broad",
+            "large D open"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "She invested a lot of time _____ researching the most appropriate university course.",
+        "choices": [
+            "to",
+            "for",
+            "with D in"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "The police claimed that they acted in self- _____ .",
+        "choices": [
+            "interest",
+            "confidence",
+            "defence D discipline"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "_____ remember putting my briefcase down on that shelf.",
+        "choices": [
+            "deeply",
+            "entirely",
+            "clearly D strongly"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "He turned _____ to be considerably older than I had imagined.",
+        "choices": [
+            "over",
+            "up",
+            "out D round"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "The windows in this house are in urgent _____ of replacement.",
+        "choices": [
+            "need",
+            "help",
+            "want D demand"
+        ],
+        "answer": "A",
+        "level": "C1"
+    },
+    {
+        "question": "Speed cameras _____ shown to reduce accidents.",
+        "choices": [
+            "have",
+            "were being",
+            "have been D are being"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "Life is a _____ deal easier for immigrants who can speak the local language.",
+        "choices": [
+            "far",
+            "huge",
+            "big D great"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "The experiment _____ testing people's responses before and after drinking coffee.",
+        "choices": [
+            "contained",
+            "incorporated",
+            "involved D consisted"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "We may be a bit late. We're _____ in a traffic jam.",
+        "choices": [
+            "buried",
+            "stuck",
+            "blocked D surrounded"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "Having _____ his driving test several times, Paul finally passed at the fourth attempt.",
+        "choices": [
+            "taken",
+            "made",
+            "had D attended"
+        ],
+        "answer": "A",
+        "level": "C1"
+    },
+    {
+        "question": "Gospel music has been a major influence _____ other musical styles, especially soul.",
+        "choices": [
+            "with",
+            "to",
+            "about D on"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "Maintaining an accurate balance sheet is essential, _____ business you're in.",
+        "choices": [
+            "however",
+            "wherever",
+            "whatever D whenever"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "It's _____ likely that this novel will win a literary prize.",
+        "choices": [
+            "totally",
+            "deeply",
+            "strongly D highly"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "It's no _____ for me to get Brad's phone number - I'll be seeing him tonight.",
+        "choices": [
+            "point",
+            "wonder",
+            "secret D problem"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "I'd lived in Australia, so I was used to _____ on the left side of the road.",
+        "choices": [
+            "driving",
+            "drive",
+            "having driven D drove"
+        ],
+        "answer": "A",
+        "level": "C1"
+    },
+    {
+        "question": "I don't think the colours in Julia's outfit _____ together.",
+        "choices": [
+            "fit",
+            "suit",
+            "match D go"
+        ],
+        "answer": "D",
+        "level": "C1"
+    },
+    {
+        "question": "Very rarely _____ here in July.",
+        "choices": [
+            "it rains",
+            "does it rain",
+            "is it raining D it is raining"
+        ],
+        "answer": "B",
+        "level": "C1"
+    },
+    {
+        "question": "I prefer to buy CDs _____ download music from my computer.",
+        "choices": [
+            "in contrast to",
+            "as opposed to",
+            "rather than D in comparison to"
+        ],
+        "answer": "C",
+        "level": "C1"
+    },
+    {
+        "question": "The number of turtles on the island _____ by 70% over the last decade.",
+        "choices": [
+            "has declined",
+            "has been declining",
+            "has been declined D is declining"
+        ],
+        "answer": "A",
+        "level": "C1"
+    }
+]

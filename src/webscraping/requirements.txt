@@ -1,0 +1,7 @@
+requests
+pandas
+numpy
+bs4
+google-cloud-storage
+pytest
+pytest-cov

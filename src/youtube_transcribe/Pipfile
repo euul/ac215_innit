@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+youtube-transcript-api = "*"
+google-cloud-storage = "*"
+transformers = "*"
+selenium = "*"
+webdriver-manager = "*"
+beautifulsoup4 = "*"
+tiktoken = "*"
+sentencepiece = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

@@ -1,0 +1,21 @@
+.videoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.videoPlayer {
+  width: 100%;
+  height: 360px;
+  background-color: #000; /* Black background while loading */
+}
+
+.noVideo {
+  color: #6b7280; /* Neutral gray */
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+}

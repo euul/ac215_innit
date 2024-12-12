@@ -1,0 +1,9 @@
+method: bayes
+metric:
+  name: accuracy
+  goal: maximize
+parameters:
+  learning_rate:
+    distribution: uniform
+    min: 0.0000001
+    max: 0.00002

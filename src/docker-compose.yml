@@ -1,0 +1,173 @@
+version: "3.8"
+
+services:
+  webscraping:
+    build:
+      context: ./webscraping
+      dockerfile: Dockerfile
+    image: webscraping
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_webscraping
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    #command: ["pipenv", "run", "pytest", "/app/tests/integration_tests"]  # Run tests only
+    command: tail -f /dev/null
+
+  datapipeline:
+    build:
+      context: ./datapipeline
+      dockerfile: Dockerfile
+    image: datapipeline
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_datapipeline
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    #command: ["pipenv", "run", "pytest", "/app/tests/integratioa3121a2891afn_tests"]  # Run tests only
+    command: tail -f /dev/null
+
+  question_bank:
+    build:
+      context: ./question_bank
+      dockerfile: Dockerfile
+    image: question_bank
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_question_bank
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+  youtube_transcribe:
+    build:
+      context: ./youtube_transcribe
+      dockerfile: Dockerfile
+    image: youtube_transcribe
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_youtube_transcribe
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+  news_text:
+    build:
+      context: ./news_text
+      dockerfile: Dockerfile
+    image: news_text
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_news_text
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+  summary_vocab:
+    build:
+      context: ./summary_vocab
+      dockerfile: Dockerfile
+    image: summary_vocab
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_summary_vocab
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+  generate:
+    build:
+      context: ./generate
+      dockerfile: Dockerfile
+    image: generate
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_generate
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+
+  api-service-shivas:
+    build:
+      context: ./api-service-shivas
+      dockerfile: Dockerfile
+    image: api-service-shivas
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_api-service-shivas
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+
+  diagnostic_test:
+    build:
+      context: ./diagnostic_test
+      dockerfile: Dockerfile
+    image: diagnostic_test
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_diagnostic_test
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+
+  models:
+    build:
+      context: ./models
+      dockerfile: Dockerfile
+    image: models
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_models
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null
+
+
+  fine_tune:
+    build:
+      context: ./fine_tune
+      dockerfile: Dockerfile
+    image: fine_tune
+    environment:
+      DATA_SERVICE_ACCOUNT: ${DATA_SERVICE_ACCOUNT}
+      TEXT_GENERATOR: ${TEXT_GENERATOR}
+    volumes:
+      - ../tests:/app/tests:ro # Mount the tests directory into the container
+      - ./htmlcov:/app/htmlcov_fine_tune
+      - ../.coveragerc:/app/.coveragerc:ro
+    working_dir: /app
+    command: tail -f /dev/null

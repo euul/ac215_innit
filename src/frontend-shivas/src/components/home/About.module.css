@@ -1,0 +1,85 @@
+.about {
+  padding: 80px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #000; /* Retro black background */
+  color: #00ff00; /* Neon green text for retro feel */
+  font-family: 'Press Start 2P', monospace; /* Retro pixelated font */
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 40px;
+  font-family: 'Press Start 2P', monospace; /* Pixelated font for title */
+  font-size: 28px; /* Adjusted size for retro style */
+  color: #ffff00; /* Bright yellow for headings */
+}
+
+.underline {
+  width: 100px;
+  height: 2px;
+  background-color: #ff00ff; /* Retro neon pink underline */
+  margin: 0 auto 40px;
+}
+
+.content {
+  text-align: center;
+  font-family: 'Press Start 2P', monospace; /* Keep the retro font */
+  line-height: 1.8;
+  color: #00ff00; /* Neon green for content text */
+}
+
+.content p {
+  margin-bottom: 24px;
+}
+
+.content strong {
+  color: #ffff00; /* Highlighted text in yellow */
+  font-weight: bold; /* Retro styling often uses bold text */
+}
+
+.content a {
+  color: #0000ff; /* Neon pink links */
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.content a:hover {
+  opacity: 0.7;
+}
+
+.contactButton {
+  display: inline-block;
+  background-color: #0000ff; /* Bright retro blue */
+  color: white !important;
+  padding: 15px 40px;
+  border-radius: 0; /* No rounded corners for retro style */
+  text-decoration: none !important;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  transition: transform 0.2s ease; /* Slight hover scale effect */
+  border: 2px solid #ff00ff; /* Neon pink border */
+}
+
+.contactButton:hover {
+  background-color: #000; /* Background to black on hover */
+  color: #00ff00; /* Green text on hover */
+  transform: scale(1.05); /* Retro hover effect */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about {
+    padding: 60px 20px;
+  }
+
+  .title {
+    font-size: 24px; /* Smaller font size for mobile */
+  }
+
+  .content {
+    font-size: 12px; /* Adjusted font size for mobile */
+  }
+}
