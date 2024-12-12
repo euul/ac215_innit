@@ -105,5 +105,4 @@ We would ideally run this workflow after a specific time interval to ensure that
 
 For evidence that this works, please look at the commit hash: `d6821aa30f60cea182dab89b45cada3b952a2f66`. Likewise, a screenshot has been provided below for your convenience.
 
-![Screenshot of Successful ML Workflow](ml_workflow_success.png)
----
+## ![Screenshot of Successful ML Workflow](ml_workflow_success.png)
